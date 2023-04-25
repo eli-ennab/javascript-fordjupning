@@ -8,6 +8,10 @@
   border-radius: 2%;
 }
 
+button {
+	margin: 10px;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

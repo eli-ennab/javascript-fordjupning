@@ -18,9 +18,11 @@ const App = () => {
 
 			<h2>{msg}</h2>
 
-			<p>You have clicked the button {clicks} times.</p>
+			<p>You have clicked the dark button {clicks} times.</p>
 
 			<button onClick={handleButtonClick} className="btn btn-dark btn-lg">Click me</button>
+
+			<button onClick={ () => { setMsg('You made me yellow.')} } className="btn btn-warning btn-lg">Try me</button>
 		</div>
 	)
 }
