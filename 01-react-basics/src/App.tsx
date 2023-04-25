@@ -10,6 +10,7 @@ type Post = {
 const App = () => {
 	const [msg, setMsg] = useState("I am stateful.")
 	const [clicks, setClicks] = useState(0)
+	const [salary, setSalary] = useState(10)
 	const [posts, setPosts] = useState<Post[]>([
 		{
 			id: 1,
@@ -28,15 +29,17 @@ const App = () => {
 		}
 	])
 
-	let [salary, setSalary] = useState(10)
-
-	if (salary < 5) {
-		salary = 5
-	}
-
 	const handleButtonClick = () => {
 		setMsg("I am rendered.")
 		setClicks(clicks + 1)
+	}
+
+	const handleChangeSalary = (amount: number) => {
+		if (salary + amount < 5) {
+			return setSalary(5)
+		}
+
+		setSalary(salary + amount)
 	}
 
 	return (
@@ -53,22 +56,26 @@ const App = () => {
 
 			<hr />
 
-			<h3>Salary per hour: SALARY {salary} &euro;</h3>
-			<p>{salary < 10 ? "You should get a new job." : "Way to go, buddy."}</p>
+			<h3>Salary per hour: {salary} &euro;</h3>
+
+			{salary < 10 && (
+				<div className="alert alert-warning">You are not getting paid enough.</div>
+			)}
+
 				<div className="buttons">
 					<div className="mb-1">
-						<button className="btn btn-dark btn-lg m-1" onClick={ () => { setSalary(salary + 1)} }>
+						<button className="btn btn-dark btn-lg m-1" onClick={ () => { handleChangeSalary(1) } }>
 							Raise 1 &euro;
 						</button>
-						<button className="btn btn-dark btn-lg m-1" onClick={ () => { setSalary(salary - 1)} }>
+						<button className="btn btn-dark btn-lg m-1" onClick={ () => { handleChangeSalary(-1) } }>
 							Decrease 1 &euro;
 						</button>
 					</div>
 					<div className="mb-1">
-						<button className="btn btn-dark btn-lg m-1" onClick={ () => { setSalary(salary + 5)} }>
+						<button className="btn btn-dark btn-lg m-1" onClick={ () => { handleChangeSalary(5) } }>
 							Raise 5 &euro;
 						</button>
-						<button className="btn btn-dark btn-lg m-1" onClick={ () => { setSalary(salary - 5)} }>
+						<button className="btn btn-dark btn-lg m-1" onClick={ () => { handleChangeSalary(-5) } }>
 							Decrease 5 &euro;
 						</button>
 					</div>
