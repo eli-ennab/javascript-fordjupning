@@ -51,7 +51,7 @@ const App = () => {
 
 			<ul className="list-group list-group-flush">
 				{
-					posts.map(post => (<li className="list-group-item" key={post.id}>{post.title} ({post.likes} likes)</li>))
+					posts.map( (post, index) => (<li className="list-group-item" key={index}>{post.title}<span className="badge badge-primary badge-pill">{post.likes}</span></li>))
 				}
 			</ul>
 
