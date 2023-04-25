@@ -28,6 +28,12 @@ const App = () => {
 		}
 	])
 
+	let [salary, setSalary] = useState(10)
+
+	if (salary < 5) {
+		salary = 5
+	}
+
 	const handleButtonClick = () => {
 		setMsg("I am rendered.")
 		setClicks(clicks + 1)
@@ -44,6 +50,29 @@ const App = () => {
 			<button onClick={handleButtonClick} className="btn btn-dark btn-lg">Click me</button>
 
 			<button onClick={ () => { setMsg('You made me yellow.')} } className="btn btn-warning btn-lg">Try me</button>
+
+			<hr />
+
+			<h3>Salary per hour: SALARY {salary} &euro;</h3>
+			<p>{salary < 10 ? "You should get a new job." : "Way to go, buddy."}</p>
+				<div className="buttons">
+					<div className="mb-1">
+						<button className="btn btn-dark btn-lg m-1" onClick={ () => { setSalary(salary + 1)} }>
+							Raise 1 &euro;
+						</button>
+						<button className="btn btn-dark btn-lg m-1" onClick={ () => { setSalary(salary - 1)} }>
+							Decrease 1 &euro;
+						</button>
+					</div>
+					<div className="mb-1">
+						<button className="btn btn-dark btn-lg m-1" onClick={ () => { setSalary(salary + 5)} }>
+							Raise 5 &euro;
+						</button>
+						<button className="btn btn-dark btn-lg m-1" onClick={ () => { setSalary(salary - 5)} }>
+							Decrease 5 &euro;
+						</button>
+					</div>
+				</div>
 
 			<hr />
 
