@@ -105,6 +105,10 @@ const App = () => {
 
 			<h2>Posts</h2>
 
+			{ posts.length === 0 && (
+				<p>There are no posts yet.</p>
+			)}
+
 			<ul className="list-group list-group-flush">
 				{
 					posts.map( (post, index) => (
