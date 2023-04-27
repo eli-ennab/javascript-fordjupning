@@ -1,5 +1,5 @@
 #root {
-	max-width: 400px;
+	max-width: 800px;
 	margin: 5vw;
 }
 
@@ -10,6 +10,14 @@
 	border: 3px solid goldenrod;
 	border-bottom: 3px solid rgb(129, 98, 18);
 	border-right: 3px solid rgb(129, 98, 18);
-    padding: 5px;
+    padding: 10px;
 	margin: 5px;
+}
+
+.btn-toggle {
+	border: 1px solid gold;
+}
+
+.btn-delete {
+	border: 1px solid gray;
 }
