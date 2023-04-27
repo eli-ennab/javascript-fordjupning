@@ -19,6 +19,21 @@ function App() {
 
 	<h1>Todos</h1>
 
+	<form>
+		<div className="input-group mb-3">
+			<input
+				type="text"
+				className="form-control"
+				placeholder="write your todo title here..."
+				/>
+			<button
+				className="btn btn-outline-secondary"
+				type="button"
+				>Create todo
+			</button>
+		</div>
+	</form>
+
 
 		<ul className="list-group">
 			{
@@ -26,11 +41,15 @@ function App() {
 					<li
 						key={index}
 						className="todo">
-						{todo.title}
+						{todo.title} {todo.completed ? "✓" : "×"}
 						<button
-							className="btn btn-dark">
+							className="btn btn-dark btn-toggle">
+							{!todo.completed ? "mark as completed" : "mark as not completed"}
+						</button>
+						<button
+							className="btn btn-grey btn-delete">
 							delete
-					</button>
+						</button>
 					</li>
 				)
 			}
