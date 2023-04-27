@@ -14,6 +14,20 @@ function App() {
 		{ title: "my third todo", completed: true }
 	])
 
+	const [newTodoTitle, setNewTodoTitle] = useState("")
+
+	const createTodo = (e: React.FormEvent) => {
+		e.preventDefault()
+
+		const newTodo: Todo = {
+			title: newTodoTitle,
+			completed: false,
+		}
+		setTodos([...todos, newTodo])
+
+		setNewTodoTitle("")
+	}
+
   return (
 	<div className="App">
 
@@ -25,10 +39,13 @@ function App() {
 				type="text"
 				className="form-control"
 				placeholder="write your todo title here..."
+				onChange={(e) => { setNewTodoTitle(e.target.value) }}
+				value={newTodoTitle}
 				/>
 			<button
 				className="btn btn-outline-secondary"
 				type="button"
+				onClick={createTodo}
 				>Create todo
 			</button>
 		</div>
