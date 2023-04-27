@@ -74,7 +74,7 @@ const App = () => {
 
 			<h2>Posts</h2>
 
-			<form onSubmit={ handleFormSubmit }>
+			<form onSubmit={ handleFormSubmit } className="mb-3">
 				<div className="input-group mb-3">
 					<input
 						type="text"
@@ -92,6 +92,9 @@ const App = () => {
 						Create
 					</button>
 				</div>
+				{newPostTitle.length > 0 && newPostTitle.length < 5 && (
+					<div className="form-text text-warning">Title has to be at least 5 chars.</div>
+				)}
 			</form>
 
 			{ posts.length > 0 && (
