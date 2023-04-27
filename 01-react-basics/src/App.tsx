@@ -31,6 +31,14 @@ const App = () => {
 		}
 	])
 
+	const handleAddLike = (post: Post) => {
+		console.log("adding like to this post:", post)
+		post.likes++
+		console.log("posts likes are now:", post.likes)
+
+		setPosts([...posts])
+	}
+
 	const handleButtonClick = () => {
 		setMsg("I am rendered.")
 		// setClicks(clicks + 1)
@@ -97,7 +105,15 @@ const App = () => {
 
 			<ul className="list-group list-group-flush">
 				{
-					posts.map( (post, index) => (<li className="list-group-item" key={index}>{post.title}<span className="badge badge-primary badge-pill">{post.likes}</span></li>))
+					posts.map( (post, index) => (
+						<li key={index}>
+							{post.title} ({post.likes} likes)
+							<button
+								className="btn btn-sm btn-heart"
+								onClick={() => { handleAddLike(post)}}
+							>❤</button>
+						</li>
+					))
 				}
 			</ul>
 

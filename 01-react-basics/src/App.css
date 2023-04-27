@@ -12,6 +12,14 @@ button {
 	margin: 10px;
 }
 
+.list-group {
+	list-style-type: none;
+}
+
+.btn-heart {
+	color: red;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
