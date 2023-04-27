@@ -60,8 +60,7 @@ const App = () => {
 
 			<hr />
 
-			<button className="btn btn-light" onClick={() => setShowsalary(true)}>Show salary</button>
-			<button className="btn btn-light" onClick={() => setShowsalary(false)}>Hide salary</button>
+			<button className="btn btn-light" onClick={() => setShowsalary(!showSalary)}>Show/Hide salary</button>
 
 			{ showSalary && (
 				<>
