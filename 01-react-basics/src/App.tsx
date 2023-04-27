@@ -4,31 +4,29 @@ import Salary from './components/Salary'
 import './App.css'
 
 type Post = {
-	id: number
 	title: string
 	likes: number
 }
 
 const App = () => {
 	const [msg, setMsg] = useState("I am stateful.")
-
 	const [posts, setPosts] = useState<Post[]>([
 		{
-			id: 1,
 			title: "React rocks",
 			likes: 1337
 		},
 		{
-			id: 2,
 			title: "JSX also rocks",
 			likes: 45
 		},
 		{
-			id: 3,
 			title: "TypeScript",
 			likes: 1000
 		}
 	])
+
+	// input state
+	const [newPostTitle, setNewPostTitle] = useState("")
 
 	const deletePost = (deletedPost: Post) => {
 		setPosts(posts.filter(post => post !== deletedPost))
@@ -39,6 +37,21 @@ const App = () => {
 		post.likes++
 
 		setPosts([...posts])
+	}
+
+	const handleFormSubmit = (e: React.FormEvent) => {
+		// stop form from submitting
+		e.preventDefault()
+
+		// add a new post to the posts state
+		const newPost: Post = {
+			title: newPostTitle,
+			likes: 0,
+		}
+		setPosts([...posts, newPost])
+
+		// clear new post title state
+		setNewPostTitle("")
 	}
 
 	return (
@@ -60,6 +73,26 @@ const App = () => {
 			<hr />
 
 			<h2>Posts</h2>
+
+			<form onSubmit={ handleFormSubmit }>
+				<div className="input-group mb-3">
+					<input
+						type="text"
+						className="form-control"
+						placeholder="Post title"
+						onChange={e => setNewPostTitle(e.target.value)}
+						value={newPostTitle}
+						required
+					/>
+
+					<button
+						type="submit"
+						className="btn btn-light"
+					>
+						Create
+					</button>
+				</div>
+			</form>
 
 			{ posts.length > 0 && (
 				<ul className="list-group list-group-flush">
