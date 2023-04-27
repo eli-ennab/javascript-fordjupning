@@ -16,8 +16,20 @@
 
 .btn-toggle {
 	border: 1px solid gold;
+	color: goldenrod;
 }
 
 .btn-delete {
 	border: 1px solid gray;
+}
+
+h1,
+p,
+li,
+button {
+	letter-spacing: 1.5px;
+}
+
+li {
+	color: goldenrod;
 }
