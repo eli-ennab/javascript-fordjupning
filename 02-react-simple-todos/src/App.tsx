@@ -33,14 +33,15 @@ function App() {
 	}
 
 	const handleClickedTodo = (toggledTodo: Todo) => {
-		console.log("completed:", toggledTodo.completed)
+		console.log("completed status before toggle:", toggledTodo.completed)
 
 		const updateTodo: Todo = {
 			title: toggledTodo.title,
 			completed: !toggledTodo.completed
 		}
-
-		// setTodos([...todos, updateTodo])
+		setTodos(prevTodos => prevTodos.filter(post => post !== updateTodo))
+		// setTodos(todos.filter(todos => todos !== updateTodo))
+		console.log("completed status after toggle:", updateTodo.completed)
 	}
 
   return (
