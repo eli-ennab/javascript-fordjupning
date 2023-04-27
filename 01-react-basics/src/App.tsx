@@ -31,21 +31,19 @@ const App = () => {
 		}
 	])
 
-	const deletePost = (post: Post) => {
-		setPosts(posts.filter(deletedPost => deletedPost !== post))
+	const deletePost = (deletedPost: Post) => {
+		setPosts(posts.filter(post => post !== deletedPost))
 	}
 
 	const handleAddLike = (post: Post) => {
-		console.log("adding like to this post:", post)
 		post.likes++
-		console.log("posts likes are now:", post.likes)
 
 		setPosts([...posts])
 	}
 
 	const handleButtonClick = () => {
 		setMsg("I am rendered.")
-		// setClicks(clicks + 1)
+
 		setClicks( (prevValue) => { return prevValue + 1 } )	// prevValue = 0, return 1
 		setClicks( (prevValue) => { return prevValue + 1 } )	// prevValue = 1, return 2
 	}
