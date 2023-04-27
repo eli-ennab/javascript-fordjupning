@@ -31,6 +31,10 @@ const App = () => {
 		}
 	])
 
+	const deletePost = (post: Post) => {
+		setPosts(posts.filter(deletedPost => deletedPost !== post))
+	}
+
 	const handleAddLike = (post: Post) => {
 		console.log("adding like to this post:", post)
 		post.likes++
@@ -112,6 +116,11 @@ const App = () => {
 								className="btn btn-sm btn-heart"
 								onClick={() => { handleAddLike(post)}}
 							>❤</button>
+							<button
+								className="btn btn-sm btn-delete"
+								onClick={() => { deletePost(post) }}
+								>delete
+							</button>
 						</li>
 					))
 				}

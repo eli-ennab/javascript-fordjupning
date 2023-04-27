@@ -20,6 +20,10 @@ button {
 	color: red;
 }
 
+.btn-delete {
+	border: 1px solid rgb(168, 168, 168);
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
