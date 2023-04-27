@@ -16,7 +16,7 @@ function App() {
 
 	const [newTodoTitle, setNewTodoTitle] = useState("")
 
-	const createTodo = (e: React.FormEvent) => {
+	const handleCreateTodo = (e: React.FormEvent) => {
 		e.preventDefault()
 
 		const newTodo: Todo = {
@@ -28,11 +28,19 @@ function App() {
 		setNewTodoTitle("")
 	}
 
-	const deleteTodo = (deleteTodo: Todo) => {
-		console.log("i want to delete this todo:", deleteTodo)
-		console.log("list before delete", todos)
-		setTodos(todos.filter(todos => todos !== deleteTodo))
-		console.log("list after delete", todos)
+	const handleDeleteTodo = (deletedTodo: Todo) => {
+		setTodos(todos.filter(todos => todos !== deletedTodo))
+	}
+
+	const handleClickedTodo = (toggledTodo: Todo) => {
+		console.log("completed:", toggledTodo.completed)
+
+		const updateTodo: Todo = {
+			title: toggledTodo.title,
+			completed: !toggledTodo.completed
+		}
+
+		// setTodos([...todos, updateTodo])
 	}
 
   return (
@@ -52,7 +60,7 @@ function App() {
 				<button
 					className="btn btn-outline-secondary"
 					type="button"
-					onClick={createTodo}
+					onClick={handleCreateTodo}
 					>Create todo
 				</button>
 			</div>
@@ -64,15 +72,16 @@ function App() {
 					todos.map( (todo, index) =>
 						<li
 							key={index}
-							className="todo">
-							{todo.title} {todo.completed ? "✓" : "×"}
-							<button
+							className="todo"
+							onClick={ () => {handleClickedTodo(todo)} }
+							>{todo.title} {todo.completed ? <p>completed</p> : <p> not completed</p>}
+							{/* <button
 								className="btn btn-dark btn-toggle">
 								{!todo.completed ? "mark as completed" : "mark as not completed"}
-							</button>
+							</button> */}
 							<button
 								className="btn btn-grey btn-delete"
-								onClick={ () => (deleteTodo(todo)) }
+								onClick={ (e) => (e.stopPropagation(), handleDeleteTodo(todo)) }
 								>delete
 							</button>
 						</li>
