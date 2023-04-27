@@ -33,6 +33,7 @@ const App = () => {
 
 	const deletePost = (deletedPost: Post) => {
 		setPosts(posts.filter(post => post !== deletedPost))
+		// setPosts(prevPosts => prevPosts.filter(post => post !== deletedPost))	// if it could have been updated, use prevPosts
 	}
 
 	const handleAddLike = (post: Post) => {
@@ -105,28 +106,31 @@ const App = () => {
 
 			<h2>Posts</h2>
 
-			{ posts.length === 0 && (
-				<p>There are no posts yet.</p>
+			{ posts.length > 0 && (
+				<ul className="list-group list-group-flush">
+					{
+						posts.map( (post, index) => (
+							<li key={index}>
+								{post.title} ({post.likes} likes)
+								<button
+									className="btn btn-sm btn-heart"
+									onClick={() => { handleAddLike(post)}}
+								>❤</button>
+								<button
+									className="btn btn-sm btn-delete"
+									onClick={() => { deletePost(post) }}
+									>delete
+								</button>
+							</li>
+						))
+					}
+				</ul>
 			)}
 
-			<ul className="list-group list-group-flush">
-				{
-					posts.map( (post, index) => (
-						<li key={index}>
-							{post.title} ({post.likes} likes)
-							<button
-								className="btn btn-sm btn-heart"
-								onClick={() => { handleAddLike(post)}}
-							>❤</button>
-							<button
-								className="btn btn-sm btn-delete"
-								onClick={() => { deletePost(post) }}
-								>delete
-							</button>
-						</li>
-					))
-				}
-			</ul>
+			{/* conditional template */}
+				{ posts.length === 0 && (
+				<p>There are no posts yet.</p>
+			)}
 
 		</div>
 	)
