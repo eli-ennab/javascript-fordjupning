@@ -31,7 +31,9 @@ const App = () => {
 
 	const handleButtonClick = () => {
 		setMsg("I am rendered.")
-		setClicks(clicks + 1)
+		// setClicks(clicks + 1)
+		setClicks( (prevValue) => { return prevValue + 1 } )	// prevValue = 0, return 1
+		setClicks( (prevValue) => { return prevValue + 1 } )	// prevValue = 1, return 2
 	}
 
 	const handleChangeSalary = (amount: number) => {
