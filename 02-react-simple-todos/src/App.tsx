@@ -15,6 +15,7 @@ function App() {
 	])
 
 	const [newTodoTitle, setNewTodoTitle] = useState("")
+	const completedTodos = todos.filter(todos => todos.completed !== true)
 
 	const handleCreateTodo = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -82,6 +83,16 @@ function App() {
 					)
 				}
 			</ul>
+		)}
+
+		<hr />
+
+		{(todos.length > 0 &&
+			<div>
+				<p>
+					{completedTodos.length} out of {todos.length} todos are completed.
+				</p>
+			</div>
 		)}
 
 		{( todos.length === 0 &&
