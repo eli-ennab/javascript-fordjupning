@@ -44,7 +44,7 @@ function App() {
 
 		<h1>Todos</h1>
 
-		<form>
+		<form onSubmit={handleCreateTodo}>
 			<div className="input-group mb-3">
 				<input
 					type="text"
@@ -56,63 +56,60 @@ function App() {
 				/>
 				<button
 					className="btn btn-outline-secondary"
-					type="button"
-					onClick={handleCreateTodo}
-					>Create todo
+					type="submit"
+						>Create todo
 				</button>
 			</div>
 		</form>
 
 		{(todos.length > 0 &&
-			<h2>Not completed todos</h2>
-		)}
+			<>
+				<h2>
+					Not completed todos
+				</h2>
 
-		{(todos.length > 0 &&
-			<ul className="list-group">
-				{
-					notCompletedTodos.map( (todo, index) =>
-						<li
-							key={index}
-							className="todo"
-							onClick={ () => {handleToggleTodo(todo)} }
-							>{todo.title} {todo.completed ? <p>completed</p> : <p>not completed</p>}
-							<button
-								className="btn btn-grey btn-delete"
-								onClick={ (e) => (e.stopPropagation(), handleDeleteTodo(todo)) }
-								>delete
-							</button>
-						</li>
-					)
-				}
-			</ul>
-		)}
+				<ul className="list-group">
+					{
+						notCompletedTodos.map( (todo, index) =>
+							<li
+								key={index}
+								className="todo"
+								onClick={ () => {handleToggleTodo(todo)} }
+								>{todo.title} {todo.completed ? <p>completed</p> : <p>not completed</p>}
+								<button
+									className="btn btn-grey btn-delete"
+									onClick={ (e) => (e.stopPropagation(), handleDeleteTodo(todo)) }
+										>delete
+								</button>
+							</li>
+						)
+					}
+				</ul>
 
-		{(todos.length > 0 &&
-			<h2>Completed todos</h2>
-		)}
+				<h2>Completed todos</h2>
 
-		{(todos.length > 0 &&
-			<ul className="list-group">
-				{
-					completedTodos.map( (todo, index) =>
-						<li
-							key={index}
-							className="todo"
-							onClick={ () => {handleToggleTodo(todo)} }
-							>{todo.title} {todo.completed ? <p>completed</p> : <p>not completed</p>}
-							{/* <button
-								className="btn btn-dark btn-toggle">
-								{!todo.completed ? "mark as completed" : "mark as not completed"}
-							</button> */}
-							<button
-								className="btn btn-grey btn-delete"
-								onClick={ (e) => (e.stopPropagation(), handleDeleteTodo(todo)) }
-								>delete
-							</button>
-						</li>
-					)
-				}
-			</ul>
+				<ul className="list-group">
+					{
+						completedTodos.map( (todo, index) =>
+							<li
+								key={index}
+								className="todo"
+								onClick={ () => {handleToggleTodo(todo)} }
+								>{todo.title} {todo.completed ? <p>completed</p> : <p>not completed</p>}
+								{/* <button
+									className="btn btn-dark btn-toggle">
+									{!todo.completed ? "mark as completed" : "mark as not completed"}
+								</button> */}
+								<button
+									className="btn btn-grey btn-delete"
+									onClick={ (e) => (e.stopPropagation(), handleDeleteTodo(todo)) }
+									>delete
+								</button>
+							</li>
+						)
+					}
+				</ul>
+			</>
 		)}
 
 		<hr />
