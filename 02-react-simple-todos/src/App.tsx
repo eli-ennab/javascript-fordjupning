@@ -15,8 +15,8 @@ function App() {
 	])
 
 	const [newTodoTitle, setNewTodoTitle] = useState("")
-	const completedTodos = todos.filter(todos => todos.completed !== true)
-	const notCompletedTodos = todos.filter(todos => todos.completed !== false)
+	const completedTodos = todos.filter(todo => todo.completed)
+	const notCompletedTodos = todos.filter(todo => !todo.completed)
 
 	const handleCreateTodo = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -34,7 +34,7 @@ function App() {
 		setTodos(todos.filter(todos => todos !== deletedTodo))
 	}
 
-	const handleClickedTodo = (toggledTodo: Todo) => {
+	const handleToggleTodo = (toggledTodo: Todo) => {
 		toggledTodo.completed = !toggledTodo.completed
 		setTodos([...todos])
 	}
@@ -63,7 +63,10 @@ function App() {
 			</div>
 		</form>
 
-		<h2>Not completed todos</h2>
+		{(todos.length > 0 &&
+			<h2>Not completed todos</h2>
+		)}
+
 		{(todos.length > 0 &&
 			<ul className="list-group">
 				{
@@ -71,12 +74,8 @@ function App() {
 						<li
 							key={index}
 							className="todo"
-							onClick={ () => {handleClickedTodo(todo)} }
-							>{todo.title} {todo.completed ? <p>not completed</p> : <p>completed</p>}
-							{/* <button
-								className="btn btn-dark btn-toggle">
-								{!todo.completed ? "mark as completed" : "mark as not completed"}
-							</button> */}
+							onClick={ () => {handleToggleTodo(todo)} }
+							>{todo.title} {todo.completed ? <p>completed</p> : <p>not completed</p>}
 							<button
 								className="btn btn-grey btn-delete"
 								onClick={ (e) => (e.stopPropagation(), handleDeleteTodo(todo)) }
@@ -88,7 +87,10 @@ function App() {
 			</ul>
 		)}
 
-		<h2>Completed todos</h2>
+		{(todos.length > 0 &&
+			<h2>Completed todos</h2>
+		)}
+
 		{(todos.length > 0 &&
 			<ul className="list-group">
 				{
@@ -96,8 +98,8 @@ function App() {
 						<li
 							key={index}
 							className="todo"
-							onClick={ () => {handleClickedTodo(todo)} }
-							>{todo.title} {todo.completed ? <p>not completed</p> : <p>completed</p>}
+							onClick={ () => {handleToggleTodo(todo)} }
+							>{todo.title} {todo.completed ? <p>completed</p> : <p>not completed</p>}
 							{/* <button
 								className="btn btn-dark btn-toggle">
 								{!todo.completed ? "mark as completed" : "mark as not completed"}
