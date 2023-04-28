@@ -1,6 +1,19 @@
 #root {
 	max-width: 800px;
 	margin: 5vw;
+	border: 1px solid gray;
+	border-bottom: 5px solid gray;
+	border-right: 5px solid gray;
+	padding: 20px;
+}
+
+h1,
+h2 {
+	padding: 20px 0px 20px 0px;
+}
+
+p {
+	margin: 0;
 }
 
 .todo {
