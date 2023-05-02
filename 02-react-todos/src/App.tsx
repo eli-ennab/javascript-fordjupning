@@ -39,9 +39,17 @@ function App() {
 	const unfinishedTodos = todos.filter(todo => !todo.completed)
 	const finishedTodos = todos.filter(todo => todo.completed)
 
-	// our first side-effect
+	// This will only be executed when the component is mounted,
+	// and only AFTER the component has been rendered
+	useEffect(() => {
+		console.log("Look mom, I'm a newly mounted component 👶🏻")
+	}, [])
+
+	// This will only be executed if `finishedTodos.length` or `todos.length`
+	// have changed since last render, and only AFTER the component has been rendered
 	useEffect( () => {
-		document.title = `${finishedTodos.length}/${todos.length} completed todos`
+		console.log("Updating page title using an effect")
+		document.title = `${finishedTodos.length} of ${todos.length} completed`
 	}, [finishedTodos.length, todos.length] )
 
 	return (
