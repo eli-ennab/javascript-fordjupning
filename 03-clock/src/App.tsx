@@ -3,9 +3,7 @@ import './assets/scss/App.scss'
 
 function App() {
 
-	const [time, setTime] = useState(() => {
-		return new Date().toLocaleTimeString()
-	})
+	const [time, setTime] = useState(() => new Date().toLocaleTimeString())
 
 	useEffect(() => {
 		console.log("Starting clock...")
