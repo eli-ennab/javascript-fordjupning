@@ -1,10 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-
-type Todo = {
-	title: string
-	completed: boolean
-}
+import { Todo } from './types'
 
 function App() {
 
