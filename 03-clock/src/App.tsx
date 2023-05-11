@@ -13,6 +13,10 @@ function App() {
 		console.log("Tick")
 	}, [])
 
+	useEffect(() => {
+		document.title = time
+	}, [time])
+
 	return (
 		<div className="container">
 			<div className="display-1 text-center">
