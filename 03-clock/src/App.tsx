@@ -9,8 +9,8 @@ function App() {
 		console.log("Starting clock...")
 		setInterval(() => {
 			setTime(new Date().toLocaleTimeString())
+			console.log("Tick")
 		}, 1000)
-		console.log("Tick")
 	}, [])
 
 	useEffect(() => {
