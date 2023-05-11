@@ -77,7 +77,7 @@ function App() {
 						) )}
 					</ul>
 
-					<TodoCounter finishedTodos={finishedTodos} todos={todos} />
+					<TodoCounter finished={finishedTodos.length} total={todos.length} />
 				</>
 			)}
 
