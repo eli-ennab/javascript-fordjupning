@@ -3,6 +3,7 @@ import TodoListItem from './components/TodoListItem'
 import { Todo, TodoList } from './types'
 import './assets/scss/App.scss'
 import TodoCounter from './components/TodoCounter'
+import AddTodoForm from './components/AddTodoForm'
 
 function App() {
 	const [todos, setTodos] = useState<TodoList>([
@@ -45,22 +46,12 @@ function App() {
 		<div className="container">
 			<h1 className="mb-3">React Simple Todos</h1>
 
-			<form onSubmit={handleSubmit} className="mb-3">
-				<div className="input-group">
-					<input
-						type="text"
-						className="form-control"
-						placeholder="Todo title"
-						onChange={e => setNewTodoTitle(e.target.value)}
-						value={newTodoTitle}
-					/>
-
-					<button
-						type="submit"
-						className="btn btn-success"
-					>Create</button>
-				</div>
-			</form>
+			<AddTodoForm
+				onSubmit={handleSubmit}
+				onChange={setNewTodoTitle}
+				value={newTodoTitle}
+				newTodoTitle={newTodoTitle}
+			/>
 
 			{todos.length > 0 && (
 				<>
