@@ -1,27 +1,12 @@
 import { useEffect, useState } from 'react'
 import './assets/scss/App.scss'
+import Clock from './components/Clock'
 
 function App() {
 
-	const [time, setTime] = useState(() => new Date().toLocaleTimeString())
-
-	useEffect(() => {
-		console.log("Starting clock...")
-		setInterval(() => {
-			setTime(new Date().toLocaleTimeString())
-			console.log("Tick")
-		}, 1000)
-	}, [])
-
-	useEffect(() => {
-		document.title = time
-	}, [time])
-
 	return (
 		<div className="container">
-			<div className="display-1 text-center">
-				{time}
-			</div>
+				<Clock />
 		</div>
 	)
 }
