@@ -22,7 +22,7 @@ const AddTodoForm: React.FC<IProps> = ({ onSubmit, onChange, newTodoTitle }) => 
 				<button
 					type="submit"
 					className="btn btn-success"
-					disabled={!newTodoTitle}
+					disabled={!newTodoTitle.trim()}
 				>Create</button>
 				</div>
 			</form>
