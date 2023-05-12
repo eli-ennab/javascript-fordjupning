@@ -7,7 +7,7 @@ interface IResource {
 }
 
 function App() {
-	const [resource, setResource] = useState('posts')
+	const [resource, setResource] = useState('')
 	const [data, setData] = useState<IResource[]>([])
 
 	// fetch data with .then
@@ -19,6 +19,11 @@ function App() {
 
 	// fetch data with async await
 	useEffect(() => {
+
+		if (!resource) {
+			return
+		}
+
 		const fetchData = async () => {
 			// fetch resource
 			const res = await fetch(`https://jsonplaceholder.typicode.com/${resource}`)
