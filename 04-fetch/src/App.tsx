@@ -1,46 +1,38 @@
 import { useEffect, useState } from 'react'
+import { getResource } from './services/API'
+import { IResource } from './types'
 import './assets/scss/App.scss'
-
-interface IResource {
-	id: number
-	title: string
-}
 
 function App() {
 	const [resource, setResource] = useState('')
 	const [data, setData] = useState<IResource[]>([])
-	const [loading, setLoading] = useState(true)
+	const [loading, setLoading] = useState(false)
+	const [error, setError] = useState('')
 
-	// fetch data with async await
 	useEffect(() => {
-
-		setLoading(false)
-		console.log("loading?", loading)
-
-		if (!resource) {
-			return
-		}
-
-
 		const fetchData = async () => {
-			// fetch resource
-			const res = await fetch(`https://jsonplaceholder.typicode.com/${resource}`)
-
-			if (res.status === 404) {
-				setData([])
-				setLoading(false)
-				console.log(loading)
+			if (!resource) {
 				return
 			}
 
+			// empty data and error before fetching new
+			// and set loading
+			setError('')
+			setData([])
 			setLoading(true)
-			console.log("loading?", loading)
 
-			// parse response as json
-			const payload = await res.json() as IResource[]
+			try {
+				const payload = await getResource(resource)
 
-			// update data state with resource payload
-			setData(payload)
+				// update data state with resource payload
+				setData(payload)
+				setLoading(false)
+
+			} catch (e: any) {
+				setError(e.toString())
+				setLoading(false)
+
+			}
 		}
 
 		// call function
@@ -59,12 +51,17 @@ function App() {
 				<button onClick={() => setResource('tra$h')} className="btn btn-dark">Tra$h</button>
 			</div>
 
-			{!loading && (
-					<p>There are no {resource}</p>
+			{error && (
+					<p>{error}</p>
 				)
 			}
 
-			{resource && loading && (
+			{loading && (
+					<p>Loading...</p>
+				)
+			}
+
+			{!loading && !error && resource && !!data.length && (
 				<>
 					<h2>{resource}</h2>
 					<p>There are {data.length} {resource}.</p>
