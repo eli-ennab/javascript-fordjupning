@@ -1,12 +1,18 @@
 @import "bootstrap/scss/bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap');
 
 body {
 	background-color: $gray-900;
 	color: $gray-200;
+	letter-spacing: .1rem;
+	margin: 10px;
+	font-family: 'Nunito', sans-serif;
 }
 
 .btn {
 	margin: 10px;
 	border-right: 5px solid rgb(66, 66, 66);
 	border-bottom: 5px solid rgb(66, 66, 66);
+	letter-spacing: .1rem;
+	text-transform: uppercase;
 }

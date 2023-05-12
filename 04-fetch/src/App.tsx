@@ -44,13 +44,13 @@ function App() {
 			<h1 className="mb-3">Fetch</h1>
 
 			<div className="d-flex justify-content-between">
-				<button onClick={() => setResource('albums')} className="btn btn-light">Albums</button>
-				<button onClick={() => setResource('photos')} className="btn btn-light">Photos</button>
-				<button onClick={() => setResource('posts')} className="btn btn-light">Posts</button>
-				<button onClick={() => setResource('todos')} className="btn btn-light">Todos</button>
+				<button onClick={() => setResource('albums')} className="btn btn-dark">Albums</button>
+				<button onClick={() => setResource('photos')} className="btn btn-dark">Photos</button>
+				<button onClick={() => setResource('posts')} className="btn btn-dark">Posts</button>
+				<button onClick={() => setResource('todos')} className="btn btn-dark">Todos</button>
 			</div>
 
-			{data && (
+			{resource && (
 				<>
 					<h2>{resource}</h2>
 					<p>There are {data.length} {resource}.</p>
