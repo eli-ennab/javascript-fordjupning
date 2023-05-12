@@ -4,3 +4,9 @@ body {
 	background-color: $gray-900;
 	color: $gray-200;
 }
+
+.btn {
+	margin: 10px;
+	border-right: 5px solid rgb(66, 66, 66);
+	border-bottom: 5px solid rgb(66, 66, 66);
+}
