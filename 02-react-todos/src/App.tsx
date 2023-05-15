@@ -14,8 +14,8 @@ function App() {
 		setTodos(data)
 	}
 
-	const addTodo = (todo: Todo) => {
-		setTodos([...todos, todo])
+	const addTodo = async (todo: Todo) => {
+		setTodos([...todos, await TodosAPI.createTodo(todo)])
 	}
 
 	const deleteTodo = (todoToDelete: Todo) => {
@@ -32,6 +32,11 @@ function App() {
 	useEffect(() => {
 		getTodos()
 	}, [])
+
+	// fetch new list of todos every time a todo is created
+	useEffect(() => {
+		getTodos()
+	}, [todos.length + 1])
 
 	const unfinishedTodos = todos.filter(todo => !todo.completed)
 	const finishedTodos = todos.filter(todo => todo.completed)
