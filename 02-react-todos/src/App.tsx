@@ -9,6 +9,9 @@ import * as TodosAPI from './services/TodosAPI'
 function App() {
 	const [todos, setTodos] = useState<Todos>([])
 
+	const unfinishedTodos = todos.filter(todo => !todo.completed)
+	const finishedTodos = todos.filter(todo => todo.completed)
+
 	const getTodos = async () => {
 		const data = await TodosAPI.getTodos()
 		setTodos(data)
@@ -18,9 +21,9 @@ function App() {
 		setTodos([...todos, await TodosAPI.createTodo(todo)])
 	}
 
-	const deleteTodo = (todoToDelete: Todo) => {
-		// set a new list of todos where the clicked todo is excluded
-		setTodos(todos.filter(todo => todo !== todoToDelete))
+	const deleteTodo = async (todoToDelete: Todo) => {
+		await TodosAPI.deleteTodo(todoToDelete)
+		setTodos([...todos])
 	}
 
 	const toggleTodo = async(todo: Todo) => {
@@ -30,25 +33,10 @@ function App() {
 	}
 
 	// fetch todos when app is being mounted
+	// and when todo is added or toggled
 	useEffect(() => {
 		getTodos()
-	}, [])
-
-	// fetch new list of todos every time a todo is created
-	useEffect(() => {
-		getTodos()
-	}, [todos.length + 1])
-
-
-	const unfinishedTodos = todos.filter(todo => !todo.completed)
-	const finishedTodos = todos.filter(todo => todo.completed)
-
-	// fetch new list of todos every time a todo is updated
-	useEffect(() => {
-		getTodos()
-	}, [finishedTodos.length - 1 || + 1])
-
-	// console.log("App rendering...")
+	}, [todos.length, finishedTodos.length])
 
 	return (
 		<div className="container">
@@ -75,7 +63,7 @@ function App() {
 			)}
 
 			{todos.length === 0 && (
-				<p>Yayyy, you have 0 todos to do</p>
+				<p>You have no todos.</p>
 			)}
 
 		</div>
