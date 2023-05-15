@@ -13,8 +13,8 @@ function App() {
 	const finishedTodos = todos.filter(todo => todo.completed)
 
 	const getTodos = async () => {
-		const data = await TodosAPI.getTodos()
-		setTodos(data)
+		// const data = await TodosAPI.getTodos()
+		setTodos(await TodosAPI.getTodos())
 	}
 
 	const addTodo = async (todo: Todo) => {
