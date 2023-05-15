@@ -32,7 +32,7 @@ const AddNewTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
 				<input
 					type="text"
 					className="form-control"
-					placeholder="Todo title"
+					placeholder="Start typing..."
 					onChange={e => setNewTodoTitle(e.target.value)}
 					value={newTodoTitle}
 				/>
@@ -40,7 +40,7 @@ const AddNewTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
 				<button
 					disabled={!newTodoTitle.trim()}
 					type="submit"
-					className="btn btn-success"
+					className="btn btn-light"
 				>Create</button>
 			</div>
 		</form>

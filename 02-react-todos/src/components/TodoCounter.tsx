@@ -8,7 +8,7 @@ interface IProps {
 const TodoCounter: React.FC<IProps> = ({ finished, total }) => {
 	return (
 		<p className="status">
-			{finished} of {total} todos completed
+			{finished} of {total} todos are completed
 		</p>
 	)
 }

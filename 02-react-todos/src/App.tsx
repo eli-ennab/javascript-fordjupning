@@ -32,7 +32,7 @@ function App() {
 	}
 
 	// fetch todos when app is being mounted
-	// and when todo is added or toggled
+	// and when todo is added, toggled or deleted
 	useEffect(() => {
 		getTodos()
 	}, [todos.length, finishedTodos.length])
@@ -45,12 +45,14 @@ function App() {
 
 			{todos.length > 0 && (
 				<>
+					<h3>not completed todos</h3>
 					<TodoList
 						onToggle={toggleTodo}
 						onDelete={deleteTodo}
 						todos={unfinishedTodos}
 					/>
 
+					<h3>completed todos</h3>
 					<TodoList
 						onToggle={toggleTodo}
 						onDelete={deleteTodo}
