@@ -23,8 +23,9 @@ function App() {
 		setTodos(todos.filter(todo => todo !== todoToDelete))
 	}
 
-	const toggleTodo = (todo: Todo) => {
+	const toggleTodo = async(todo: Todo) => {
 		todo.completed = !todo.completed
+		await TodosAPI.updateTodo(todo)
 		setTodos([...todos])
 	}
 
@@ -38,8 +39,14 @@ function App() {
 		getTodos()
 	}, [todos.length + 1])
 
+
 	const unfinishedTodos = todos.filter(todo => !todo.completed)
 	const finishedTodos = todos.filter(todo => todo.completed)
+
+	// fetch new list of todos every time a todo is updated
+	useEffect(() => {
+		getTodos()
+	}, [finishedTodos.length - 1 || + 1])
 
 	// console.log("App rendering...")
 
