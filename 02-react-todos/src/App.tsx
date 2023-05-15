@@ -22,8 +22,7 @@ function App() {
 	}
 
 	const deleteTodo = async (todoToDelete: Todo) => {
-		await TodosAPI.deleteTodo(todoToDelete)
-		setTodos([...todos])
+		setTodos([...todos, await TodosAPI.deleteTodo(todoToDelete)])
 	}
 
 	const toggleTodo = async(todo: Todo) => {

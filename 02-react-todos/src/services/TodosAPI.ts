@@ -43,6 +43,5 @@ export const updateTodo = async (todo: Todo) => {
  */
 export const deleteTodo = async (todo: Todo) => {
 	const todo_id = todo.id
-	const res = await axios.delete(`${BASE_URL}/todos/${todo_id}`)
-	return res.data as Todos
+	return await axios.delete(`${BASE_URL}/todos/${todo_id}`) as Todo
 }
