@@ -13,29 +13,30 @@ function App() {
 	const finishedTodos = todos.filter(todo => todo.completed)
 
 	const getTodos = async () => {
-		// const data = await TodosAPI.getTodos()
 		setTodos(await TodosAPI.getTodos())
 	}
 
 	const addTodo = async (todo: Todo) => {
-		setTodos([...todos, await TodosAPI.createTodo(todo)])
+		await TodosAPI.createTodo(todo)
+		setTodos(await TodosAPI.getTodos())
 	}
 
 	const deleteTodo = async (todoToDelete: Todo) => {
-		setTodos([...todos, await TodosAPI.deleteTodo(todoToDelete)])
+		await TodosAPI.deleteTodo(todoToDelete)
+		setTodos(await TodosAPI.getTodos())
 	}
 
-	const toggleTodo = async(todo: Todo) => {
+	const toggleTodo = async (todo: Todo) => {
 		todo.completed = !todo.completed
 		await TodosAPI.updateTodo(todo)
-		setTodos([...todos])
+		setTodos(await TodosAPI.getTodos())
 	}
 
 	// fetch todos when app is being mounted
 	// and when todo is added, toggled or deleted
 	useEffect(() => {
 		getTodos()
-	}, [todos.length, finishedTodos.length])
+	}, [])
 
 	return (
 		<div className="container">
