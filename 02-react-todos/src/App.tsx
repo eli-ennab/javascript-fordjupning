@@ -30,8 +30,12 @@ function App() {
 	}
 
 	const toggleTodo = async (todo: Todo) => {
-		todo.completed = !todo.completed
-		await TodosAPI.updateTodo(todo)
+		if (!todo.id) {
+			return
+		}
+		await TodosAPI.updateTodo(todo.id, {
+			completed: !todo.completed
+		})
 		getTodos()
 	}
 
