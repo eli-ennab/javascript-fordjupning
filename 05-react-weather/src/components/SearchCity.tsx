@@ -13,8 +13,6 @@ const SearchCity: React.FC<IProps> = ({onSearch}) => {
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
 
-		console.log(newSearch)
-
 		onSearch(newSearch)
 
 		setNewSearch('')

@@ -8,15 +8,35 @@ import './assets/scss/App.scss'
 
 function App() {
 
-	const [currentWeather, setCurrentWeather] = useState<ICurrentWeather>()
+	const [currentWeather, setCurrentWeather] = useState<ICurrentWeather | null>()
+	const [loading, setLoading] = useState(false)
+	const [error, setError] = useState('')
 
 	const getWeather = async (data: string) => {
-		setCurrentWeather(await getCurrentWeather(data))
+		if (!data) {
+			return
+		}
+
+		setError('')
+		setLoading(true)
+		setCurrentWeather(null)
+
+		try {
+			setCurrentWeather(await getCurrentWeather(data))
+			setLoading(false)
+		} catch (e: any) {
+			setError(e.toString())
+			setLoading(false)
+		}
 	}
 
 	return (
 		<div id="app" className="container">
 			<SearchCity onSearch={getWeather}/>
+
+		{loading && !currentWeather && (
+			<img src={Airplane} className="img-fluid" alt="" />
+		)}
 
 		{currentWeather && (
 			<Forecast weather={currentWeather}/>
