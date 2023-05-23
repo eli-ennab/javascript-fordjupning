@@ -18,18 +18,18 @@ function App() {
 
 	const addTodo = async (todo: Todo) => {
 		await TodosAPI.createTodo(todo)
-		setTodos(await TodosAPI.getTodos())
+		getTodos()
 	}
 
 	const deleteTodo = async (todoToDelete: Todo) => {
 		await TodosAPI.deleteTodo(todoToDelete)
-		setTodos(await TodosAPI.getTodos())
+		getTodos()
 	}
 
 	const toggleTodo = async (todo: Todo) => {
 		todo.completed = !todo.completed
 		await TodosAPI.updateTodo(todo)
-		setTodos(await TodosAPI.getTodos())
+		getTodos()
 	}
 
 	// fetch todos when app is being mounted

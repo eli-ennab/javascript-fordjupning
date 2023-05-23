@@ -20,7 +20,7 @@ export const getTodos = async () => {
  * @param data Object with properties and values for the new todo
  */
 export const createTodo = async (todo: Todo) => {
-	const res = await axios.post(`${BASE_URL}/todos`, { id: todo.id, title: todo.title, completed: todo.completed })
+	const res = await axios.post(`${BASE_URL}/todos`, todo)
 	return res.data as Todo
 }
 

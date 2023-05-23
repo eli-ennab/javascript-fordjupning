@@ -3,12 +3,12 @@
     {
       "id": 1,
       "title": "Learn TypeScript",
-      "completed": true
+      "completed": false
     },
     {
       "id": 2,
       "title": "Learn JavaScript",
-      "completed": true
+      "completed": false
     },
     {
       "id": 3,
@@ -22,12 +22,12 @@
     },
     {
       "title": "Learn the basics of AI",
-      "completed": false,
+      "completed": true,
       "id": 5
     },
     {
       "title": "Learn the basics of cyber security",
-      "completed": false,
+      "completed": true,
       "id": 6
     }
   ]
