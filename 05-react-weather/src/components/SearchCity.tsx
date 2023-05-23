@@ -6,16 +6,16 @@ interface IProps {
 	onSearch: (data: string) => void
 }
 
-const SearchCity: React.FC<IProps> = ({onSearch}) => {
+const SearchCity: React.FC<IProps> = ({ onSearch }) => {
 
-	const [newSearch, setNewSearch] = useState('')
+	const [search, setSearch] = useState('')
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
 
-		onSearch(newSearch)
+		onSearch(search)
 
-		setNewSearch('')
+		setSearch('')
 	}
 
 	return (
@@ -26,12 +26,12 @@ const SearchCity: React.FC<IProps> = ({onSearch}) => {
 						type="text"
 						className="form-control"
 						placeholder="Enter city to search for" aria-label="City" aria-details="Search for city to show current weather for."
-						onChange={e => setNewSearch(e.target.value)}
-						value={newSearch}
+						onChange={e => setSearch(e.target.value)}
+						value={search}
 					/>
 
 					<button
-						disabled={!newSearch.trim()}
+						disabled={!search.trim()}
 						type="submit"
 						className="btn btn-light"
 					>Search</button>
