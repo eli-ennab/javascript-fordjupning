@@ -12,7 +12,7 @@ function App() {
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState('')
 
-	const getWeather = async (data: string) => {
+	const handleSearch = async (data: string) => {
 		if (!data) {
 			return
 		}
@@ -25,22 +25,28 @@ function App() {
 			setCurrentWeather(await getCurrentWeather(data))
 			setLoading(false)
 		} catch (e: any) {
-			setError(e.toString())
+			setError(e.response.data.message)
+			console.log(e.response.data.message)
 			setLoading(false)
 		}
 	}
 
 	return (
 		<div id="app" className="container">
-			<SearchCity onSearch={getWeather}/>
 
-		{loading && !currentWeather && (
-			<img src={Airplane} className="img-fluid" alt="" />
-		)}
+			<SearchCity onSearch={handleSearch} />
 
-		{currentWeather && (
-			<Forecast weather={currentWeather}/>
-		)}
+			{ error && !loading && (
+				<p>{error}</p>
+			)}
+
+			{ loading && !currentWeather && (
+				<img src={Airplane} className="img-fluid" alt="Airplane showing when page load" />
+			)}
+
+			{ currentWeather && (
+				<Forecast data={currentWeather} />
+			)}
 
 		</div>
 	)
