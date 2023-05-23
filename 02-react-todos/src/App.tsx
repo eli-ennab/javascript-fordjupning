@@ -21,8 +21,11 @@ function App() {
 		getTodos()
 	}
 
-	const deleteTodo = async (todoToDelete: Todo) => {
-		await TodosAPI.deleteTodo(todoToDelete)
+	const deleteTodo = async (todo: Todo) => {
+		if (!todo.id) {
+			return
+		}
+		await TodosAPI.deleteTodo(todo.id)
 		getTodos()
 	}
 
