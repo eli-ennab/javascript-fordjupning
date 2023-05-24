@@ -1,12 +1,13 @@
 import React from 'react'
 import forecastBanner from '../assets/images/forecast-banner.png'
-import { ICurrentWeather } from '../types'
+import { ICurrentWeather, IWeather } from '../types'
 
 interface IProps {
 	data: ICurrentWeather
 }
 
 const Forecast: React.FC<IProps> = ({ data }) => {
+	const source = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
 
 	return (
 		<div id="forecast">
@@ -30,9 +31,8 @@ const Forecast: React.FC<IProps> = ({ data }) => {
 						<span id="windspeed">{data.wind.speed}</span> m/s
 					</p>
 
-					{/*
 					<ul className="conditions">
-						<li><img src="" title="CONDITION_MAIN" alt="CONDITION_MAIN">CONDITION_DESCRIPTION</li>
+						<li><img src={source} title={data.weather[0].description} alt={data.weather[0].main} />{data.weather[0].description}</li>
 					</ul>
 
 					<p className="text-muted small">
@@ -40,7 +40,6 @@ const Forecast: React.FC<IProps> = ({ data }) => {
 							1970-01-01 13:37:00
 						</span>
 					</p>
-					*/}
 				</div>
 
 			</div>
