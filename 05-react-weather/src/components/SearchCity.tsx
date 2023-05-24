@@ -31,11 +31,15 @@ const SearchCity: React.FC<IProps> = ({ onSearch }) => {
 					/>
 
 					<button
-						disabled={!search.trim()}
+						disabled={!search.trim() || search.length > 0 && search.length < 3}
 						type="submit"
 						className="btn btn-light"
 					>Search</button>
 				</div>
+
+				{search.length > 0 && search.length < 3 && (
+					<div className="form-text text-warning">Search must contain at least 3 chars.</div>
+				)}
 			</form>
 		</div>
 	)
