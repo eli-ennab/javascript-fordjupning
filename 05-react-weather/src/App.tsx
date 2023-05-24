@@ -25,8 +25,8 @@ function App() {
 			setCurrentWeather(await getCurrentWeather(data))
 			setLoading(false)
 		} catch (e: any) {
-			setError(e.response.data.message)
-			console.log(e.response.data.message)
+			setError(e.response.data.message.toString())
+			// console.log(e.response.data.message)
 			setLoading(false)
 		}
 	}
@@ -36,12 +36,15 @@ function App() {
 
 			<SearchCity onSearch={handleSearch} />
 
-			{ error && !loading && (
-				<p>{error}</p>
-			)}
 
 			{ loading && !currentWeather && (
 				<img src={Airplane} className="img-fluid" alt="Airplane showing when page load" />
+				)}
+
+			{ error && (
+				<div className="alert alert-dark" role="alert">
+					<p>{error}</p>
+				</div>
 			)}
 
 			{ currentWeather && (
