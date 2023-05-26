@@ -7,6 +7,8 @@ interface IProps {
 }
 
 const Forecast: React.FC<IProps> = ({ data }) => {
+	const freshness = new Date(data.dt * 1000).toLocaleString()
+
 	return (
 		<div id="forecast">
 			<div className="card">
@@ -46,11 +48,11 @@ const Forecast: React.FC<IProps> = ({ data }) => {
 						})}
 					</ul>
 
-					{/* <p className="text-muted small">
+					<p className="text-muted small">
 						<span>
-							{data.dt}
+							Last updated: {freshness}
 						</span>
-					</p> */}
+					</p>
 				</div>
 
 			</div>
