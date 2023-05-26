@@ -35,11 +35,11 @@ const Forecast: React.FC<IProps> = ({ data }) => {
 						<li><img src={source} title={data.weather[0].description} alt={data.weather[0].main} />{data.weather[0].description}</li>
 					</ul>
 
-					<p className="text-muted small">
+					{/* <p className="text-muted small">
 						<span>
-							1970-01-01 13:37:00
+							{data.dt}
 						</span>
-					</p>
+					</p> */}
 				</div>
 
 			</div>

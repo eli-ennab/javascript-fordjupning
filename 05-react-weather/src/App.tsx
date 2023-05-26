@@ -8,9 +8,9 @@ import './assets/scss/App.scss'
 
 function App() {
 
-	const [currentWeather, setCurrentWeather] = useState<ICurrentWeather | null>()
+	const [currentWeather, setCurrentWeather] = useState<ICurrentWeather | null>(null)
 	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState('')
+	const [error, setError] = useState<string | false>(false)
 
 	const handleSearch = async (data: string) => {
 		if (!data) {
@@ -23,12 +23,10 @@ function App() {
 
 		try {
 			setCurrentWeather(await getCurrentWeather(data))
-			setLoading(false)
 		} catch (e: any) {
 			setError(e.response.data.message.toString())
-			// console.log(e.response.data.message)
-			setLoading(false)
 		}
+		setLoading(false)
 	}
 
 	return (
@@ -37,9 +35,9 @@ function App() {
 			<SearchCity onSearch={handleSearch} />
 
 
-			{ loading && !currentWeather && (
+			{ loading && (
 				<img src={Airplane} className="img-fluid" alt="Airplane showing when page load" />
-				)}
+			)}
 
 			{ error && (
 				<div className="alert alert-dark" role="alert">
