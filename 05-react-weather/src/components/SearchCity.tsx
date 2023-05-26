@@ -37,7 +37,7 @@ const SearchCity: React.FC<IProps> = ({ onSearch }) => {
 					>Search</button>
 				</div>
 
-				{search.length > 0 && search.length < 3 && (
+				{ search.trim().length > 0 && search.trim().length < 3 && (
 					<div className="form-text text-warning">Search must contain at least 3 chars.</div>
 				)}
 			</form>
