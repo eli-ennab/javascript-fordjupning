@@ -30,24 +30,20 @@ const Forecast: React.FC<IProps> = ({ data }) => {
 					</p>
 
 					<ul className="conditions">
-						{ data.weather.map(condition => (
-							<li key={condition.id}>
-								<img
-									src={`https://openweathermap.org/img/wn/${condition.icon}@2x.png`}
-									title={condition.main}
-									alt={condition.description}
-								/>
-								{condition.description}
-							</li>
-						))}
-						{/* <li>
-							<img
-								src={source}
-								title={data.weather[0].description}
-								alt={data.weather[0].main}
-							/>
-							{data.weather[0].description}
-						</li> */}
+						{data.weather.map(condition => {
+							const weatherIconUrl = `https://openweathermap.org/img/wn/${condition.icon}@2x.png`
+
+							return (
+								<li key={condition.id}>
+									<img
+										src={weatherIconUrl}
+										title={condition.main}
+										alt={condition.main}
+									/>
+									{condition.description}
+								</li>
+							)
+						})}
 					</ul>
 
 					{/* <p className="text-muted small">
