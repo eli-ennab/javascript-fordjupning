@@ -31,7 +31,7 @@ const SearchCity: React.FC<IProps> = ({ onSearch }) => {
 					/>
 
 					<button
-						disabled={!search.trim() || search.length > 0 && search.length < 3}
+						disabled={search.trim().length < 3}
 						type="submit"
 						className="btn btn-light"
 					>Search</button>
