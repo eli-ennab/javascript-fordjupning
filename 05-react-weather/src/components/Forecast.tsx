@@ -9,9 +9,11 @@ interface IProps {
 }
 
 const Forecast: React.FC<IProps> = ({ data }) => {
-	const banner = data.dt > data.sys.sunrise && data.dt < data.sys.sunset
+	const now = Math.round(Date.now() / 1000)
+	const banner = now > data.sys.sunrise && now < data.sys.sunset
 		? dayBanner
 		: nightBanner
+
 	const freshness = new Date(data.dt * 1000).toLocaleString()
 
 	return (
