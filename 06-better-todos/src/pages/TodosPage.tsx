@@ -70,7 +70,7 @@ const TodosPage = () => {
 						as={Link}
 						className={todo.completed ? 'done' : ''}
 						key={todo.id}
-						to={`/todos/{todo.id}`}
+						to={`/todos/${todo.id}`}
 					>
 						{todo.title}
 					</ListGroup.Item>
