@@ -17,6 +17,36 @@ const TodoPage = () => {
 		setTodo(data)
 	}
 
+		/*
+	// Delete a todo in the api
+	const deleteTodo = async (todo: Todo) => {
+		if (!todo.id) {
+			return
+		}
+
+		// Delete todo from the api
+		await TodosAPI.deleteTodo(todo.id)
+
+		// Get all the todos from the api
+		getTodos()
+	}
+	*/
+
+	// Toggle the completed status of a todo in the api
+	const toggleTodo = async (todo: Todo) => {
+		if (!todo.id) {
+			return
+		}
+
+		// Update a todo in the api
+		await TodosAPI.updateTodo(todo.id, {
+			completed: !todo.completed
+		})
+
+		// Get all the todos from the api
+		getTodo(todo.id)
+	}
+
 	useEffect(() => {
 		if (typeof todoId !== "number") {
 			return
@@ -31,6 +61,24 @@ const TodoPage = () => {
 	return (
 		<>
 			<h1>{todo.title}</h1>
+
+			<Button
+				variant='info'
+				size='lg'
+				className='m-3'
+				onClick={ () => toggleTodo(todo) }
+				>
+					Toggle todo
+				</Button>
+
+			<Button
+				variant='danger'
+				size='lg'
+				className='m-3'
+				onClick={ () => (console.log('you tried to delete')) }
+				>
+					Delete todo
+				</Button>
 
 			<p><strong>Status:</strong> { todo.completed ? 'Completed' : 'Not completed'}</p>
 
