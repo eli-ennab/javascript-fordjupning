@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react'
+import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import { Link, useParams } from 'react-router-dom'
 import { Todo } from '../types'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import * as TodosAPI from '../services/TodosAPI'
 
 const TodoPage = () => {
 	const [todo, setTodo] = useState<Todo | null>(null)
+	const [isTodoDeleted, setIsTodoDeleted] = useState(false)
+	const navigate = useNavigate()
 	const { id } = useParams()
 	const todoId = Number(id)
 
@@ -17,20 +21,27 @@ const TodoPage = () => {
 		setTodo(data)
 	}
 
-		/*
 	// Delete a todo in the api
 	const deleteTodo = async (todo: Todo) => {
 		if (!todo.id) {
 			return
 		}
 
-		// Delete todo from the api
-		await TodosAPI.deleteTodo(todo.id)
+		try {
+			await TodosAPI.deleteTodo(todo.id)
 
-		// Get all the todos from the api
-		getTodos()
+			setIsTodoDeleted(true)
+
+			setTimeout(() => {
+				navigate('/todos')
+				setIsTodoDeleted(false)
+				}, 2000)
+		} catch (e: any) {
+			setIsTodoDeleted(false)
+
+			alert("Something went wrong")
+		}
 	}
-	*/
 
 	// Toggle the completed status of a todo in the api
 	const toggleTodo = async (todo: Todo) => {
@@ -62,29 +73,38 @@ const TodoPage = () => {
 		<>
 			<h1>{todo.title}</h1>
 
-			<Button
-				variant='info'
-				size='lg'
-				className='m-3'
-				onClick={ () => toggleTodo(todo) }
-				>
-					Toggle todo
-				</Button>
+			{ !isTodoDeleted &&
+				<>
+					<Button
+						variant='info'
+						size='lg'
+						className='m-3'
+						onClick={ () => toggleTodo(todo) }
+						>
+							Toggle todo
+					</Button>
 
-			<Button
-				variant='danger'
-				size='lg'
-				className='m-3'
-				onClick={ () => (console.log('you tried to delete')) }
-				>
-					Delete todo
-				</Button>
+					<Button
+						variant='danger'
+						size='lg'
+						className='m-3'
+						onClick={ () => deleteTodo(todo) }
+						>
+							Delete todo
+					</Button>
 
-			<p><strong>Status:</strong> { todo.completed ? 'Completed' : 'Not completed'}</p>
+					<p><strong>Status:</strong> { todo.completed ? 'Completed' : 'Not completed'}</p>
 
-			<Link to="/todos">
-				<Button variant='secondary'>&laquo; All todos</Button>
-			</Link>
+					<Link to="/todos">
+						<Button variant='secondary'>&laquo; All todos</Button>
+					</Link>
+				</>
+			}
+
+			{ isTodoDeleted &&
+				<Alert variant='info' className='m-5'>Todo was deleted successfully. You are being redirected to all todos.</Alert>
+			}
+
 		</>
 	)
 }
