@@ -6,6 +6,7 @@ import Navigation from './components/Navigation'
 import NotFound from './pages/NotFound'
 import TodoPage from './pages/TodoPage'
 import TodosPage from './pages/TodosPage'
+import NewTodoPage from './pages/NewTodoPage'
 
 const App = () => {
 	return (
@@ -15,6 +16,7 @@ const App = () => {
 			<Container className="py-3">
 				<Routes>
 					<Route path="/" element={<HomePage />} />
+					<Route path="/new" element={<NewTodoPage />} />
 					<Route path="/todos" element={<TodosPage />} />
 					<Route path="/todos/:id" element={<TodoPage />} />
 
