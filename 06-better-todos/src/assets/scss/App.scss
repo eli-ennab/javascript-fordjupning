@@ -2,9 +2,8 @@
 
 .todolist {
 	.done {
-		.todo-title {
+			color: $success;
 			font-style: italic;
 			text-decoration: line-through;
-		}
 	}
 }
