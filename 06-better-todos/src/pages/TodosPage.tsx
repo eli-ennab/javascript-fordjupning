@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Todo, Todos } from '../types'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { Link } from 'react-router-dom'
-// import AddNewTodoForm from '../components/AddNewTodoForm'
 import * as TodosAPI from '../services/TodosAPI'
 
 const TodosPage = () => {
