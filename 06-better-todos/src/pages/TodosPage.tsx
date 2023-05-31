@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Todo, Todos } from '../types'
+import { Todos } from '../types'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { Link } from 'react-router-dom'
 import * as TodosAPI from '../services/TodosAPI'
