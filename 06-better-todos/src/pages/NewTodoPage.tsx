@@ -21,6 +21,9 @@ const NewTodoPage = () => {
 				navigate('/todos')
 				}, 2000)
 		} catch (e: any) {
+
+			setIsTodoCreated(false)
+
 			alert("Something went wrong")
 		}
 	}

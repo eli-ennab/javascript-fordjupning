@@ -13,8 +13,8 @@ const Navigation = () => {
 					<Navbar.Collapse id="basic-navbar-nav">
 						<Nav className="ms-auto">
 							<Nav.Link as={NavLink} to="/">Home</Nav.Link>
-							<Nav.Link as={NavLink} to="/new">Create todo</Nav.Link>
-							<Nav.Link as={NavLink} to="/todos">Todos</Nav.Link>
+							<Nav.Link as={NavLink} to="/new">New todo</Nav.Link>
+							<Nav.Link as={NavLink} to="/todos">All todos</Nav.Link>
 						</Nav>
 					</Navbar.Collapse>
 				</Container>
