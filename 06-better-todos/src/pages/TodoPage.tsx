@@ -10,7 +10,6 @@ const TodoPage = () => {
 	const [error, setError] = useState<string | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [todo, setTodo] = useState<Todo | null>(null)
-	const [isTodoDeleted, setIsTodoDeleted] = useState(false)
 	const navigate = useNavigate()
 	const { id } = useParams()
 	const todoId = Number(id)
@@ -40,22 +39,16 @@ const TodoPage = () => {
 			return
 		}
 
-		try {
-			await TodosAPI.deleteTodo(todo.id)
+		// Delete todo from the api
+		await TodosAPI.deleteTodo(todo.id)
 
-			setIsTodoDeleted(true)
-
-			setTimeout(() => {
-				navigate('/todos', {
-					replace: true
-			})
-				setIsTodoDeleted(false)
-			}, 2000)
-		} catch (e: any) {
-			setIsTodoDeleted(false)
-
-			alert("Something went wrong")
-		}
+		// Navigate user to `/todos`
+		navigate('/todos', {
+			replace: true,
+			state: {
+				message: `Todo "${todo.title}" was successfully deleted.`,
+			},
+		})
 	}
 
 	// Toggle the completed status of a todo in the api
@@ -108,38 +101,17 @@ const TodoPage = () => {
 		<>
 			<h1>{todo.title}</h1>
 
-			{ !isTodoDeleted &&
-				<>
-					<Button
-						variant='info'
-						size='lg'
-						className='m-3'
-						onClick={ () => toggleTodo(todo) }
-						>
-							Toggle todo
-					</Button>
+			<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
 
-					<Button
-						variant='danger'
-						size='lg'
-						className='m-3'
-						onClick={ () => deleteTodo(todo) }
-						>
-							Delete todo
-					</Button>
+			<div className="buttons mb-3">
+				<Button variant='success' onClick={() => toggleTodo(todo)}>Toggle</Button>
+				<Button variant='warning'>Edit</Button>
+				<Button variant='danger' onClick={() => deleteTodo(todo)}>Delete</Button>
+			</div>
 
-					<p><strong>Status:</strong> { todo.completed ? 'Completed' : 'Not completed'}</p>
-
-					<Link to="/todos">
-						<Button variant='secondary'>&laquo; All todos</Button>
-					</Link>
-				</>
-			}
-
-			{ isTodoDeleted &&
-				<Alert variant='info' className='m-5'>Todo was deleted successfully. You are being redirected to all todos.</Alert>
-			}
-
+			<Link to="/todos">
+				<Button variant='secondary'>&laquo; All todos</Button>
+			</Link>
 		</>
 	)
 }
