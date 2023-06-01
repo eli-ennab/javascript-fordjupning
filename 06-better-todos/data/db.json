@@ -14,6 +14,26 @@
       "title": "Learn stuff",
       "completed": false,
       "id": 3
+    },
+    {
+      "title": "Applause for memes",
+      "completed": false,
+      "id": 4
+    },
+    {
+      "title": "Be ready for coffee at any given time",
+      "completed": true,
+      "id": 5
+    },
+    {
+      "title": "Create another todo just to get that C ",
+      "completed": true,
+      "id": 6
+    },
+    {
+      "title": "Do myself a favor and get some more coffee",
+      "completed": false,
+      "id": 7
     }
   ]
 }
