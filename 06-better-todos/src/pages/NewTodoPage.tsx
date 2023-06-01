@@ -19,7 +19,7 @@ const NewTodoPage = () => {
 
 			setTimeout(() => {
 				navigate('/todos')
-				}, 2000)
+			}, 2000)
 		} catch (e: any) {
 
 			setIsTodoCreated(false)

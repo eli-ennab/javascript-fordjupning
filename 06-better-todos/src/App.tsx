@@ -16,8 +16,8 @@ const App = () => {
 			<Container className="py-3">
 				<Routes>
 					<Route path="/" element={<HomePage />} />
-					<Route path="/new" element={<NewTodoPage />} />
 					<Route path="/todos" element={<TodosPage />} />
+					<Route path="/todos/new" element={<NewTodoPage />} />
 					<Route path="/todos/:id" element={<TodoPage />} />
 
 					<Route path="*" element={<NotFound />} />
