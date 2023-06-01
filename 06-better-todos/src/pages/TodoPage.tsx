@@ -46,7 +46,9 @@ const TodoPage = () => {
 			setIsTodoDeleted(true)
 
 			setTimeout(() => {
-				navigate('/todos')
+				navigate('/todos', {
+					replace: true
+			})
 				setIsTodoDeleted(false)
 			}, 2000)
 		} catch (e: any) {
