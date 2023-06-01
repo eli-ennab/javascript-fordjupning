@@ -39,16 +39,21 @@ const TodoPage = () => {
 			return
 		}
 
-		// Delete todo from the api
-		await TodosAPI.deleteTodo(todo.id)
+		if (window.confirm("Are you sure?")) {
+			// Delete todo from the api
+			await TodosAPI.deleteTodo(todo.id)
 
-		// Navigate user to `/todos`
-		navigate('/todos', {
-			replace: true,
-			state: {
-				message: `Todo "${todo.title}" was successfully deleted.`,
-			},
-		})
+			// Navigate user to `/todos`
+			navigate('/todos', {
+				replace: true,
+				state: {
+					message: `Todo "${todo.title}" was successfully deleted.`,
+				},
+			})
+		} else {
+			return
+		}
+
 	}
 
 	// Toggle the completed status of a todo in the api
