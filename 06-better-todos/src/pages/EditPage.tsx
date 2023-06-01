@@ -9,6 +9,7 @@ const EditPage = () => {
 	const location = useLocation()
 	const navigate = useNavigate()
 	const { id } = useParams()
+	const todoId = Number(id)
 	const [updateTodoTitle, setUpdateTodoTitle] = useState("")
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -20,7 +21,7 @@ const EditPage = () => {
 			title: updateTodoTitle,
 		}
 
-		const res = await TodosAPI.updateTodo(Number(id), updatedTodo)
+		const res = await TodosAPI.updateTodo(todoId, updatedTodo)
 		console.log(res)
 
 		// clear
