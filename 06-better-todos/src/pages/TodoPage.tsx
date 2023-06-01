@@ -35,7 +35,7 @@ const TodoPage = () => {
 			setTimeout(() => {
 				navigate('/todos')
 				setIsTodoDeleted(false)
-				}, 2000)
+			}, 2000)
 		} catch (e: any) {
 			setIsTodoDeleted(false)
 
@@ -49,13 +49,23 @@ const TodoPage = () => {
 			return
 		}
 
+		/*
 		// Update a todo in the api
 		await TodosAPI.updateTodo(todo.id, {
 			completed: !todo.completed
 		})
 
-		// Get all the todos from the api
+		// Get the todo from the api
 		getTodo(todo.id)
+		*/
+
+		// Update a todo in the api
+		const updatedTodo = await TodosAPI.updateTodo(todo.id, {
+			completed: !todo.completed
+		})
+
+		// update todo state with the updated todo
+		setTodo(updatedTodo)
 	}
 
 	useEffect(() => {
