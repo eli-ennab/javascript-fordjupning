@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom'
 import * as TodosAPI from '../services/TodosAPI'
 
 const TodoPage = () => {
+	const [error, setError] = useState<string | null>(null)
+	const [loading, setLoading] = useState(true)
 	const [todo, setTodo] = useState<Todo | null>(null)
 	const [isTodoDeleted, setIsTodoDeleted] = useState(false)
 	const navigate = useNavigate()
@@ -14,11 +16,22 @@ const TodoPage = () => {
 	const todoId = Number(id)
 
 	const getTodo = async (id: number) => {
-		// call TodosAPI
-		const data = await TodosAPI.getTodo(id)
+		setError(null)
+		setLoading(true)
 
-		// update todo state with data
-		setTodo(data)
+		try {
+			// call TodosAPI
+			const data = await TodosAPI.getTodo(id)
+
+			// update todo state with data
+			setTodo(data)
+
+		} catch (e: any) {
+			// set error
+			setError(e.message)
+		}
+
+		setLoading(false)
 	}
 
 	// Delete a todo in the api
@@ -75,7 +88,17 @@ const TodoPage = () => {
 		getTodo(todoId)
 	}, [todoId])
 
-	if (!todo) {
+
+	if (error) {
+		return (
+			<Alert variant="warning">
+				<h1>Something went wrong</h1>
+				<p>{error}</p>
+			</Alert>
+		)
+	}
+
+	if (loading || !todo) {
 		return (<p>Loading...</p>)
 	}
 
