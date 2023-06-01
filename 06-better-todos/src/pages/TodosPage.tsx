@@ -20,6 +20,11 @@ const TodosPage = () => {
 		getTodos()
 	}, [])
 
+	const sortAsc = [...todos].sort((a, b) =>a.title > b.title ? 1 : -1,)
+
+	const completedTodos = sortAsc.filter(todo => todo.completed)
+	const notCompletedTodos = sortAsc.filter(todo => !todo.completed)
+
 	return (
 	<>
 		<h1 className="mb-3">Todos</h1>
@@ -31,19 +36,38 @@ const TodosPage = () => {
 		)}
 
 		{todos.length > 0 && (
-			<ListGroup className="todolist">
-				{todos.map(todo => (
+			<>
+				<ListGroup className="todolist p-2">
+					<p className="p-2">Completed todos</p>
+					{completedTodos.map(todo => (
+							<ListGroup.Item
+								action
+								as={Link}
+								className={todo.completed ? 'done' : ''}
+								key={todo.id}
+								to={`/todos/${todo.id}`}
+							>
+								{todo.title}
+							</ListGroup.Item>
+						))
+					}
+				</ListGroup>
+				<ListGroup className="todolist p-2">
+				<p className="p-2">Not completed todos</p>
+				{notCompletedTodos.map(todo => (
 					<ListGroup.Item
-						action
-						as={Link}
-						className={todo.completed ? 'done' : ''}
-						key={todo.id}
-						to={`/todos/${todo.id}`}
-					>
-						{todo.title}
-					</ListGroup.Item>
-				))}
+							action
+							as={Link}
+							className={todo.completed ? 'done' : ''}
+							key={todo.id}
+							to={`/todos/${todo.id}`}
+						>
+							{todo.title}
+						</ListGroup.Item>
+					))
+				}
 			</ListGroup>
+			</>
 		)}
 
 		{todos.length === 0 && (
