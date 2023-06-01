@@ -7,6 +7,7 @@ import NotFound from './pages/NotFound'
 import TodoPage from './pages/TodoPage'
 import TodosPage from './pages/TodosPage'
 import NewTodoPage from './pages/NewTodoPage'
+import EditPage from './pages/EditPage'
 
 const App = () => {
 	return (
@@ -17,8 +18,9 @@ const App = () => {
 				<Routes>
 					<Route path="/" element={<HomePage />} />
 					<Route path="/todos" element={<TodosPage />} />
-					<Route path="/todos/new" element={<NewTodoPage />} />
 					<Route path="/todos/:id" element={<TodoPage />} />
+					<Route path="/todos/:id/edit" element={<EditPage />} />
+					<Route path="/todos/new" element={<NewTodoPage />} />
 
 					<Route path="*" element={<NotFound />} />
 				</Routes>

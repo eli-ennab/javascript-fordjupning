@@ -56,21 +56,24 @@ const TodoPage = () => {
 
 	}
 
+	// Edit a todo
+	const editTodo = (todo: Todo) => {
+		if (!todo.id) {
+			return
+		}
+
+		navigate(`/todos/${todo.id}/edit`, {
+			state: {
+				message: `${todo.title}`,
+			},
+		})
+	}
+
 	// Toggle the completed status of a todo in the api
 	const toggleTodo = async (todo: Todo) => {
 		if (!todo.id) {
 			return
 		}
-
-		/*
-		// Update a todo in the api
-		await TodosAPI.updateTodo(todo.id, {
-			completed: !todo.completed
-		})
-
-		// Get the todo from the api
-		getTodo(todo.id)
-		*/
 
 		// Update a todo in the api
 		const updatedTodo = await TodosAPI.updateTodo(todo.id, {
@@ -110,7 +113,7 @@ const TodoPage = () => {
 
 			<div className="buttons mb-3">
 				<Button variant='success' onClick={() => toggleTodo(todo)}>Toggle</Button>
-				<Button variant='warning'>Edit</Button>
+				<Button variant='warning' onClick={() => editTodo(todo)}>Edit</Button>
 				<Button variant='danger' onClick={() => deleteTodo(todo)}>Delete</Button>
 			</div>
 
