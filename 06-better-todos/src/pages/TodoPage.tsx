@@ -3,13 +3,14 @@ import Button from 'react-bootstrap/Button'
 import { Link, useParams } from 'react-router-dom'
 import { Todo } from '../types'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import * as TodosAPI from '../services/TodosAPI'
 
 const TodoPage = () => {
 	const [error, setError] = useState<string | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [todo, setTodo] = useState<Todo | null>(null)
+	const location = useLocation()
 	const navigate = useNavigate()
 	const { id } = useParams()
 	const todoId = Number(id)
@@ -107,7 +108,14 @@ const TodoPage = () => {
 
 	return (
 		<>
+			{location.state?.message && (
+				<Alert variant="success">
+					{location.state.message}
+				</Alert>
+			)}
+
 			<h1>{todo.title}</h1>
+
 
 			<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
 

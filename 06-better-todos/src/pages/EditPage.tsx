@@ -23,7 +23,11 @@ const EditPage = () => {
 
 		setUpdateTodoTitle("")
 
-		navigate(-1)
+		navigate(`/todos/${todoId}`, {
+			state: {
+				message: `Todo was updated successfully.`,
+			},
+		})
 	}
 
 	return (
