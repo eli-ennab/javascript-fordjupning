@@ -1,9 +1,32 @@
 @import "bootstrap/scss/bootstrap";
 
+body {
+	background-color: rgb(52, 54, 61);
+	color: rgb(255, 255, 255);
+}
+
+.navbar {
+	border: 1px solid lightgrey;
+}
+
 .todolist {
 	.done {
-			color: $success;
-			font-style: italic;
 			text-decoration: line-through;
 	}
+}
+
+.list-group-item {
+	padding: 10px;
+	background-color: rgb(230, 230, 230);
+	border: 1px solid lightgrey;
+}
+
+h1,
+p,
+button {
+	letter-spacing: 1.5px;
+}
+
+.btn {
+	border: 1px solid white;
 }

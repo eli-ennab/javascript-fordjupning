@@ -120,14 +120,14 @@ const TodoPage = () => {
 			<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
 
 			<div className="buttons mb-3">
-				<Button variant='success'
+				<Button variant='light'
 					onClick={() => toggleTodo(todo)}
 					className="m-1"
 					>
 						Toggle
 				</Button>
 				<Button
-					variant='warning'
+					variant='dark'
 					onClick={() => editTodo(todo)}
 					className="m-1"
 					>
@@ -144,7 +144,7 @@ const TodoPage = () => {
 
 			<Link to="/todos">
 				<Button
-					variant='secondary'
+					variant='light'
 					className="m-1"
 					>
 						&laquo; All todos

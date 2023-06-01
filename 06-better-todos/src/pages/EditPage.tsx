@@ -43,7 +43,7 @@ const EditPage = () => {
 			</Form.Group>
 
 			<Button
-				variant="secondary"
+				variant="light"
 				onClick={() => navigate(-1)}
 				className="m-1"
 				>
@@ -51,7 +51,7 @@ const EditPage = () => {
 			</Button>
 
 			<Button
-				variant="primary"
+				variant="dark"
 				type="submit"
 				className="m-1"
 				>
