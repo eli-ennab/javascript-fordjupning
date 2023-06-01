@@ -112,13 +112,35 @@ const TodoPage = () => {
 			<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
 
 			<div className="buttons mb-3">
-				<Button variant='success' onClick={() => toggleTodo(todo)}>Toggle</Button>
-				<Button variant='warning' onClick={() => editTodo(todo)}>Edit</Button>
-				<Button variant='danger' onClick={() => deleteTodo(todo)}>Delete</Button>
+				<Button variant='success'
+					onClick={() => toggleTodo(todo)}
+					className="m-1"
+					>
+						Toggle
+				</Button>
+				<Button
+					variant='warning'
+					onClick={() => editTodo(todo)}
+					className="m-1"
+					>
+						Edit
+				</Button>
+				<Button
+					variant='danger'
+					onClick={() => deleteTodo(todo)}
+					className="m-1"
+					>
+						Delete
+				</Button>
 			</div>
 
 			<Link to="/todos">
-				<Button variant='secondary'>&laquo; All todos</Button>
+				<Button
+					variant='secondary'
+					className="m-1"
+					>
+						&laquo; All todos
+				</Button>
 			</Link>
 		</>
 	)
