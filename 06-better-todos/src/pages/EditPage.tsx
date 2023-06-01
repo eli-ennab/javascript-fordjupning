@@ -13,21 +13,16 @@ const EditPage = () => {
 	const [updateTodoTitle, setUpdateTodoTitle] = useState("")
 
 	const handleSubmit = async (e: React.FormEvent) => {
-		// stop form from submitting
 		e.preventDefault()
 
-		// create a new todo and set a new todos state
 		const updatedTodo = {
 			title: updateTodoTitle,
 		}
 
-		const res = await TodosAPI.updateTodo(todoId, updatedTodo)
-		console.log(res)
+		await TodosAPI.updateTodo(todoId, updatedTodo)
 
-		// clear
 		setUpdateTodoTitle("")
 
-		// go back
 		navigate(-1)
 	}
 
@@ -58,7 +53,7 @@ const EditPage = () => {
 				>
 					Submit
 			</Button>
-	  </Form>
+	  	</Form>
 	)
 }
 
