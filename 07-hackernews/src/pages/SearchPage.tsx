@@ -4,16 +4,43 @@ import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 
 const SearchPage = () => {
+	const [error, setError] = useState<string|null>(null)
+	const [loading, setLoading] = useState(false)
+	const [searchInput, setSearchInput] = useState('')
+	// const [searchResult, setSearchResult] = useState()
+
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault()
+
+		if (!searchInput.trim().length) {
+			return
+		}
+
+		// search for hacker news
+		try {
+			// searchHackerNews(searchInput, 0)
+			// setLoading(true)
+		} catch (err) {
+			// setError(err.message)
+		}
+	}
+
 	return (
 		<>
 			<h1>Search for Hacker News</h1>
 
-			<Form className="mb-4">
+			<Form
+				className="mb-4"
+				onSubmit={() => {handleSubmit}}
+			>
 				<Form.Group className="mb-3" controlId="searchQuery">
 					<Form.Label>Search Query</Form.Label>
 					<Form.Control
 						type="text"
 						placeholder="Enter your search query"
+						onChange={e => setSearchInput(e.target.value)}
+						value={searchInput}
+						required
 					/>
 				</Form.Group>
 
@@ -21,7 +48,8 @@ const SearchPage = () => {
 					<Button
 						variant="light"
 						size="lg"
-						type="submit">
+						type="submit"
+						disabled={!searchInput.trim().length}>
 							Search
 					</Button>
 				</div>
