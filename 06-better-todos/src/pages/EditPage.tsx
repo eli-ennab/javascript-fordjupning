@@ -7,10 +7,11 @@ import * as TodosAPI from '../services/TodosAPI'
 
 const EditPage = () => {
 	const location = useLocation()
+	const todoTitle = location.state.message
 	const navigate = useNavigate()
 	const { id } = useParams()
 	const todoId = Number(id)
-	const [updateTodoTitle, setUpdateTodoTitle] = useState("")
+	const [updateTodoTitle, setUpdateTodoTitle] = useState(todoTitle)
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()

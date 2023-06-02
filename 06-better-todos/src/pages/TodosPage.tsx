@@ -20,7 +20,7 @@ const TodosPage = () => {
 		getTodos()
 	}, [])
 
-	const sortAsc = [...todos].sort((a, b) =>a.title > b.title ? 1 : -1,)
+	const sortAsc = [...todos].sort((a, b) => a.title > b.title ? 1 : -1)
 
 	const completedTodos = sortAsc.filter(todo => todo.completed)
 	const notCompletedTodos = sortAsc.filter(todo => !todo.completed)
