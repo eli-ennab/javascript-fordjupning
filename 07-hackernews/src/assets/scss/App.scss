@@ -5,6 +5,15 @@ body {
 	color: white;
 }
 
+nav {
+	border-bottom: 1px dotted whitesmoke;
+}
+
 h1, h2, h3, h4, h5, h6 {
 	margin-bottom: 0.75em;
+}
+
+.btn-prev,
+.btn-next {
+	border: 1px dotted whitesmoke;
 }
