@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom'
 
-const HomePage = () => {
+const NotFound = () => {
 	return (
 		<>
 			<h1>Sorry homie, pagie not found.</h1>
@@ -13,4 +13,4 @@ const HomePage = () => {
 	)
 }
 
-export default HomePage
+export default NotFound
