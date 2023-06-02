@@ -1,6 +1,7 @@
 import Container from 'react-bootstrap/Container'
 import { Routes, Route } from 'react-router-dom'
 import HomePage from './pages/HomePage'
+import NotFound from './pages/NotFound'
 import Navigation from './components/Navigation'
 import './assets/scss/App.scss'
 
@@ -13,6 +14,7 @@ const App = () => {
 				<Routes>
 					<Route path="/" element={<HomePage />} />
 					{/* <Route path="/search" element={SearchHackerNews} /> */}
+					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</Container>
 		</div>
