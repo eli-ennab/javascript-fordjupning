@@ -5,11 +5,13 @@ import { Todo } from '../types'
 import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import * as TodosAPI from '../services/TodosAPI'
+import ConfirmationModal from '../components/ConfirmationModal'
 
 const TodoPage = () => {
 	const [error, setError] = useState<string | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [todo, setTodo] = useState<Todo | null>(null)
+	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 	const location = useLocation()
 	const navigate = useNavigate()
 	const { id } = useParams()
@@ -37,10 +39,6 @@ const TodoPage = () => {
 	// Delete a todo in the api
 	const deleteTodo = async (todo: Todo) => {
 		if (!todo.id) {
-			return
-		}
-
-		if (!window.confirm("Are you sure?")) {
 			return
 		}
 
@@ -134,12 +132,20 @@ const TodoPage = () => {
 				</Button>
 				<Button
 					variant='danger'
-					onClick={() => deleteTodo(todo)}
+					onClick={() => setShowConfirmDelete(true)}
 					className="m-1"
 					>
 						Delete
 				</Button>
 			</div>
+
+			<ConfirmationModal
+				show={showConfirmDelete}
+				onCancel={() => setShowConfirmDelete(false)}
+				onConfirm={() => deleteTodo(todo)}
+			>
+
+			</ConfirmationModal>
 
 			<Link to="/todos">
 				<Button
