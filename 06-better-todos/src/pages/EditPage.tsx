@@ -22,7 +22,7 @@ const EditPage = () => {
 
 		await TodosAPI.updateTodo(todoId, updatedTodo)
 
-		setUpdateTodoTitle("")
+		// setUpdateTodoTitle("")
 
 		navigate(`/todos/${todoId}`, {
 			state: {
@@ -33,7 +33,7 @@ const EditPage = () => {
 
 	return (
 		<Form onSubmit={handleSubmit}>
-			<Form.Group className="mb-3">
+			<Form.Group className="mb-3" controlId="title">
 				<Form.Label>Edit your todo title here</Form.Label>
 				<Form.Control
 					type="text"
