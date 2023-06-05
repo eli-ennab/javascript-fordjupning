@@ -9,11 +9,12 @@ import { HN_SearchResponse } from '../types'
 const SearchPage = () => {
 	const [error, setError] = useState<string|null>(null)
 	const [loading, setLoading] = useState(false)
+	const [page, setPage] = useState(0)
 	const [searchInput, setSearchInput] = useState("")
 	const [searchResult, setSearchResult] = useState<HN_SearchResponse|null>(null)
 	const queryRef = useRef("")
 
-	const searchHackerNews = async (searchQuery: string) => {
+	const searchHackerNews = async (searchQuery: string, searchPage = 0) => {
 		setError(null)
 		setLoading(true)
 		setSearchResult(null)
@@ -22,7 +23,7 @@ const SearchPage = () => {
 		queryRef.current = searchQuery
 
 		try {
-			const res = await HN_searchByDate(searchQuery)
+			const res = await HN_searchByDate(searchQuery, searchPage)
 			setSearchResult(res)
 		} catch (err: any) {
 			setError(err.message)
@@ -40,8 +41,18 @@ const SearchPage = () => {
 		}
 
 		// search HN
-		searchHackerNews(searchInput)
+		setPage(0)
+		searchHackerNews(searchInput, 0)
 	}
+
+	// react to changes in page state
+	useEffect(() => {
+		if (!queryRef.current) {
+			return
+		}
+
+		searchHackerNews(queryRef.current, page)
+	}, [page])
 
 	return (
 		<>
@@ -95,14 +106,18 @@ const SearchPage = () => {
 						<div className="prev">
 							<Button
 								variant="dark"
+								disabled={page <= 0}
+								onClick={() => {setPage(prevValue => prevValue - 1)}}
 							>Previous Page</Button>
 						</div>
 
-						<div className="page">{searchResult.page}</div>
+						<div className="page">Page {searchResult.page + 1}/{searchResult.nbPages + 1}</div>
 
 						<div className="next">
 							<Button
 								variant="dark"
+								disabled={page + 1 >= searchResult.nbPages}
+								onClick={() => {setPage(prevValue => prevValue + 1)}}
 							>Next Page</Button>
 						</div>
 					</div>
