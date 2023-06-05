@@ -31,8 +31,6 @@ const get = async <T>(endpoint: string) => {
 /**
  * Search Hacker News stories
  *
- * @todo Replace any with correct type definition 😱!
- *
  * @param {string} query Search query to search for
  * @param {number} page Page of search results to get
  * @returns Promise
@@ -43,8 +41,6 @@ export const search = async (query: string, page = 0) => {
 
 /**
  * Search Hacker News stories by date
- *
- * @todo Replace any with correct type definition 😱!
  *
  * @param {string} query Search query to search for
  * @param {number} page Page of search results to get
