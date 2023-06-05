@@ -1,79 +1,87 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
+import { searchByDate as HN_searchByDate } from '../services/HackerNewsAPI'
+import { HN_SearchResponse } from '../types'
 
 const SearchPage = () => {
 	const [error, setError] = useState<string|null>(null)
 	const [loading, setLoading] = useState(false)
-	const [searchInput, setSearchInput] = useState('')
-	// const [searchResult, setSearchResult] = useState()
+	const [searchInput, setSearchInput] = useState("")
+	const [searchResult, setSearchResult] = useState<HN_SearchResponse|null>(null)
+
+	const searchHackerNews = async (searchQuery: string) => {
+		setError(null)
+		setLoading(true)
+		setSearchResult(null)
+
+		try {
+			const res = await HN_searchByDate(searchQuery)
+			setSearchResult(res)
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (err: any) {
+			setError(err.message)
+		}
+
+		setLoading(false)
+	}
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
 
+		// haxx0r
 		if (!searchInput.trim().length) {
 			return
 		}
 
-		// search for hacker news
-		try {
-			// searchHackerNews(searchInput, 0)
-			// setLoading(true)
-		} catch (err) {
-			// setError(err.message)
-		}
+		// search HN
+		searchHackerNews(searchInput)
 	}
 
 	return (
 		<>
-			<h1>Search for Hacker News</h1>
+			<h1>Hacker News Search</h1>
 
-			<Form
-				className="mb-4"
-				onSubmit={() => {handleSubmit}}
-			>
+			<Form className="mb-4" onSubmit={handleSubmit}>
 				<Form.Group className="mb-3" controlId="searchQuery">
 					<Form.Label>Search Query</Form.Label>
 					<Form.Control
-						type="text"
-						placeholder="Enter your search query"
 						onChange={e => setSearchInput(e.target.value)}
-						value={searchInput}
+						placeholder="Enter your search query"
 						required
+						type="text"
+						value={searchInput}
 					/>
 				</Form.Group>
 
 				<div className="d-flex justify-content-end">
 					<Button
 						variant="light"
-						size="lg"
 						type="submit"
-						disabled={!searchInput.trim().length}>
-							Search
-					</Button>
+						disabled={!searchInput.trim().length}
+					>Search</Button>
 				</div>
 			</Form>
 
-			{ false && (
-				<p>Loading...</p>
-			)}
+			{loading && <p>Loading...</p>}
 
-			{ true && (
+			{searchResult && (
 				<div id="search-result">
-					<p>Showing 'HITS' search results for 'QUERY'</p>
+					<p>Showing {searchResult.nbHits} search results for {searchInput}...</p>
 
-					<ListGroup
-						className="mb-3"
-					>
-						{[{}, {}, {}].map(hit => (
+					<ListGroup className="mb-3">
+						{searchResult.hits.map(hit => (
 							<ListGroup.Item
 								action
-								href={''}
-								key={''}	// 'STORY_ID'
+								href={hit.url}
+								key={hit.objectID}
 							>
-								<h2 className="h3">'TITLE'</h2>
-								<p className="text-muted sm mb-0">'POINTS' points by 'AUTHOR' at 'CREATED_AT'</p>
+								<h2 className="h3">{hit.title}</h2>
+								<p className="text-muted small mb-0">
+									{hit.points} points by {hit.author} at {hit.created_at}
+								</p>
 							</ListGroup.Item>
 						))}
 					</ListGroup>
@@ -82,21 +90,15 @@ const SearchPage = () => {
 						<div className="prev">
 							<Button
 								variant="dark"
-								className="btn-prev"
-							>
-								Previous page
-							</Button>
+							>Previous Page</Button>
 						</div>
 
-						<div className="page">'PAGE'</div>
+						<div className="page">{searchResult.page}</div>
 
 						<div className="next">
 							<Button
 								variant="dark"
-								className="btn-next"
-							>
-								Next page
-							</Button>
+							>Next Page</Button>
 						</div>
 					</div>
 				</div>
