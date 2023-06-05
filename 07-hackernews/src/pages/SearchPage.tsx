@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -19,8 +20,6 @@ const SearchPage = () => {
 		try {
 			const res = await HN_searchByDate(searchQuery)
 			setSearchResult(res)
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (err: any) {
 			setError(err.message)
 		}
@@ -65,9 +64,11 @@ const SearchPage = () => {
 				</div>
 			</Form>
 
-			{loading && <p>Loading...</p>}
+			{ error && <Alert variant="warning">{error}</Alert>}
 
-			{searchResult && (
+			{ loading && <p>Loading...</p>}
+
+			{ searchResult && (
 				<div id="search-result">
 					<p>Showing {searchResult.nbHits} search results for {searchInput}...</p>
 
