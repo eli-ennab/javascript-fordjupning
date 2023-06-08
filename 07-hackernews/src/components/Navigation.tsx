@@ -2,7 +2,7 @@ import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import { NavLink, Link } from 'react-router-dom'
-import { useThemeContext } from '../contexts/ThemeProvider'
+import useThemeContext from '../hooks/useThemeContext'
 import Button from 'react-bootstrap/Button'
 
 const Navigation = () => {

@@ -6,7 +6,7 @@ import SearchPage from './pages/SearchPage'
 import NotFound from './pages/NotFound'
 import Navigation from './components/Navigation'
 import './assets/scss/App.scss'
-import { useThemeContext } from './contexts/ThemeProvider'
+import useThemeContext from './hooks/useThemeContext'
 
 const App = () => {
 	const { isLightMode } = useThemeContext()

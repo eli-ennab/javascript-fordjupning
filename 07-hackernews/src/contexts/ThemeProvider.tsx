@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useState } from 'react'
 
 type ThemeContextType = {
 	isLightMode: boolean
@@ -13,10 +13,6 @@ export const ThemeContext = createContext<ThemeContextType>({
 		throw new Error("Trying to use function toggleTheme outside of context")
 	}
 })
-
-export const useThemeContext = () => {
-	return useContext(ThemeContext)
-}
 
 interface IProps {
 	children: React.ReactNode
