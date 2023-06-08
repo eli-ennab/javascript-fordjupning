@@ -9,6 +9,7 @@ type ThemeContextType = {
 export const ThemeContext = createContext<ThemeContextType>({
 	isLightMode: false,
 	toggleTheme: () => {
+		// we can provide a default implemenatation that throws an error if trying to use outside of context
 		throw new Error("Trying to use function toggleTheme outside of context")
 	}
 })
