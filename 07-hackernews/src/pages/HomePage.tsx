@@ -16,7 +16,7 @@ const HomePage = () => {
 
 			<p>Your theme is: <strong>{isLightMode ? 'light' : 'dark'}</strong></p>
 
-			<Button variant="light" onClick={handleToggleTheme}>Switch theme</Button>
+			<Button variant="warning" onClick={handleToggleTheme}>Switch theme</Button>
 
 			<Link to="/search">
 				<Button variant="dark">Use the Search for Hacker News</Button>
