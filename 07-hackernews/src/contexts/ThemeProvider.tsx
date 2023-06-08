@@ -2,11 +2,15 @@ import { createContext, useState } from 'react'
 
 type ThemeContextType = {
 	isLightMode: boolean
+	toggleTheme: () => void
 }
 
 // This creates the actual context and sets the context's initial/default value
 export const ThemeContext = createContext<ThemeContextType>({
-	isLightMode: false
+	isLightMode: false,
+	toggleTheme: () => {
+		throw new Error("Trying to use function toggleTheme outside of context")
+	}
 })
 
 interface IProps {
@@ -22,7 +26,7 @@ const ThemeProvider: React.FC<IProps> = ({ children }) => {
 	}
 
 	return (
-		<ThemeContext.Provider value={ {isLightMode} }>
+		<ThemeContext.Provider value={{ isLightMode, toggleTheme }}>
 			{ children }
 		</ThemeContext.Provider>
 	)
