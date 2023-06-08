@@ -1,38 +1,35 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
-import { DogAPI_RandomImageResponse } from '../types'
+import useGetData from '../hooks/useGetData'
 
 const RandomDogPage = () => {
-	const [data, setdata] = useState<DogAPI_RandomImageResponse|null>(null)
-	const [url, setUrl] = useState<string|null>(null)
-
-	const getData= async (resourceUrl: string) => {
-		// setUrl(null)
-		const res = await axios.get<DogAPI_RandomImageResponse>(resourceUrl)
-		// await new Promise(r => setTimeout(r, 3000))
-		setdata(res.data)
-	}
-
-	useEffect(() => {
-		if(!url) {
-			return
-		}
-
-		getData(url)
-	}, [url])
+	const { data, setUrl, reloadData, error, loading } = useGetData()
 
 	return (
 		<>
 			<h1>A random doggo</h1>
 
 			<div>
-				<Button variant="light" onClick={() => setUrl("https://dog.ceo/api/breeds/image/random")}>Random Doggo</Button>
-				<Button variant="light" onClick={() => setUrl("https://dog.ceo/api/breed/boxer/images/random")}>Random Boxer Doggo</Button>
+				<Button
+					variant="primary"
+					onClick={() => setUrl("https://dog.ceo/api/breds/image/random")}
+				>Random Doggo</Button>
+
+				<Button
+					variant="primary"
+					onClick={() => setUrl("https://dog.ceo/api/breed/boer/images/random")}
+				>Random Boxer Doggo</Button>
+
+				<Button
+					variant="primary"
+					onClick={() => {reloadData("https://dog.ceo/api/brees/image/random")}}
+				>MOAR!!</Button>
 			</div>
 
-			{ !data && <p>Loading...</p> }
+			{ !loading && error && ( <Alert variant="primary">{error}</Alert> )}
+
+			{ loading && <p>Loading...</p> }
 
 			<div>
 				{ data && data.status === "success" && (
