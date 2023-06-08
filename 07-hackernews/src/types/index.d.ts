@@ -19,3 +19,8 @@ export type HN_SearchResponse = {
 	hitsPerPage: number
 }
 
+export type DogAPI_RandomImageResponse = {
+	message: string
+	status: string
+}
+

@@ -16,6 +16,7 @@ const Navigation = () => {
 					<Navbar.Toggle aria-controls="basic-navbar-nav" />
 					<Navbar.Collapse id="basic-navbar-nav">
 						<Nav className="ms-auto">
+							<Nav.Link as={NavLink} to="/random-dog">Get Random Dog</Nav.Link>
 							<Nav.Link as={NavLink} end to="/search">Search Hacker News</Nav.Link>
 							<Button variant="light" onClick={toggleTheme}>
 								{isLightMode ? 'set dark mode' : 'set light mode'}
