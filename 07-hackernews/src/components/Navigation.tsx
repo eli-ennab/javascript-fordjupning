@@ -1,13 +1,12 @@
-import { useContext } from 'react'
 import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import { NavLink, Link } from 'react-router-dom'
-import { ThemeContext } from '../contexts/ThemeProvider'
+import { useThemeContext } from '../contexts/ThemeProvider'
 import Button from 'react-bootstrap/Button'
 
 const Navigation = () => {
-	const { isLightMode, toggleTheme } = useContext(ThemeContext)
+	const { isLightMode, toggleTheme } = useThemeContext()
 
 	return (
 			<Navbar bg="dark" variant="dark" expand="md">

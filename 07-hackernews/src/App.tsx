@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import Container from 'react-bootstrap/Container'
 import { Routes, Route } from 'react-router-dom'
 import HomePage from './pages/HomePage'
@@ -6,10 +5,10 @@ import SearchPage from './pages/SearchPage'
 import NotFound from './pages/NotFound'
 import Navigation from './components/Navigation'
 import './assets/scss/App.scss'
-import { ThemeContext } from './contexts/ThemeProvider'
+import { useThemeContext } from './contexts/ThemeProvider'
 
 const App = () => {
-	const { isLightMode } = useContext(ThemeContext)
+	const { isLightMode } = useThemeContext()
 
 	return (
 		<div id="App" className={ isLightMode ? 'bg-light text-dark' : ''}>

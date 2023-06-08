@@ -1,10 +1,9 @@
-import { useContext } from 'react'
 import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom'
-import { ThemeContext } from '../contexts/ThemeProvider'
+import { useThemeContext } from '../contexts/ThemeProvider'
 
 const HomePage = () => {
-	const { isLightMode, toggleTheme } = useContext(ThemeContext)
+	const { isLightMode, toggleTheme } = useThemeContext()
 
 	const handleToggleTheme = () => {
 		toggleTheme()
