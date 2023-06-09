@@ -4,7 +4,7 @@ import Image from 'react-bootstrap/Image'
 import useGetData from '../hooks/useGetData'
 
 const RandomDogPage = () => {
-	const { data, setUrl, reloadData, error, loading } = useGetData()
+	const { data, isError, setUrl, reloadData, error, loading } = useGetData()
 
 	return (
 		<>
@@ -27,7 +27,7 @@ const RandomDogPage = () => {
 				>MOAR!!</Button>
 			</div>
 
-			{ error && ( <Alert variant="primary">{error}</Alert> )}
+			{ isError === true && ( <Alert variant="primary">{error}</Alert> )}
 
 			{ loading && <p>Loading...</p> }
 
