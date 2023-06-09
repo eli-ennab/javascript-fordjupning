@@ -1,39 +1,33 @@
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
-import Image from 'react-bootstrap/Image'
+import Spinner from 'react-bootstrap/Spinner'
 import useGetData from '../hooks/useGetData'
+import { ChuckNorrisAPI_RandomJokeResponse } from '../types'
 
 const ChuckNorrisPage = () => {
-	const { data, isError, setUrl, reloadData, error, isLoading } = useGetData()
+	const { data, isError, reloadData, error, isLoading } =
+		useGetData<ChuckNorrisAPI_RandomJokeResponse>("https://api.chucknorris.io/jokes/random")
 
 	return (
 		<>
-			<h1>A random Chuck Norris quote</h1>
+			<h1>A Chuck Norris fact</h1>
 
-			<div>
+			<div className="mb-3">
 				<Button
-					variant="dark"
-					onClick={() => setUrl("https://dog.ceo/api/breeds/image/random")}
-				>Random quote</Button>
-
-				<Button
-					variant="dark"
-					onClick={() => setUrl("https://dog.ceo/api/breed/boxer/images/random")}
-				>Random Boxer Doggo</Button>
-
-				<Button
-					variant="dark"
-					onClick={() => {reloadData("https://dog.ceo/api/breeds/image/random")}}
+					variant="primary"
+					onClick={() => reloadData("https://api.chucknorris.io/jokes/random")}
 				>MOAR!!</Button>
 			</div>
 
-			{ isError === true && ( <Alert variant="primary">{error}</Alert> )}
+			{isLoading && <Spinner animation="border" variant="secondary" />}
 
-			{ isLoading === true && <p>Loading...</p> }
+			{isError === true && <Alert variant="warning">{error}</Alert>}
 
 			<div>
-				{ data && data.status === "success" && (
-					<Image src={data?.message} fluid />
+				{data && (
+					<>
+					<p className="display-1 text-center">{data.value}</p>
+				</>
 				)}
 			</div>
 		</>

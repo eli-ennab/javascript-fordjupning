@@ -8,6 +8,7 @@ import NotFound from './pages/NotFound'
 import Navigation from './components/Navigation'
 import './assets/scss/App.scss'
 import useThemeContext from './hooks/useThemeContext'
+import ChuckNorrisPage from './pages/ChuckNorrisPage'
 
 const App = () => {
 	const { isLightMode } = useThemeContext()
@@ -26,6 +27,7 @@ const App = () => {
 				<Routes>
 					<Route path="/" element={<HomePage />} />
 					<Route path="/random-dog" element={<RandomDogPage />} />
+					<Route path="/chuck-norris" element={<ChuckNorrisPage />} />
 					<Route path="/search" element={<SearchPage />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
