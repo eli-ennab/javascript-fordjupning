@@ -24,8 +24,8 @@ const instance = axios.create({
  * @returns Promise
  */
 const get = async <T>(endpoint: string) => {
-	const response = await instance.get(endpoint)
-	return response.data as T
+	const response = await instance.get<T>(endpoint)
+	return response.data
 }
 
 /**
