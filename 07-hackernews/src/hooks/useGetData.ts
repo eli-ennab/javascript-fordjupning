@@ -3,21 +3,21 @@ import { DogAPI_RandomImageResponse } from '../types'
 import axios from 'axios'
 
 const useGetData = (initialUrl: string|null = null) => {
-	const [data, setdata] = useState<DogAPI_RandomImageResponse|null>(null)
+	const [data, setData] = useState<DogAPI_RandomImageResponse|null>(null)
 	const [url, setUrl] = useState<string|null>(initialUrl)
 	const [error, setError] = useState<string | null>(null)
-	const [loading, setLoading] = useState(true)
+	const [loading, setLoading] = useState(false)
 
 	const getData = async (resourceUrl: string) => {
+		setData(null)
 		setLoading(true)
-		setdata(null)
-		await new Promise(r => setTimeout(r, 3000))
+		await new Promise(r => setTimeout(r, 1000))
 
 		try {
 			setError(null)
 			setUrl(null)
 			const res = await axios.get<DogAPI_RandomImageResponse>(resourceUrl)
-			setdata(res.data)
+			setData(res.data)
 		} catch (err: any) {
 			setError(err.message)
 		}
