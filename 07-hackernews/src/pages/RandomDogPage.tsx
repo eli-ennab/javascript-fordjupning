@@ -12,22 +12,22 @@ const RandomDogPage = () => {
 
 			<div>
 				<Button
-					variant="primary"
-					onClick={() => setUrl("https://dog.ceo/api/breds/image/random")}
+					variant="dark"
+					onClick={() => setUrl("https://dog.ceo/api/breeds/image/random")}
 				>Random Doggo</Button>
 
 				<Button
-					variant="primary"
-					onClick={() => setUrl("https://dog.ceo/api/breed/boer/images/random")}
+					variant="dark"
+					onClick={() => setUrl("https://dog.ceo/api/breed/boxer/images/random")}
 				>Random Boxer Doggo</Button>
 
 				<Button
-					variant="primary"
-					onClick={() => {reloadData("https://dog.ceo/api/brees/image/random")}}
+					variant="dark"
+					onClick={() => {reloadData("https://dog.ceo/api/breeds/image/random")}}
 				>MOAR!!</Button>
 			</div>
 
-			{ !loading && error && ( <Alert variant="primary">{error}</Alert> )}
+			{ error && ( <Alert variant="primary">{error}</Alert> )}
 
 			{ loading && <p>Loading...</p> }
 
