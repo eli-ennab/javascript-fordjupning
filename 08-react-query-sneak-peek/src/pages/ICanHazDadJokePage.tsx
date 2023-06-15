@@ -47,7 +47,7 @@ const ICanHazDadJokePage = () => {
 			<div className="d-flex justify-content-center">
 				<Button
 					variant="primary"
-					disabled={false}
+					disabled={isFetching}
 					onClick={() => refetch()}
 				>
 					MOAR!
