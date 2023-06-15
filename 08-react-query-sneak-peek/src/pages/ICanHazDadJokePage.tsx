@@ -8,6 +8,7 @@ const ICanHazDadJokePage = () => {
 			<h1>Random Dad Joke</h1>
 
 			<pre className="bg-light py-2 px-3">
+				i can haz jokes
 			</pre>
 
 			{false && <Spinner animation="border" variant="secondary" />}
