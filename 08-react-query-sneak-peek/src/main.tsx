@@ -10,6 +10,7 @@ const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
 			refetchOnWindowFocus: false,
+			staleTime: 1000 * 15 // 15 seconds = data is considered fresh for 15 seconds, then the data is considered stale
 		}
 	}
 })
