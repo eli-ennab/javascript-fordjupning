@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import Alert from "react-bootstrap/Alert"
 import Button from "react-bootstrap/Button"
-import Spinner from "react-bootstrap/Spinner"
 import { getRandomDadJoke } from '../services/ICanHazDadJokeAPI'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 const ICanHazDadJokePage = () => {
 	// const jokeQuery = useQuery(["random-dad-joke"], getRandomDadJoke)
@@ -30,7 +30,7 @@ const ICanHazDadJokePage = () => {
 				status: {status}
 			</pre>
 
-			{isLoading && <Spinner animation="border" variant="secondary" />}
+			{isFetching && <LoadingSpinner />}
 
 			{isError && <Alert variant="warning">ERROR! ERROR! ERROR!</Alert>}
 
