@@ -13,6 +13,7 @@ const ICanHazDadJokePage = () => {
 		isFetching,
 		isStale,
 		isSuccess,
+		refetch,
 		status
 	} = useQuery(["random-dad-joke"], getRandomDadJoke)
 
@@ -47,6 +48,7 @@ const ICanHazDadJokePage = () => {
 				<Button
 					variant="primary"
 					disabled={false}
+					onClick={() => refetch()}
 				>
 					MOAR!
 				</Button>
