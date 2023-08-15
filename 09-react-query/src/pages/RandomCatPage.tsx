@@ -23,12 +23,14 @@ const RandomCatPage = () => {
 		<>
 			<h1>I LUV RANDOM CATS</h1>
 
-			<Button
-				variant="dark"
-				className="my-4"
-				onClick={() => refetch()}>
-					Give me another one
-			</Button>
+			<div className="mb-3">
+				<Button
+					variant="dark"
+					onClick={() => refetch()}
+				>
+						Give me another one
+				</Button>
+			</div>
 
 			{ data &&
 				data.map(data => <Image key={data.id} src={data.url} fluid />)
