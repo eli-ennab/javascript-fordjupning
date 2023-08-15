@@ -3,6 +3,7 @@ import Navigation from './pages/partials/Navigation'
 import { Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import PageNotFound from './pages/PageNotFound'
+import RandomCatPage from './pages/RandomCatPage'
 
 import './assets/scss/App.scss'
 
@@ -13,6 +14,7 @@ const App = () => {
 			<Container className="py-3">
 				<Routes>
 					<Route path="/" element={<HomePage />} />
+					<Route path="/random-cat" element={<RandomCatPage />} />
 					<Route path="*" element={<PageNotFound />} />
 				</Routes>
 			</Container>
