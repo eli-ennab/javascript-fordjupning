@@ -11,7 +11,7 @@ const RandomCatPage = () => {
 	// 	queryFn: () => getRandomCat(),
 	// })
 
-	const { error, data, isLoading } = useQuery(['random-cat'], getRandomCat)
+	const { error, data, isLoading, refetch } = useQuery(['random-cat'], getRandomCat)
 
 	if (error) {
 		return <Alert variant="error">Oops, something went wrong.</Alert>
@@ -26,7 +26,7 @@ const RandomCatPage = () => {
 			<Button
 				variant="dark"
 				className="my-4"
-				onClick={() => getRandomCat()}>
+				onClick={() => refetch()}>
 					Give me another one
 			</Button>
 
