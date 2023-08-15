@@ -1,15 +1,11 @@
 import axios from 'axios'
-import { CatAPI_ImageResponse } from '../types'
+import { CatAPI_ImageResponse } from '../types/TheCatAPI.types'
 
 const FAKE_DELAY = 2000
 
 const instance = axios.create({
-	baseURL: `https://api.thecatapi.com/v1/images/search`,
+	baseURL: "https://api.thecatapi.com/v1/",
 	timeout: 10000,
-	headers: {
-		"Content-Type": "application/json",
-		"Accept": "application/json",
-	}
 })
 
 /**
@@ -24,8 +20,8 @@ export const get = async <T>(endpoint: string) => {
 /**
  * Get a random cat image
  */
-export const getRandomCat = () => {
-	return get<CatAPI_ImageResponse[]>('/')
+export const getRandomCat = async () => {
+	return await get<CatAPI_ImageResponse>("images/search")
 }
 
 

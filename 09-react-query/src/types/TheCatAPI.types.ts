@@ -1,6 +1,8 @@
-export type CatAPI_ImageResponse = {
+export type Cat = {
 	id: string,
 	width: number,
 	height: number,
 	url: string,
 }
+
+export type CatAPI_ImageResponse = Cat[]
