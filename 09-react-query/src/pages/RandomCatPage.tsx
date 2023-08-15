@@ -11,13 +11,11 @@ const RandomCatPage = () => {
 	// 	queryFn: () => getRandomCat(),
 	// })
 
-	const { error, data, isLoading, refetch } = useQuery(['random-cat'], getRandomCat)
+	const { error, data, isFetching, refetch } = useQuery(['random-cat'], getRandomCat)
 
 	if (error) {
 		return <Alert variant="error">Oops, something went wrong.</Alert>
 	}
-
-	if (isLoading) return 'Loading...'
 
 	return (
 		<>
@@ -31,6 +29,8 @@ const RandomCatPage = () => {
 						Give me another one
 				</Button>
 			</div>
+
+			{ isFetching && <p>Loading a lil' cat img...</p>}
 
 			{ data &&
 				data.map(data => <Image key={data.id} src={data.url} fluid />)
