@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { CatAPI_ImageResponse } from '../types'
 
-const FAKE_DELAY = 1000
+const FAKE_DELAY = 2000
 
 const instance = axios.create({
 	baseURL: `https://api.thecatapi.com/v1/images/search`,
@@ -17,7 +17,7 @@ const instance = axios.create({
  */
 export const get = async <T>(endpoint: string) => {
 	const response = await instance.get<T>(endpoint)
-	await new Promise(r => setTimeout(r, FAKE_DELAY))
+	!!FAKE_DELAY && await new Promise(r => setTimeout(r, FAKE_DELAY))
 	return response.data
 }
 
