@@ -1,9 +1,21 @@
+import { useQuery } from '@tanstack/react-query'
+import { getRandomCat } from './../services/TheCatAPI'
+import Image from 'react-bootstrap/Image'
+
 const RandomCatPage = () => {
+
+  const { isLoading, data } = useQuery({
+	queryKey: ['cat'],
+	queryFn: () => getRandomCat(),
+  })
+
+	if (isLoading) return 'Loading...'
+
 	return (
 		<>
-			<h1>I LUV RANDOM CATS</h1>
-
-			<p>Random cat 4 you</p>
+			{ data &&
+				data.map(data => <Image key={data.id} src={data.url} width={data.width} />)
+			}
 		</>
 	)
 }
