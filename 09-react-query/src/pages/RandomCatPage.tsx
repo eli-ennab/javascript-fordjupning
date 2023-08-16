@@ -1,21 +1,25 @@
 import { useQuery } from '@tanstack/react-query'
-import { getRandomCatImage, getRandomBengalCatImage } from './../services/TheCatAPI'
+import { getRandomCatImage, getRandomCatImageByBreed } from './../services/TheCatAPI'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
 import CatSpinner from './components/CatSpinner'
+import { useState } from 'react'
 
 const RandomCatPage = () => {
+
+	const [breed, setBreed] = useState<string | null>(null)
 
 	const getRandomCat = useQuery({
 		queryKey: ['random-cat'],
 		queryFn: getRandomCatImage,
 	})
 
-	const getRandomBengalCat = useQuery({
-		queryKey: ['random-cat', 'beng'],
-		queryFn: getRandomBengalCatImage,
-	})
+	const getRandomCatByBreed = useQuery({
+        queryKey: ['breed', breed],
+        queryFn: () => breed ? getRandomCatImageByBreed(breed) : null,
+        enabled: breed !== null,
+    })
 
 	if (getRandomCat.error) {
 		return <Alert variant="error">Oops, something went wrong.</Alert>
@@ -28,7 +32,7 @@ const RandomCatPage = () => {
 			<div className="mb-3">
 				<Button
 					variant="dark"
-					onClick={() => getRandomCat.refetch()}
+					onClick={() => { setBreed(null); getRandomCat.refetch()} }
 				>
 						Give me a totally random cat
 				</Button>
@@ -37,22 +41,31 @@ const RandomCatPage = () => {
 			<div className="mb-3">
 				<Button
 					variant="dark"
-					onClick={() => getRandomBengalCat.refetch()}
+					onClick={() => setBreed('beng')}
 				>
 						Give me a random bengal cat
 				</Button>
 			</div>
 
+			<div className="mb-3">
+				<Button
+					variant="dark"
+					onClick={() => setBreed('siam')}
+				>
+						Give me a random siamese cat
+				</Button>
+			</div>
+
 			{getRandomCat.isFetching && <CatSpinner />}
 
-			{getRandomBengalCat.isFetching && <CatSpinner />}
+			{getRandomCatByBreed.isFetching && <CatSpinner />}
 
 			{getRandomCat.data && (
 				<Image src={getRandomCat.data.url} fluid />
 			)}
 
-			{getRandomBengalCat.data && (
-				<Image src={getRandomBengalCat.data.url} fluid />
+			{getRandomCatByBreed.data && (
+				<Image src={getRandomCatByBreed.data.url} fluid />
 			)}
 
 		</>
