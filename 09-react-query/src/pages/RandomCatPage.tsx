@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getRandomCatImage } from './../services/TheCatAPI'
+import { getRandomCatImage, getRandomBengalCatImage } from './../services/TheCatAPI'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
@@ -9,12 +9,17 @@ const RandomCatPage = () => {
 
 	// const { error, data, isFetching, refetch } = useQuery(['random-cat'], getRandomCatImage)
 
-	const { data, error, isFetching, refetch } = useQuery({
+	const { data: randomCatData, error: randomCatError, isFetching: randomCatIsFetching, refetch: randomCatRefetch } = useQuery({
 		queryKey: ['random-cat'],
 		queryFn: getRandomCatImage,
 	})
 
-	if (error) {
+	const { data: breedCatData, error: breedCatError, isFetching: breedCatIsFetching, refetch: breedCatRefetch } = useQuery({
+		queryKey: ['random-bengal-cat'],
+		queryFn: getRandomBengalCatImage,
+	})
+
+	if (randomCatError || breedCatError) {
 		return <Alert variant="error">Oops, something went wrong.</Alert>
 	}
 
@@ -25,16 +30,29 @@ const RandomCatPage = () => {
 			<div className="mb-3">
 				<Button
 					variant="dark"
-					onClick={() => refetch()}
+					onClick={() => randomCatRefetch()}
 				>
-						Give me another one
+						Give me a random cat
 				</Button>
 			</div>
 
-			{isFetching && <CatSpinner />}
+			<div className="mb-3">
+				<Button
+					variant="dark"
+					onClick={() => breedCatRefetch()}
+				>
+						Give me a random bengal cat
+				</Button>
+			</div>
 
-			{data && (
-				<Image src={data.url} fluid />
+			{randomCatIsFetching || breedCatIsFetching && <CatSpinner />}
+
+			{randomCatData && (
+				<Image src={randomCatData.url} fluid />
+			)}
+
+			{breedCatData && (
+				<Image src={breedCatData.url} fluid />
 			)}
 
 		</>
