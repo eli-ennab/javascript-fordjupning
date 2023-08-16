@@ -7,19 +7,17 @@ import CatSpinner from './components/CatSpinner'
 
 const RandomCatPage = () => {
 
-	// const { error, data, isFetching, refetch } = useQuery(['random-cat'], getRandomCatImage)
-
-	const { data: randomCatData, error: randomCatError, isFetching: randomCatIsFetching, refetch: randomCatRefetch } = useQuery({
+	const getRandomCat = useQuery({
 		queryKey: ['random-cat'],
 		queryFn: getRandomCatImage,
 	})
 
-	const { data: breedCatData, error: breedCatError, isFetching: breedCatIsFetching, refetch: breedCatRefetch } = useQuery({
-		queryKey: ['random-bengal-cat'],
+	const getRandomBengalCat = useQuery({
+		queryKey: ['random-cat', 'beng'],
 		queryFn: getRandomBengalCatImage,
 	})
 
-	if (randomCatError || breedCatError) {
+	if (getRandomCat.error) {
 		return <Alert variant="error">Oops, something went wrong.</Alert>
 	}
 
@@ -30,29 +28,31 @@ const RandomCatPage = () => {
 			<div className="mb-3">
 				<Button
 					variant="dark"
-					onClick={() => randomCatRefetch()}
+					onClick={() => getRandomCat.refetch()}
 				>
-						Give me a random cat
+						Give me a totally random cat
 				</Button>
 			</div>
 
 			<div className="mb-3">
 				<Button
 					variant="dark"
-					onClick={() => breedCatRefetch()}
+					onClick={() => getRandomBengalCat.refetch()}
 				>
 						Give me a random bengal cat
 				</Button>
 			</div>
 
-			{randomCatIsFetching || breedCatIsFetching && <CatSpinner />}
+			{getRandomCat.isFetching && <CatSpinner />}
 
-			{randomCatData && (
-				<Image src={randomCatData.url} fluid />
+			{getRandomBengalCat.isFetching && <CatSpinner />}
+
+			{getRandomCat.data && (
+				<Image src={getRandomCat.data.url} fluid />
 			)}
 
-			{breedCatData && (
-				<Image src={breedCatData.url} fluid />
+			{getRandomBengalCat.data && (
+				<Image src={getRandomBengalCat.data.url} fluid />
 			)}
 
 		</>
