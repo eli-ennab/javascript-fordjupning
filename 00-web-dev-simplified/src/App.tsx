@@ -5,14 +5,23 @@ const POSTS =  [
 	{ id: 2, title: "Post 2"}
 ]
 
+// /posts 				>> ["posts"]
+// /posts/1 			>> ["posts", post.id]
+// /posts?authorId=1 	>> ["posts", { authorId: 1 }]
+// /posts/2/comments	>> ["posts", post.id, "comments"]
+
 function App() {
 	console.log(POSTS)
 
 	const queryClient = useQueryClient()
 
 	const postsQuery = useQuery({
+		// the key needs to be unique
 		queryKey: ['posts'],
-		queryFn: () => wait(1000).then(() => [...POSTS])
+		queryFn: ({ queryKey }) => wait(1000).then(() => {
+			console.log(queryKey)
+			return [...POSTS]
+		}),
 	})
 
 	const newPostMutation = useMutation({
