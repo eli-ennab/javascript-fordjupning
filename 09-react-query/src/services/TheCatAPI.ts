@@ -1,3 +1,10 @@
+/**
+ * API client for The Cat API
+ *
+ * Docs: https://docs.thecatapi.com/
+ * API: https://api.thecatapi.com/v1/
+ */
+
 import axios from 'axios'
 import { CatAPI_ImageResponse } from '../types/TheCatAPI.types'
 
@@ -20,8 +27,18 @@ export const get = async <T>(endpoint: string) => {
 /**
  * Get a random cat image
  */
-export const getRandomCat = async () => {
-	return await get<CatAPI_ImageResponse>("images/search")
+export const getRandomCatImage = async () => {
+	const data = await get<CatAPI_ImageResponse>("images/search")
+
+	return data[0]
 }
 
+/**
+ * Get random cat images
+ */
+export const getRandomCatImages = async (qty = 1) => {
+	const data = await get<CatAPI_ImageResponse>("images/search?limit=" + qty)
+
+	return data
+}
 

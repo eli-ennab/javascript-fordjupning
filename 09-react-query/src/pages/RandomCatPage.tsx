@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getRandomCat } from './../services/TheCatAPI'
+import { getRandomCatImage } from './../services/TheCatAPI'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image'
@@ -7,12 +7,12 @@ import CatSpinner from './components/CatSpinner'
 
 const RandomCatPage = () => {
 
-	// const { isLoading, data } = useQuery({
-	// 	queryKey: ['random-cat'],
-	// 	queryFn: () => getRandomCat(),
-	// })
+	// const { error, data, isFetching, refetch } = useQuery(['random-cat'], getRandomCatImage)
 
-	const { error, data, isFetching, refetch } = useQuery(['random-cat'], getRandomCat)
+	const { data, error, isFetching, refetch } = useQuery({
+		queryKey: ['random-cat'],
+		queryFn: getRandomCatImage,
+	})
 
 	if (error) {
 		return <Alert variant="error">Oops, something went wrong.</Alert>
@@ -33,9 +33,9 @@ const RandomCatPage = () => {
 
 			{isFetching && <CatSpinner />}
 
-			{ data &&
-				data.map(data => <Image key={data.id} src={data.url} fluid />)
-			}
+			{data && (
+				<Image src={data.url} fluid />
+			)}
 
 		</>
 	)
