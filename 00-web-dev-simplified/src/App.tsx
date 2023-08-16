@@ -6,9 +6,18 @@ const POSTS =  [
 ]
 
 function App() {
+	console.log(POSTS)
+
 	const postsQuery = useQuery({
 		queryKey: ['posts'],
 		queryFn: () => wait(1000).then(() => [...POSTS])
+	})
+
+	const newPostMutation = useMutation({
+		mutationFn: (title: string) => {
+			return wait(1000).then(() => POSTS.push({ id: crypto.randomUUID(),
+			title }))
+		},
 	})
 
 	if (postsQuery.isLoading) return <h1>Loading...</h1>
@@ -20,6 +29,10 @@ function App() {
 			{postsQuery.data.map(post => (
 				<div key={post.id}>{post.title}</div>
 			))}
+
+			<button onClick={() => newPostMutation.mutate("New Post")}>
+				Add new
+			</button>
 		</div>
 	)
 }
