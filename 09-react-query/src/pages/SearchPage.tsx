@@ -1,40 +1,52 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
-import { HN_SearchResponse } from '../types/SearchHN.types'
-import { search } from '../services/HackerNewsAPI'
+import { searchByDate as HN_searchByDate } from '../services/HackerNewsAPI'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
-// import { useSearchParams } from 'react-router-dom'
-// import { searchByDate as HN_searchByDate } from '../services/HackerNewsAPI'
 
 const SearchPage = () => {
-
-	const [ searchInput, setSearchInput ] = useState('')
+	// const [page, setPage] = useState(0)
+	const [searchInput, setSearchInput] = useState("")
 	const [searchParams, setSearchParams] = useSearchParams()
 
-	const query = searchParams.get('query')
-	console.log(query)
+	// get "query=" from URL Search Params
+	const query = searchParams.get("query") ?? ""
 
-	const { data, error } = useQuery({
-		queryKey: ['search', searchInput],
-		queryFn: () => search(searchInput),
-		staleTime: 5 * 1000,	// 5 seconds, only for this query
-	})
+	const { data: searchResult, isError } = useQuery(
+		['search-hn', query],
+		() => HN_searchByDate(query),
+		{
+			enabled: !!query,
+		}
+	)
+
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault()
+
+		// haxx0r
+		if (!searchInput.trim().length) {
+			return
+		}
+
+		// reset page state
+		// setPage(0)
+
+		// set input value as query in searchParams
+		setSearchParams({ query: searchInput })    // ?query=tesla
+	}
 
 	return (
 		<>
-			<h1>Hacker News Search</h1>
-			<Form className="mb-4" onSubmit={(e) => {
-					e.preventDefault()
-					setSearchParams( { query: searchInput } )
-				}}>
+			<h1>Hacker Search News</h1>
+
+			<Form className="mb-4" onSubmit={handleSubmit}>
 				<Form.Group className="mb-3" controlId="searchQuery">
 					<Form.Label>Search Query</Form.Label>
 					<Form.Control
-						onChange={e => { setSearchInput(e.target.value); console.log(searchInput) }}
+						onChange={e => setSearchInput(e.target.value)}
 						placeholder="Enter your search query"
 						required
 						type="text"
@@ -44,20 +56,21 @@ const SearchPage = () => {
 
 				<div className="d-flex justify-content-end">
 					<Button
-						variant="light"
+						variant="success"
 						type="submit"
 						disabled={!searchInput.trim().length}
 					>Search</Button>
 				</div>
 			</Form>
 
-			{ error && <Alert variant="warning">Something went wrong.</Alert>}
+			{isError && <Alert variant='warning'>Something went wrong.</Alert>}
 
-			{ data && (
+			{searchResult && (
 				<div id="search-result">
+					<p>Showing {searchResult.nbHits} search results for "{query}"...</p>
 
 					<ListGroup className="mb-3">
-						{data.hits.map(hit => (
+						{searchResult.hits.map(hit => (
 							<ListGroup.Item
 								action
 								href={hit.url}
@@ -76,8 +89,8 @@ const SearchPage = () => {
 						totalPages={searchResult.nbPages}
 						hasPreviousPage={page > 0}
 						hasNextPage={page + 1 < searchResult.nbPages}
-						onPreviousPage={() => {setPage(prevValue => prevValue - 1)}}
-						onNextPage={() => {setPage(prevValue => prevValue + 1)}}
+						onPreviousPage={() => { setPage(prevValue => prevValue - 1) }}
+						onNextPage={() => { setPage(prevValue => prevValue + 1) }}
 					/> */}
 				</div>
 			)}
