@@ -6,7 +6,6 @@ import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Image from 'react-bootstrap/Image'
-import CatSpinner from '../components/CatSpinner'
 
 const breeds: Breed[] = [
 	{ id: '', name: 'Any' },
@@ -36,8 +35,6 @@ const RandomCatPage = () => {
 		<>
 			<h1>I ❤️ Random Cats</h1>
 			<p>They cute.</p>
-
-			{isFetching && <CatSpinner />}
 
 			<div className="text-center">
 				<div className="mb-3">
