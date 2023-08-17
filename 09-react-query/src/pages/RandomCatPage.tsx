@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getRandomCatImageByBreed } from '../services/TheCatAPI'
-import { Breed } from '../types/TheCatAPI.types'
+import { Breed } from '../types/index.types'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'

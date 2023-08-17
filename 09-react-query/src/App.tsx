@@ -5,6 +5,7 @@ import Navigation from './pages/partials/Navigation'
 import HomePage from './pages/HomePage'
 import PageNotFound from './pages/PageNotFound'
 import RandomCatPage from './pages/RandomCatPage'
+import SearchPage from './pages/SearchPage'
 import Container from 'react-bootstrap/Container'
 
 import './assets/scss/App.scss'
@@ -18,6 +19,7 @@ const App = () => {
 				<Routes>
 					<Route path="/" element={<HomePage />} />
 					<Route path="/random-cat" element={<RandomCatPage />} />
+					<Route path="/search" element={<SearchPage />} />
 					<Route path="*" element={<PageNotFound />} />
 				</Routes>
 			</Container>
