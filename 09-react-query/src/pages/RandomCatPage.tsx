@@ -33,6 +33,7 @@ const RandomCatPage = () => {
 				<Button
 					variant="dark"
 					onClick={() => { setBreed(null); getRandomCat.refetch()} }
+					disabled={getRandomCat.isFetching}
 				>
 						Give me a totally random cat
 				</Button>
@@ -42,6 +43,7 @@ const RandomCatPage = () => {
 				<Button
 					variant="dark"
 					onClick={() => setBreed('beng')}
+					disabled={getRandomCatByBreed.isFetching}
 				>
 						Give me a random bengal cat
 				</Button>
@@ -51,6 +53,7 @@ const RandomCatPage = () => {
 				<Button
 					variant="dark"
 					onClick={() => setBreed('siam')}
+					disabled={getRandomCatByBreed.isFetching}
 				>
 						Give me a random siamese cat
 				</Button>
