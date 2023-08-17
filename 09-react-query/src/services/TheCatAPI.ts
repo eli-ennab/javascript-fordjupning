@@ -34,10 +34,10 @@ export const getRandomCatImage = async () => {
 }
 
 /**
- * Get a random cat image of a specific breed
+ * Get a random cat image by breed
  */
-export const getRandomCatImageByBreed = async (breed: string) => {
-	const data = await get<CatAPI_ImageResponse>(`/images/search?breed_ids=${breed}`)
+export const getRandomCatImageByBreed = async (breed_id = '') => {
+	const data = await get<CatAPI_ImageResponse>("/images/search?breed_ids=" + breed_id)
 
 	return data[0]
 }

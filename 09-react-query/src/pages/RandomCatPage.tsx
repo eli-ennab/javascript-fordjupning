@@ -1,76 +1,65 @@
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getRandomCatImage, getRandomCatImageByBreed } from './../services/TheCatAPI'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Image from 'react-bootstrap/Image'
-import CatSpinner from './components/CatSpinner'
-import { useState } from 'react'
+import CatSpinner from '../components/CatSpinner'
+import { getRandomCatImageByBreed } from '../services/TheCatAPI'
 
 const RandomCatPage = () => {
 
-	const [breed, setBreed] = useState<string | null>(null)
+	const [ selectedBreed, setSelectedBreed ] = useState('')
 
-	const getRandomCat = useQuery({
-		queryKey: ['random-cat'],
-		queryFn: getRandomCatImage,
+	// const { data, error, isFetching, refetch } = useQuery(['random-cat'], getRandomCatImage)
+	const { data, error, isFetching, refetch } = useQuery({
+		queryKey: ['random-cat', selectedBreed],
+		queryFn: () => {
+			return getRandomCatImageByBreed(selectedBreed)
+		},
 	})
 
-	const getRandomCatByBreed = useQuery({
-        queryKey: ['breed', breed],
-        queryFn: () => breed ? getRandomCatImageByBreed(breed) : null,
-        enabled: breed !== null,
-    })
-
-	if (getRandomCat.error) {
+	if (error) {
 		return <Alert variant="error">Oops, something went wrong.</Alert>
 	}
 
 	return (
 		<>
-			<h1>I LUV RANDOM CATS</h1>
+			<h1>I ❤️ Random Cats</h1>
+			<p>They cute.</p>
 
-			<div className="mb-3">
-				<Button
-					variant="dark"
-					onClick={() => { setBreed(null); getRandomCat.refetch()} }
-					disabled={getRandomCat.isFetching}
-				>
-						Give me a totally random cat
-				</Button>
+			{isFetching && <CatSpinner />}
+
+			<div className="text-center">
+				<div className="mb-3">
+					<Button
+						disabled={isFetching}
+						onClick={() => refetch()}
+						variant="dark"
+					>
+						Refetch
+					</Button>
+
+					<ButtonGroup className="ms-2">
+						<Button variant="secondary" onClick={() => { setSelectedBreed('') }}>
+							Any
+						</Button>
+						<Button variant="secondary" onClick={() => { setSelectedBreed('ragd') }}>
+							Ragdoll
+						</Button>
+						<Button variant="secondary" onClick={() => { setSelectedBreed('sibe') }}>
+							Siberian
+						</Button>
+						<Button variant="secondary" onClick={() => { setSelectedBreed('beng') }}>
+							Bengal
+						</Button>
+					</ButtonGroup>
+				</div>
+
+				{data && (
+					<Image src={data.url} fluid />
+				)}
 			</div>
-
-			<div className="mb-3">
-				<Button
-					variant="dark"
-					onClick={() => setBreed('beng')}
-					disabled={getRandomCatByBreed.isFetching}
-				>
-						Give me a random bengal cat
-				</Button>
-			</div>
-
-			<div className="mb-3">
-				<Button
-					variant="dark"
-					onClick={() => setBreed('siam')}
-					disabled={getRandomCatByBreed.isFetching}
-				>
-						Give me a random siamese cat
-				</Button>
-			</div>
-
-			{getRandomCat.isFetching && <CatSpinner />}
-
-			{getRandomCatByBreed.isFetching && <CatSpinner />}
-
-			{getRandomCat.data && (
-				<Image src={getRandomCat.data.url} fluid />
-			)}
-
-			{getRandomCatByBreed.data && (
-				<Image src={getRandomCatByBreed.data.url} fluid />
-			)}
-
 		</>
 	)
 }
