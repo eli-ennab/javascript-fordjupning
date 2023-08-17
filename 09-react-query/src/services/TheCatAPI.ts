@@ -6,7 +6,7 @@
  */
 
 import axios from 'axios'
-import { CatAPI_ImageResponse } from '../types/TheCatAPI.types'
+import { CatAPI_ImageResponse } from '../types/index.types'
 
 const FAKE_DELAY = 2000
 
