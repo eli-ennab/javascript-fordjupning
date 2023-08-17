@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
+import HN_ListItem from '../components/HN_ListItem'
 import { searchByDate as HN_searchByDate } from '../services/HackerNewsAPI'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
@@ -67,20 +68,14 @@ const SearchPage = () => {
 
 			{searchResult && (
 				<div id="search-result">
-					<p>Showing {searchResult.nbHits} search results for "{query}"...</p>
+					<p>Showing {new Intl.NumberFormat().format(searchResult.nbHits)} search results for "{query}"...</p>
 
 					<ListGroup className="mb-3">
 						{searchResult.hits.map(hit => (
-							<ListGroup.Item
-								action
-								href={hit.url}
+							<HN_ListItem
 								key={hit.objectID}
-							>
-								<h2 className="h3">{hit.title}</h2>
-								<p className="text-muted small mb-0">
-									{hit.points} points by {hit.author} at {hit.created_at}
-								</p>
-							</ListGroup.Item>
+								item={hit}
+							/>
 						))}
 					</ListGroup>
 
