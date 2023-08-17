@@ -24,9 +24,8 @@ const RandomCatPage = () => {
 	// const { data, error, isFetching, refetch } = useQuery(['random-cat'], getRandomCatImage)
 	const { data, error, isFetching, refetch } = useQuery({
 		queryKey: ['random-cat', selectedBreed],
-		queryFn: () => {
-			return getRandomCatImageByBreed(selectedBreed)
-		},
+		queryFn: () => getRandomCatImageByBreed(selectedBreed),
+		staleTime: 5 * 1000,	// 5 seconds, only for this query
 	})
 
 	if (error) {
