@@ -1,23 +1,33 @@
-// import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { HN_SearchResponse } from '../types/SearchHN.types'
+import { search } from '../services/HackerNewsAPI'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 // import { useSearchParams } from 'react-router-dom'
 // import { searchByDate as HN_searchByDate } from '../services/HackerNewsAPI'
-import { HN_SearchResponse } from '../types/index.types'
 
 const SearchPage = () => {
+
+	const [ searchInput, setSearchInput ] = useState('')
+	// const [ searchResult, setSearchResult ] = useState<HN_SearchResponse|null>(null)	// data that gets back from api
+
+	const { data, error} = useQuery({
+		queryKey: ['search', searchInput],
+		queryFn: () => search(searchInput),
+		staleTime: 5 * 1000,	// 5 seconds, only for this query
+	})
 
 	return (
 		<>
 			<h1>Hacker News Search</h1>
-
-			{/* <Form className="mb-4" onSubmit={handleSubmit}>
+			<Form className="mb-4">
 				<Form.Group className="mb-3" controlId="searchQuery">
 					<Form.Label>Search Query</Form.Label>
 					<Form.Control
-						onChange={e => setSearchInput(e.target.value)}
+						onChange={e => { setSearchInput(e.target.value); console.log(searchInput) }}
 						placeholder="Enter your search query"
 						required
 						type="text"
@@ -34,16 +44,13 @@ const SearchPage = () => {
 				</div>
 			</Form>
 
-			{ error && <Alert variant="warning">{error}</Alert>}
+			{ error && <Alert variant="warning">Something went wrong.</Alert>}
 
-			{ loading && <p>Loading...</p>}
-
-			{ searchResult && (
+			{ data && (
 				<div id="search-result">
-					<p>Showing {searchResult.nbHits} search results for "{query}"...</p>
 
 					<ListGroup className="mb-3">
-						{searchResult.hits.map(hit => (
+						{data.hits.map(hit => (
 							<ListGroup.Item
 								action
 								href={hit.url}
@@ -57,16 +64,16 @@ const SearchPage = () => {
 						))}
 					</ListGroup>
 
-					<Pagination
+					{/* <Pagination
 						page={searchResult.page + 1}
 						totalPages={searchResult.nbPages}
 						hasPreviousPage={page > 0}
 						hasNextPage={page + 1 < searchResult.nbPages}
 						onPreviousPage={() => {setPage(prevValue => prevValue - 1)}}
 						onNextPage={() => {setPage(prevValue => prevValue + 1)}}
-					/>
+					/> */}
 				</div>
-			)} */}
+			)}
 		</>
 	)
 }
