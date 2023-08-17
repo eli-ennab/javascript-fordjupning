@@ -1,11 +1,21 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { getRandomCatImageByBreed } from '../services/TheCatAPI'
+import { Breed } from '../types/TheCatAPI.types'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Image from 'react-bootstrap/Image'
 import CatSpinner from '../components/CatSpinner'
-import { getRandomCatImageByBreed } from '../services/TheCatAPI'
+
+const breeds: Breed[] = [
+	{ id: '', name: 'Any' },
+	{ id: 'ragd', name: 'Ragdoll' },
+	{ id: 'sibe', name: 'Siberian' },
+	{ id: 'beng', name: 'Bengal' },
+	{ id: 'pers', name: 'Persian' },
+	{ id: 'norw', name: 'Norwegian Forest' },
+]
 
 const RandomCatPage = () => {
 
@@ -41,18 +51,16 @@ const RandomCatPage = () => {
 					</Button>
 
 					<ButtonGroup className="ms-2">
-						<Button variant="secondary" onClick={() => { setSelectedBreed('') }}>
-							Any
-						</Button>
-						<Button variant="secondary" onClick={() => { setSelectedBreed('ragd') }}>
-							Ragdoll
-						</Button>
-						<Button variant="secondary" onClick={() => { setSelectedBreed('sibe') }}>
-							Siberian
-						</Button>
-						<Button variant="secondary" onClick={() => { setSelectedBreed('beng') }}>
-							Bengal
-						</Button>
+						{breeds.map(breed => (
+							<Button
+								key={breed.id}
+								disabled={isFetching || selectedBreed === breed.id}
+								onClick={() => setSelectedBreed(breed.id)}
+								variant="secondary"
+							>
+								{breed.name}
+							</Button>
+						))}
 					</ButtonGroup>
 				</div>
 

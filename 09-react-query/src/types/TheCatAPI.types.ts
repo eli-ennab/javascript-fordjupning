@@ -6,3 +6,8 @@ export type Cat = {
 }
 
 export type CatAPI_ImageResponse = Cat[]
+
+export type Breed = {
+	id: string
+	name: string
+}
