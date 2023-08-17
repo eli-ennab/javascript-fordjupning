@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useSearchParams } from 'react-router-dom'
 import { HN_SearchResponse } from '../types/SearchHN.types'
 import { search } from '../services/HackerNewsAPI'
 import Alert from 'react-bootstrap/Alert'
@@ -12,9 +13,12 @@ import ListGroup from 'react-bootstrap/ListGroup'
 const SearchPage = () => {
 
 	const [ searchInput, setSearchInput ] = useState('')
-	// const [ searchResult, setSearchResult ] = useState<HN_SearchResponse|null>(null)	// data that gets back from api
+	const [searchParams, setSearchParams] = useSearchParams()
 
-	const { data, error} = useQuery({
+	const query = searchParams.get('query')
+	console.log(query)
+
+	const { data, error } = useQuery({
 		queryKey: ['search', searchInput],
 		queryFn: () => search(searchInput),
 		staleTime: 5 * 1000,	// 5 seconds, only for this query
@@ -23,7 +27,10 @@ const SearchPage = () => {
 	return (
 		<>
 			<h1>Hacker News Search</h1>
-			<Form className="mb-4">
+			<Form className="mb-4" onSubmit={(e) => {
+					e.preventDefault()
+					setSearchParams( { query: searchInput } )
+				}}>
 				<Form.Group className="mb-3" controlId="searchQuery">
 					<Form.Label>Search Query</Form.Label>
 					<Form.Control
