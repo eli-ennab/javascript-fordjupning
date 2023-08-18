@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Todo, Todos } from '../types'
 import Alert from 'react-bootstrap/Alert'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import AddNewTodoForm from '../components/AddNewTodoForm'
 import AutoDismissingAlert from '../components/AutoDismissingAlert'
+import { getTodos } from '../services/TodosAPI'
 import * as TodosAPI from '../services/TodosAPI'
 
 const TodosPage = () => {
@@ -14,19 +16,7 @@ const TodosPage = () => {
 	const searchParams_deletedTodo = searchParams.get("deleted")
 	const deletedTodo = Boolean(searchParams_deletedTodo)
 
-	// Get todos from api
-	const getTodos = async () => {
-		const data = await TodosAPI.getTodos()
-
-		// sort alphabetically by title
-		data.sort((a, b) => a.title.localeCompare(b.title))
-
-		// sort by completed status
-		data.sort((a, b) => Number(a.completed) - Number(b.completed))
-
-		// update todos state
-		setTodos(data)
-	}
+	const { data } = useQuery(['todos'], () => getTodos())
 
 	// Create a new todo in the API
 	const addTodo = async (todo: Todo) => {
@@ -52,9 +42,9 @@ const TodosPage = () => {
 				</AutoDismissingAlert>
 			)}
 
-			{todos && todos.length > 0 && (
+			{data && data.length > 0 && (
 				<ListGroup className="todolist">
-					{todos.map(todo => (
+					{data.map(todo => (
 						<ListGroup.Item
 							action
 							as={Link}
@@ -68,7 +58,7 @@ const TodosPage = () => {
 				</ListGroup>
 			)}
 
-			{todos && todos.length === 0 && (
+			{data && data.length === 0 && (
 				<p>Yayyy, you have 0 todos to do</p>
 			)}
 		</>
