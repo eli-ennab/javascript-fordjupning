@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -52,14 +52,6 @@ const EditTodoPage = () => {
 		// redirect user to /todos/:id
 		navigate(`/todos/${todo.id}`)
 	}
-
-	useEffect(() => {
-		if (typeof todoId !== "number") {
-			return
-		}
-
-		getTodo(todoId)
-	}, [todoId])
 
 	if (error) {
 		return (

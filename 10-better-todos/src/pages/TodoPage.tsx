@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -77,14 +77,6 @@ const TodoPage = () => {
 		// update todo state with the updated todo
 		setTodo(updatedTodo)
 	}
-
-	useEffect(() => {
-		if (typeof todoId !== "number") {
-			return
-		}
-
-		getTodo(todoId)
-	}, [todoId])
 
 	if (error) {
 		return (

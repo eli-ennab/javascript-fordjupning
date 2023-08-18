@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Todo, Todos } from '../types'
 import Alert from 'react-bootstrap/Alert'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -33,11 +33,6 @@ const TodosPage = () => {
 		await TodosAPI.createTodo(todo)
 		getTodos()
 	}
-
-	// fetch todos when App is being mounted
-	useEffect(() => {
-		getTodos()
-	}, [])
 
 	return (
 		<>
