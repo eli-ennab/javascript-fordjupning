@@ -4,7 +4,7 @@ import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Todo } from '../types'
+import { Todo } from '../types/TodosAPI.types'
 import { getTodo } from '../services/TodosAPI'
 import * as TodosAPI from '../services/TodosAPI'
 
