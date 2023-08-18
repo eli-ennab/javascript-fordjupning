@@ -1,8 +1,10 @@
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Todo } from '../types'
+import { getTodo } from '../services/TodosAPI'
 import * as TodosAPI from '../services/TodosAPI'
 import ConfirmationModal from '../components/ConfirmationModal'
 
@@ -15,26 +17,10 @@ const TodoPage = () => {
 	const { id } = useParams()
 	const todoId = Number(id)
 
-	// Get todo from API
-	const getTodo = async (id: number) => {
-		setError(null)
-		setLoading(true)
-
-		try {
-			// call TodosAPI
-			const data = await TodosAPI.getTodo(id)
-
-			// update todo state with data
-			setTodo(data)
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		} catch (err: any) {
-			// set error
-			setError(err.message)
-		}
-
-		setLoading(false)
-	}
+	const { data } = useQuery(
+		['todos', todoId],
+		() => getTodo(todoId),
+	)
 
 	// Delete a todo in the api
 	const deleteTodo = async (todo: Todo) => {
@@ -89,18 +75,14 @@ const TodoPage = () => {
 		)
 	}
 
-	if (loading || !todo) {
-		return (<p>Loading...</p>)
-	}
-
 	return (
 		<>
-			<h1>{todo.title}</h1>
+			<h1>{data?.title}</h1>
 
-			<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
+			<p><strong>Status:</strong> {data?.completed ? 'Completed' : 'Not completed'}</p>
 
 			<div className="buttons mb-3">
-				<Button variant='success' onClick={() => toggleTodo(todo)}>Toggle</Button>
+				<Button variant='success' onClick={() => toggleTodo(data)}>Toggle</Button>
 
 				<Link to={`/todos/${todoId}/edit`}>
 					<Button variant='warning'>Edit</Button>
@@ -112,7 +94,7 @@ const TodoPage = () => {
 			<ConfirmationModal
 				show={showConfirmDelete}
 				onCancel={() => setShowConfirmDelete(false)}
-				onConfirm={() => deleteTodo(todo)}
+				onConfirm={() => deleteTodo(data)}
 			>
 				U SURE BRO?!
 			</ConfirmationModal>

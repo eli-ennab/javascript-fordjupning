@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Todo } from '../types'
+import { getTodo } from '../services/TodosAPI'
 import * as TodosAPI from '../services/TodosAPI'
 
 const EditTodoPage = () => {
@@ -15,27 +17,10 @@ const EditTodoPage = () => {
 	const { id } = useParams()
 	const todoId = Number(id)
 
-	// Get todo from API
-	const getTodo = async (id: number) => {
-		setError(null)
-		setLoading(true)
-
-		try {
-			// call TodosAPI
-			const data = await TodosAPI.getTodo(id)
-
-			// update todo state with data
-			setTodo(data)
-			setNewTodoTitle(data.title)
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		} catch (err: any) {
-			// set error
-			setError(err.message)
-		}
-
-		setLoading(false)
-	}
+	const { data } = useQuery(
+		['todos', todoId],
+		() => getTodo(todoId),
+	)
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -64,13 +49,9 @@ const EditTodoPage = () => {
 		)
 	}
 
-	if (loading || !todo) {
-		return (<p>Loading...</p>)
-	}
-
 	return (
 		<>
-			<h1>Edit: {todo.title}</h1>
+			<h1>Edit: {data?.title}</h1>
 
 			<Form onSubmit={handleSubmit} className='mb-4'>
 				<Form.Group className="mb-3" controlId="title">
