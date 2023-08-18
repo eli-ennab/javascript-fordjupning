@@ -4,22 +4,18 @@ import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Todo } from '../types/TodosAPI.types'
-import { getTodo } from '../services/TodosAPI'
 import * as TodosAPI from '../services/TodosAPI'
 import ConfirmationModal from '../components/ConfirmationModal'
 
 const TodoPage = () => {
-	const [error, setError] = useState<string|null>(null)
-	const [loading, setLoading] = useState(true)
-	const [todo, setTodo] = useState<Todo|null>(null)
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 	const navigate = useNavigate()
 	const { id } = useParams()
 	const todoId = Number(id)
 
-	const { data, isLoading, isError } = useQuery(
-		['todos', todoId],
-		() => getTodo(todoId),
+	const { data: todo, isLoading, isError, refetch: getTodo } = useQuery(
+		['todo', { id: todoId }],
+		() => TodosAPI.getTodo(todoId),
 	)
 
 	// Delete a todo in the api
@@ -28,20 +24,8 @@ const TodoPage = () => {
 			return
 		}
 
-		// if (!window.confirm('U SURE BRO?!')) {
-		// 	return
-		// }
-
 		// Delete todo from the api
 		await TodosAPI.deleteTodo(todo.id)
-
-		// Navigate user to `/todos` (using state)
-		// navigate('/todos', {
-		// 	replace: true,
-		// 	state: {
-		// 		message: `Todo "${todo.title}" was successfully deleted`,
-		// 	},
-		// })
 
 		// Navigate user to `/todos` (using search params/query params)
 		navigate('/todos?deleted=true', {
@@ -61,30 +45,33 @@ const TodoPage = () => {
 		})
 
 		// update todo state with the updated todo
-		setTodo(updatedTodo)
+		getTodo()
 	}
 
-	if (error) {
+	if (isError) {
 		return (
 			<Alert variant="warning">
 				<h1>Something went wrong!</h1>
-				<p>{error}</p>
 
-				<Button variant='primary' onClick={() => getTodo(todoId)}>TRY AGAIN!!!</Button>
+				<Button variant='primary' onClick={() => getTodo()}>TRY AGAIN!!!</Button>
 			</Alert>
 		)
 	}
 
+	if (isLoading || !todo) {
+		<p>Loading...</p>
+	}
+
 	return (
 		<>
-			{ data &&
+			{ todo &&
 				<>
-					<h1>{data.title}</h1>
+					<h1>{todo.title}</h1>
 
-					<p><strong>Status:</strong> {data.completed ? 'Completed' : 'Not completed'}</p>
+					<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
 
 					<div className="buttons mb-3">
-						<Button variant='success' onClick={() => toggleTodo(data)}>Toggle</Button>
+						<Button variant='success' onClick={() => toggleTodo(todo)}>Toggle</Button>
 
 						<Link to={`/todos/${todoId}/edit`}>
 							<Button variant='warning'>Edit</Button>
@@ -96,19 +83,11 @@ const TodoPage = () => {
 					<ConfirmationModal
 						show={showConfirmDelete}
 						onCancel={() => setShowConfirmDelete(false)}
-						onConfirm={() => deleteTodo(data)}
+						onConfirm={() => deleteTodo(todo)}
 					>
 						U SURE BRO?!
 					</ConfirmationModal>
 				</>
-			}
-
-			{ isLoading &&
-				<p>Loading...</p>
-			}
-
-			{ isError &&
-				<p>Error...</p>
 			}
 
 			<Link to="/todos">

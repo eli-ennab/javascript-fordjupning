@@ -18,7 +18,7 @@ const EditTodoPage = () => {
 	const todoId = Number(id)
 
 	const { data } = useQuery(
-		['todos', todoId],
+		['todo', todoId],
 		() => getTodo(todoId),
 	)
 

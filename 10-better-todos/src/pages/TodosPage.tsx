@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Todo, Todos } from '../types/TodosAPI.types'
 import Alert from 'react-bootstrap/Alert'
@@ -6,17 +5,21 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
 import AddNewTodoForm from '../components/AddNewTodoForm'
 import AutoDismissingAlert from '../components/AutoDismissingAlert'
-import { getTodos } from '../services/TodosAPI'
 import * as TodosAPI from '../services/TodosAPI'
 
 const TodosPage = () => {
-	const [todos, setTodos] = useState<Todos|null>(null)
 	const location = useLocation()
 	const [searchParams, setSearchParams] = useSearchParams()
 	const searchParams_deletedTodo = searchParams.get("deleted")
 	const deletedTodo = Boolean(searchParams_deletedTodo)
 
-	const { data } = useQuery(['todos'], () => getTodos())
+	const { data: todos, isError, refetch: getTodos } = useQuery(['todos'], TodosAPI.getTodos)
+
+	// // sort alphabetically by title
+	// data.sort((a, b) => a.title.localeCompare(b.title))
+
+	// // sort by completed status
+	// data.sort((a, b) => Number(a.completed) - Number(b.completed))
 
 	// Create a new todo in the API
 	const addTodo = async (todo: Todo) => {
@@ -42,9 +45,15 @@ const TodosPage = () => {
 				</AutoDismissingAlert>
 			)}
 
-			{data && data.length > 0 && (
+			{isError && (
+				<Alert variant="danger">
+					An error occured while fetching todos.
+				</Alert>
+			)}
+
+			{todos && todos.length > 0 && (
 				<ListGroup className="todolist">
-					{data.map(todo => (
+					{todos.map(todo => (
 						<ListGroup.Item
 							action
 							as={Link}
@@ -58,7 +67,7 @@ const TodosPage = () => {
 				</ListGroup>
 			)}
 
-			{data && data.length === 0 && (
+			{todos && todos.length === 0 && (
 				<p>Yayyy, you have 0 todos to do</p>
 			)}
 		</>
