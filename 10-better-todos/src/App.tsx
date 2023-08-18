@@ -9,11 +9,13 @@ import NotFound from './pages/NotFound'
 import TodoPage from './pages/TodoPage'
 import TodosPage from './pages/TodosPage'
 import './assets/scss/App.scss'
+import GlobalLoadingSpinner from './components/GlobalLoadingSpinner'
 
 const App = () => {
 	return (
 		<div id="App">
 			<Navigation />
+			<GlobalLoadingSpinner />
 
 			<Container className="py-3">
 				<Routes>
