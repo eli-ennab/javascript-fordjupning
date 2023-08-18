@@ -17,7 +17,7 @@ const TodoPage = () => {
 	const { id } = useParams()
 	const todoId = Number(id)
 
-	const { data } = useQuery(
+	const { data, isLoading, isError } = useQuery(
 		['todos', todoId],
 		() => getTodo(todoId),
 	)
@@ -77,27 +77,39 @@ const TodoPage = () => {
 
 	return (
 		<>
-			<h1>{data?.title}</h1>
+			{ data &&
+				<>
+					<h1>{data.title}</h1>
 
-			<p><strong>Status:</strong> {data?.completed ? 'Completed' : 'Not completed'}</p>
+					<p><strong>Status:</strong> {data.completed ? 'Completed' : 'Not completed'}</p>
 
-			<div className="buttons mb-3">
-				<Button variant='success' onClick={() => toggleTodo(data)}>Toggle</Button>
+					<div className="buttons mb-3">
+						<Button variant='success' onClick={() => toggleTodo(data)}>Toggle</Button>
 
-				<Link to={`/todos/${todoId}/edit`}>
-					<Button variant='warning'>Edit</Button>
-				</Link>
+						<Link to={`/todos/${todoId}/edit`}>
+							<Button variant='warning'>Edit</Button>
+						</Link>
 
-				<Button variant='danger' onClick={() => setShowConfirmDelete(true)}>Delete</Button>
-			</div>
+						<Button variant='danger' onClick={() => setShowConfirmDelete(true)}>Delete</Button>
+					</div>
 
-			<ConfirmationModal
-				show={showConfirmDelete}
-				onCancel={() => setShowConfirmDelete(false)}
-				onConfirm={() => deleteTodo(data)}
-			>
-				U SURE BRO?!
-			</ConfirmationModal>
+					<ConfirmationModal
+						show={showConfirmDelete}
+						onCancel={() => setShowConfirmDelete(false)}
+						onConfirm={() => deleteTodo(data)}
+					>
+						U SURE BRO?!
+					</ConfirmationModal>
+				</>
+			}
+
+			{ isLoading &&
+				<p>Loading...</p>
+			}
+
+			{ isError &&
+				<p>Error...</p>
+			}
 
 			<Link to="/todos">
 				<Button variant='secondary'>&laquo; All todos</Button>
