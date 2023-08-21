@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -8,6 +8,7 @@ import * as TodosAPI from '../services/TodosAPI'
 import ConfirmationModal from '../components/ConfirmationModal'
 
 const TodoPage = () => {
+	const queryClient = useQueryClient()
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 	const navigate = useNavigate()
 	const { id } = useParams()
@@ -22,20 +23,17 @@ const TodoPage = () => {
 		() => TodosAPI.getTodo(todoId),
 	)
 
-	// Delete a todo in the api
-	const deleteTodo = async (todo: Todo) => {
-		if (!todo.id) {
-			return
-		}
-
-		// Delete todo from the api
-		await TodosAPI.deleteTodo(todo.id)
-
-		// Navigate user to `/todos` (using search params/query params)
-		navigate('/todos?deleted=true', {
-			replace: true,
-		})
-	}
+	const deleteTodo = useMutation({
+		mutationFn: () => TodosAPI.deleteTodo(todoId),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['todo', { id: todoId }] })
+			queryClient.invalidateQueries({ queryKey: ['todos'] })
+			setTimeout(() => navigate('/todos?deleted=true', {
+				replace: true,
+				}
+			))
+		},
+	})
 
 	// Toggle the completed status of a todo in the api
 	const toggleTodo = async (todo: Todo) => {
@@ -83,7 +81,7 @@ const TodoPage = () => {
 					<ConfirmationModal
 						show={showConfirmDelete}
 						onCancel={() => setShowConfirmDelete(false)}
-						onConfirm={() => deleteTodo(todo)}
+						onConfirm={() => deleteTodo.mutate()}
 					>
 						U SURE BRO?!
 					</ConfirmationModal>
