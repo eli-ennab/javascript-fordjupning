@@ -4,22 +4,17 @@ import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Todo } from '../types/TodosAPI.types'
-import { getTodo } from '../services/TodosAPI'
 import * as TodosAPI from '../services/TodosAPI'
 
 const EditTodoPage = () => {
-	const [error, setError] = useState<string|null>(null)
-	const [loading, setLoading] = useState(true)
-	const [todo, setTodo] = useState<Todo|null>(null)
 	const [newTodoTitle, setNewTodoTitle] = useState("")
 	const navigate = useNavigate()
 	const { id } = useParams()
 	const todoId = Number(id)
 
-	const { data } = useQuery(
-		['todo', todoId],
-		() => getTodo(todoId),
+	const { data: todo, isLoading, isError, refetch: getTodo } = useQuery(
+		['todo', { id: todoId }],
+		() => TodosAPI.getTodo(todoId),
 	)
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -38,20 +33,23 @@ const EditTodoPage = () => {
 		navigate(`/todos/${todo.id}`)
 	}
 
-	if (error) {
+	if (isError) {
 		return (
 			<Alert variant="warning">
 				<h1>Something went wrong!</h1>
-				<p>{error}</p>
 
-				<Button variant='primary' onClick={() => getTodo(todoId)}>TRY AGAIN!!!</Button>
+				<Button variant='primary' onClick={() => getTodo()}>TRY AGAIN!!!</Button>
 			</Alert>
 		)
 	}
 
+	if (isLoading || !todo) {
+		<p>Loading...</p>
+	}
+
 	return (
 		<>
-			<h1>Edit: {data?.title}</h1>
+			<h1>Edit: {todo?.title}</h1>
 
 			<Form onSubmit={handleSubmit} className='mb-4'>
 				<Form.Group className="mb-3" controlId="title">
