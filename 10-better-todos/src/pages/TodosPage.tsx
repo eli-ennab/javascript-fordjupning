@@ -22,7 +22,6 @@ const TodosPage = () => {
 		TodosAPI.getTodos
 	)
 
-
 	// // sort alphabetically by title
 	// data.sort((a, b) => a.title.localeCompare(b.title))
 

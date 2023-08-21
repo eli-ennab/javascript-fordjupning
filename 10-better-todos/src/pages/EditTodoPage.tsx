@@ -57,12 +57,12 @@ const EditTodoPage = () => {
 					/>
 				</Form.Group>
 
-				<Button variant="primary" type="submit">
+				<Button variant="light" type="submit">
 					Save
 				</Button>
 			</Form>
 
-			<Button variant='secondary' onClick={() => navigate(-1)}>&laquo; Go back</Button>
+			<Button variant='dark' onClick={() => navigate(-1)}>&laquo; Go back</Button>
 		</>
 	)
 }

@@ -62,13 +62,13 @@ const TodoPage = () => {
 					<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
 
 					<div className="buttons mb-3">
-						<Button variant='success' onClick={() => toggleTodo.mutate(todo)}>Toggle</Button>
+						<Button variant='light' className="m-1" onClick={() => toggleTodo.mutate(todo)}>Toggle</Button>
 
 						<Link to={`/todos/${todoId}/edit`}>
-							<Button variant='warning'>Edit</Button>
+							<Button variant='light' className="m-1">Edit</Button>
 						</Link>
 
-						<Button variant='danger' onClick={() => setShowConfirmDelete(true)}>Delete</Button>
+						<Button variant='danger' className="m-1" onClick={() => setShowConfirmDelete(true)}>Delete</Button>
 					</div>
 
 					<ConfirmationModal
@@ -82,7 +82,7 @@ const TodoPage = () => {
 			}
 
 			<Link to="/todos">
-				<Button variant='secondary'>&laquo; All todos</Button>
+				<Button variant='dark'>&laquo; All todos</Button>
 			</Link>
 		</>
 	)

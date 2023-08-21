@@ -1,5 +1,9 @@
 @import "bootstrap/scss/bootstrap";
 
+body {
+	background-color: rgb(39, 39, 39);
+}
+
 h1, h2, h3, h4, h5, h6 {
 	margin-bottom: 0.75em;
 }
@@ -10,10 +14,26 @@ h1, h2, h3, h4, h5, h6 {
 	right: 3.5rem;
 }
 
+.navbar {
+	border-bottom: 1px dotted lightgrey;
+}
+
+.logo,
+h1 {
+	color: rgb(230, 230, 230);
+}
+
 .todolist {
 	.done {
-		color: $success;
-		font-style: italic;
+		color: lightgrey;
 		text-decoration: line-through;
 	}
+}
+
+.form-control:focus {
+	color: var(--bs-body-color);
+	background-color: var(--bs-body-bg);
+	border-color: rgb(94, 94, 94);
+	outline: 0;
+	box-shadow: 0 0 0 0.25rem rgb(61, 61, 61);
 }
