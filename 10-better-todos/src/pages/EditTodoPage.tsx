@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { PartialTodo } from '../types/TodosAPI.types'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -21,21 +22,10 @@ const EditTodoPage = () => {
 		() => TodosAPI.getTodo(todoId),
 	)
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault()
-
-		if (!todo || !todo.id) {
-			return
-		}
-
-		// Update a todo in the api
-		await TodosAPI.updateTodo(todo.id, {
-			title: newTodoTitle,
-		})
-
-		// redirect user to /todos/:id
-		navigate(`/todos/${todo.id}`)
-	}
+	const mutation = useMutation({
+		mutationFn: (todo: PartialTodo) => TodosAPI.updateTodo(todoId, todo),
+		onSuccess: () => navigate(`/todos/${todoId}`),
+	})
 
 	if (isError) {
 		return (
@@ -51,7 +41,7 @@ const EditTodoPage = () => {
 		<>
 			<h1>Edit: {todo?.title}</h1>
 
-			<Form onSubmit={handleSubmit} className='mb-4'>
+			<Form onSubmit={(e) => { e.preventDefault(), mutation.mutate({ title: newTodoTitle }) }} className='mb-4'>
 				<Form.Group className="mb-3" controlId="title">
 					<Form.Label>Title</Form.Label>
 					<Form.Control
