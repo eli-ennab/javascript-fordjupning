@@ -12,7 +12,11 @@ const EditTodoPage = () => {
 	const { id } = useParams()
 	const todoId = Number(id)
 
-	const { data: todo, isLoading, isError, refetch: getTodo } = useQuery(
+	const {
+		data: todo,
+		isError,
+		refetch: getTodo
+	} = useQuery(
 		['todo', { id: todoId }],
 		() => TodosAPI.getTodo(todoId),
 	)
@@ -41,10 +45,6 @@ const EditTodoPage = () => {
 				<Button variant='primary' onClick={() => getTodo()}>TRY AGAIN!!!</Button>
 			</Alert>
 		)
-	}
-
-	if (isLoading || !todo) {
-		<p>Loading...</p>
 	}
 
 	return (

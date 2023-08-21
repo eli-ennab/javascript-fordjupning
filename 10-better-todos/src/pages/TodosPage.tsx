@@ -13,7 +13,14 @@ const TodosPage = () => {
 	const searchParams_deletedTodo = searchParams.get("deleted")
 	const deletedTodo = Boolean(searchParams_deletedTodo)
 
-	const { data: todos, isError, refetch: getTodos } = useQuery(['todos'], TodosAPI.getTodos)
+	const {
+		data: todos,
+		isError,
+		refetch: getTodos,
+	} = useQuery(
+		['todos'],
+		TodosAPI.getTodos
+	)
 
 	// // sort alphabetically by title
 	// data.sort((a, b) => a.title.localeCompare(b.title))
