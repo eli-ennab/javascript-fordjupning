@@ -26,9 +26,14 @@
       "id": 6
     },
     {
-      "title": "Learn to update with useMutation",
+      "title": "invalidateQueries for ['todos'] and ['todo', { id: todoId} ]",
       "completed": false,
       "id": 7
+    },
+    {
+      "title": "Successful new todo invalidating queries for 'todos'",
+      "completed": false,
+      "id": 8
     }
   ]
 }
