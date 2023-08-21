@@ -29,12 +29,6 @@ const TodosPage = () => {
 	// // sort by completed status
 	// data.sort((a, b) => Number(a.completed) - Number(b.completed))
 
-	// // Create a new todo in the API
-	// const addTodo = async (todo: Todo) => {
-	// 	await TodosAPI.createTodo(todo)
-	// 	getTodos()
-	// }
-
 	const mutation = useMutation({
 		mutationFn: (todo: Todo) => TodosAPI.createTodo(todo),
 		onSuccess: () => getTodos(),
