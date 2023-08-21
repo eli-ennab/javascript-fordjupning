@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 import { Todo, Todos } from '../types/TodosAPI.types'
 import Alert from 'react-bootstrap/Alert'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -22,23 +22,31 @@ const TodosPage = () => {
 		TodosAPI.getTodos
 	)
 
+
 	// // sort alphabetically by title
 	// data.sort((a, b) => a.title.localeCompare(b.title))
 
 	// // sort by completed status
 	// data.sort((a, b) => Number(a.completed) - Number(b.completed))
 
-	// Create a new todo in the API
-	const addTodo = async (todo: Todo) => {
-		await TodosAPI.createTodo(todo)
-		getTodos()
-	}
+	// // Create a new todo in the API
+	// const addTodo = async (todo: Todo) => {
+	// 	await TodosAPI.createTodo(todo)
+	// 	getTodos()
+	// }
+
+	const mutation = useMutation({
+		mutationFn: (todo: Todo) => TodosAPI.createTodo(todo),
+		onSuccess: () => getTodos(),
+	})
 
 	return (
 		<>
 			<h1 className="mb-3">Todos</h1>
 
-			<AddNewTodoForm onAddTodo={addTodo} />
+			<AddNewTodoForm onAddTodo={(todo: Todo) => mutation.mutate(todo)} />
+
+			{mutation.isSuccess ? <p>New todo was successfully added!</p> : null}
 
 			{location.state?.message && (
 				<Alert variant="success">
@@ -75,7 +83,7 @@ const TodosPage = () => {
 			)}
 
 			{todos && todos.length === 0 && (
-				<p>Yayyy, you have 0 todos to do</p>
+				<p>You have 0 todos to do.</p>
 			)}
 		</>
 	)
