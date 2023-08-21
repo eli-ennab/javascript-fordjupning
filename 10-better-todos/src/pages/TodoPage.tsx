@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Todo } from '../types/TodosAPI.types'
+import { PartialTodo, Todo } from '../types/TodosAPI.types'
 import * as TodosAPI from '../services/TodosAPI'
 import ConfirmationModal from '../components/ConfirmationModal'
 
@@ -35,20 +35,14 @@ const TodoPage = () => {
 		},
 	})
 
-	// Toggle the completed status of a todo in the api
-	const toggleTodo = async (todo: Todo) => {
-		if (!todo.id) {
-			return
-		}
-
-		// Update a todo in the api
-		const updatedTodo = await TodosAPI.updateTodo(todo.id, {
-			completed: !todo.completed
-		})
-
-		// update todo state with the updated todo
-		getTodo()
-	}
+	const toggleTodo = useMutation({
+		mutationFn: (todo: PartialTodo) => TodosAPI.updateTodo(todoId, { completed: !todo.completed }),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['todo', { id: todoId }] })
+			queryClient.invalidateQueries({ queryKey: ['todos'] })
+			setTimeout(() => navigate(`/todos/${todoId}`), 2000)
+		},
+	})
 
 	if (isError) {
 		return (
@@ -69,7 +63,7 @@ const TodoPage = () => {
 					<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
 
 					<div className="buttons mb-3">
-						<Button variant='success' onClick={() => toggleTodo(todo)}>Toggle</Button>
+						<Button variant='success' onClick={() => toggleTodo.mutate(todo)}>Toggle</Button>
 
 						<Link to={`/todos/${todoId}/edit`}>
 							<Button variant='warning'>Edit</Button>
