@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import Alert from 'react-bootstrap/Alert'
-import { Todo } from '../types/TodosAPI.types'
+import { NewTodo } from '../types/TodosAPI.types'
 import AddNewTodoForm from '../components/AddNewTodoForm'
 import * as TodosAPI from '../services/TodosAPI'
 
@@ -10,7 +10,7 @@ const CreateTodoPage = () => {
 	const queryClient = useQueryClient()
 
 	const mutation = useMutation({
-		mutationFn: (todo: Todo) => TodosAPI.createTodo(todo),
+		mutationFn: (todo: NewTodo) => TodosAPI.createTodo(todo),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['todos'] })
 			setTimeout(() => navigate('/todos'), 2000)
@@ -21,7 +21,7 @@ const CreateTodoPage = () => {
 		<>
 			<h1 className="mb-3">Create a new Todo</h1>
 
-			<AddNewTodoForm onAddTodo={(todo: Todo) => mutation.mutate(todo)} />
+			<AddNewTodoForm onAddTodo={(todo: NewTodo) => mutation.mutate(todo)} />
 
 			{mutation.isSuccess && (
 				<Alert variant="success" className="mt-3">Todo created!</Alert>

@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from '@tanstack/react-query'
-import { Todo } from '../types/TodosAPI.types'
+import { NewTodo } from '../types/TodosAPI.types'
 import Alert from 'react-bootstrap/Alert'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { Link, useLocation, useSearchParams } from 'react-router-dom'
@@ -29,7 +29,7 @@ const TodosPage = () => {
 	// data.sort((a, b) => Number(a.completed) - Number(b.completed))
 
 	const mutation = useMutation({
-		mutationFn: (todo: Todo) => TodosAPI.createTodo(todo),
+		mutationFn: (todo: NewTodo) => TodosAPI.createTodo(todo),
 		onSuccess: () => getTodos(),
 	})
 
@@ -37,7 +37,7 @@ const TodosPage = () => {
 		<>
 			<h1 className="mb-3">Todos</h1>
 
-			<AddNewTodoForm onAddTodo={(todo: Todo) => mutation.mutate(todo)} />
+			<AddNewTodoForm onAddTodo={(todo: NewTodo) => mutation.mutate(todo)} />
 
 			{mutation.isSuccess ? <p>New todo was successfully added!</p> : null}
 
