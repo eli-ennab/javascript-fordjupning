@@ -16,8 +16,8 @@
       "id": 3
     },
     {
-      "title": "Look mommy, a todo 🤩!",
-      "completed": true,
+      "title": "Learn GraphQL",
+      "completed": false,
       "id": 4
     },
     {

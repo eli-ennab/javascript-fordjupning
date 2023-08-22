@@ -22,24 +22,28 @@ const TodosPage = () => {
 		TodosAPI.getTodos
 	)
 
+	const createTodoMutation = useMutation({
+		mutationFn: TodosAPI.createTodo,
+	})
+
+	// Create a new todo in the API
+	const addTodo = async (todo: NewTodo) => {
+		createTodoMutation.mutateAsync(todo)
+	}
+
 	// // sort alphabetically by title
 	// data.sort((a, b) => a.title.localeCompare(b.title))
 
 	// // sort by completed status
 	// data.sort((a, b) => Number(a.completed) - Number(b.completed))
 
-	const mutation = useMutation({
-		mutationFn: (todo: NewTodo) => TodosAPI.createTodo(todo),
-		onSuccess: () => getTodos(),
-	})
-
 	return (
 		<>
 			<h1 className="mb-3">Todos</h1>
 
-			<AddNewTodoForm onAddTodo={(todo: NewTodo) => mutation.mutate(todo)} />
+			<AddNewTodoForm onAddTodo={addTodo} />
 
-			{mutation.isSuccess ? <p>New todo was successfully added!</p> : null}
+			{createTodoMutation.isSuccess ? <p>New todo was successfully added!</p> : null}
 
 			{location.state?.message && (
 				<Alert variant="success">

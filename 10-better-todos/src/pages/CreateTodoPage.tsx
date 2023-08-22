@@ -9,25 +9,32 @@ const CreateTodoPage = () => {
 	const navigate = useNavigate()
 	const queryClient = useQueryClient()
 
-	const mutation = useMutation({
-		mutationFn: (todo: NewTodo) => TodosAPI.createTodo(todo),
+	const createTodoMutation = useMutation({
+		mutationFn: TodosAPI.createTodo,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['todos'] })
-			setTimeout(() => navigate('/todos'), 2000)
-		},
+			setTimeout(() => {
+				navigate("/todos")
+			}, 2000)
+		}
 	})
+
+	// Create a new todo in the API
+	const addTodo = async (todo: NewTodo) => {
+		await createTodoMutation.mutateAsync(todo)
+	}
 
 	return (
 		<>
 			<h1 className="mb-3">Create a new Todo</h1>
 
-			<AddNewTodoForm onAddTodo={(todo: NewTodo) => mutation.mutate(todo)} />
+			<AddNewTodoForm onAddTodo={addTodo} />
 
-			{mutation.isSuccess && (
+			{createTodoMutation.isSuccess && (
 				<Alert variant="success" className="mt-3">Todo created!</Alert>
 			)}
 
-			{mutation.error && (
+			{createTodoMutation.isError && (
 				<Alert variant="warning" className="mt-3">Todo could not be created 😔</Alert>
 			)}
 		</>

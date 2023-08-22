@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { PartialTodo } from '../types/TodosAPI.types'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -17,36 +16,58 @@ const EditTodoPage = () => {
 	const {
 		data: todo,
 		isError,
-		refetch: getTodo
-	} = useQuery(
-		['todo', { id: todoId }],
-		() => TodosAPI.getTodo(todoId),
-	)
+		isLoading,
+		refetch: getTodo,
+	} = useQuery(["todo", { id: todoId }], () => TodosAPI.getTodo(todoId))
 
-	const mutation = useMutation({
-		mutationFn: (todo: PartialTodo) => TodosAPI.updateTodo(todoId, todo),
+	const updateTodoTitleMutation = useMutation({
+		mutationFn: (newTodoTitle: string) => TodosAPI.updateTodo(todoId, {
+			title: newTodoTitle,
+		}),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['todo', { id: todoId }] })
 			queryClient.invalidateQueries({ queryKey: ['todos'] })
-			setTimeout(() => navigate(`/todos/${todo?.id}`), 2000)
+			navigate(`/todos/${todoId}`)
 		},
 	})
+
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault()
+
+		if (!todo || !todo.id) {
+			return
+		}
+
+		// Update a todo in the api
+		updateTodoTitleMutation.mutateAsync(newTodoTitle)
+	}
+
+	useEffect(() => {
+		if (todo) {
+			setNewTodoTitle(todo.title)
+		}
+	}, [todo])
 
 	if (isError) {
 		return (
 			<Alert variant="warning">
 				<h1>Something went wrong!</h1>
+				<p>It wasn't me that did something /the server</p>
 
 				<Button variant='primary' onClick={() => getTodo()}>TRY AGAIN!!!</Button>
 			</Alert>
 		)
 	}
 
+	if (isLoading || !todo) {
+		return (<p>Loading...</p>)
+	}
+
 	return (
 		<>
 			<h1>Edit: {todo?.title}</h1>
 
-			<Form onSubmit={(e) => { e.preventDefault(), mutation.mutate({ title: newTodoTitle }) }} className='mb-4'>
+			<Form onSubmit={handleSubmit} className='mb-4'>
 				<Form.Group className="mb-3" controlId="title">
 					<Form.Label>Title</Form.Label>
 					<Form.Control
