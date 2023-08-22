@@ -30,7 +30,7 @@ const TodoPage = () => {
 			queryClient.invalidateQueries({ queryKey: ['todos'] })
 			setTimeout(() => navigate('/todos?deleted=true', {
 				replace: true,
-			}))
+			}), 2000)
 		},
 	})
 

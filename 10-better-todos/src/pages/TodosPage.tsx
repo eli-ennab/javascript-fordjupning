@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { NewTodo } from '../types/TodosAPI.types'
 import Alert from 'react-bootstrap/Alert'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -8,6 +8,7 @@ import AutoDismissingAlert from '../components/AutoDismissingAlert'
 import * as TodosAPI from '../services/TodosAPI'
 
 const TodosPage = () => {
+	const queryClient = useQueryClient()
 	const location = useLocation()
 	const [searchParams, setSearchParams] = useSearchParams()
 	const searchParams_deletedTodo = searchParams.get("deleted")
@@ -24,6 +25,7 @@ const TodosPage = () => {
 
 	const createTodoMutation = useMutation({
 		mutationFn: TodosAPI.createTodo,
+		onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['todos'] }) }
 	})
 
 	// Create a new todo in the API
