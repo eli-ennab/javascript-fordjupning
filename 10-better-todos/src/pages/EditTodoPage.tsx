@@ -24,9 +24,17 @@ const EditTodoPage = () => {
 		mutationFn: (newTodoTitle: string) => TodosAPI.updateTodo(todoId, {
 			title: newTodoTitle,
 		}),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['todo', { id: todoId }] })
-			queryClient.invalidateQueries({ queryKey: ['todos'] })
+		onSuccess: (updatedTodo) => {
+			queryClient.setQueryData(['todo', { id: todoId }], updatedTodo)
+
+			// trigger refetching of all todos
+			// queryClient.invalidateQueries({ queryKey: ["todos"] })
+			// queryClient.prefetchQuery({
+			// 	queryKey: ["todos"],
+			// 	queryFn: TodosAPI.getTodos,
+			// })
+			queryClient.refetchQueries({ queryKey: ["todos"] })
+
 			navigate(`/todos/${todoId}`)
 		},
 	})
@@ -39,7 +47,7 @@ const EditTodoPage = () => {
 		}
 
 		// Update a todo in the api
-		updateTodoTitleMutation.mutateAsync(newTodoTitle)
+		updateTodoTitleMutation.mutate(newTodoTitle)
 	}
 
 	useEffect(() => {
