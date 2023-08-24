@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Todo } from '../types/TodosAPI.types'
+import { Todo, Todos } from '../types/TodosAPI.types'
 import * as TodosAPI from '../services/TodosAPI'
 import ConfirmationModal from '../components/ConfirmationModal'
 
@@ -28,9 +28,18 @@ const TodoPage = () => {
 			// disable query for this specific single todo
 			setQueryEnabled(false)
 
+			// remove the query for this specific single todo
 			queryClient.removeQueries({ queryKey: ["todo", { id: todoId }] })
-			queryClient.invalidateQueries({ queryKey: ["todos"] })
 
+			// invalidate the query for all todos
+			// queryClient.invalidateQueries({ queryKey: ["todos"] })
+			// modify query cache for ["todos"] and construct a new array with
+			// the deleted todo excluded
+			queryClient.setQueryData<Todos>(["todos"], (prevTodos) => {
+				return prevTodos?.filter(todo => todo.id !== todoId) ?? []
+			})
+
+			// Navigate user to `/todos` (with delete-status as state)
 			navigate('/todos', {
 				replace: true,
 				state: {
