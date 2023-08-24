@@ -1,91 +1,100 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { PartialTodo } from '../types/TodosAPI.types'
+import { Todo } from '../types/TodosAPI.types'
 import * as TodosAPI from '../services/TodosAPI'
 import ConfirmationModal from '../components/ConfirmationModal'
 
 const TodoPage = () => {
-	const queryClient = useQueryClient()
+	const [queryEnabled, setQueryEnabled] = useState(true)
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 	const navigate = useNavigate()
 	const { id } = useParams()
 	const todoId = Number(id)
+	const queryClient = useQueryClient()
 
 	const {
 		data: todo,
 		isError,
+		isLoading,
 		refetch: getTodo,
-	} = useQuery(
-		['todo', { id: todoId }],
-		() => TodosAPI.getTodo(todoId),
-	)
+	} = useQuery(["todo", { id: todoId }], () => TodosAPI.getTodo(todoId), { enabled: queryEnabled })
 
-	const deleteTodo = useMutation({
+	const deleteTodoMutation = useMutation({
 		mutationFn: () => TodosAPI.deleteTodo(todoId),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['todo', { id: todoId }] })
-			queryClient.invalidateQueries({ queryKey: ['todos'] })
-			setTimeout(() => navigate('/todos', {
+			// disable query for this specific single todo
+			setQueryEnabled(false)
+
+			queryClient.removeQueries({ queryKey: ["todo", { id: todoId }] })
+			queryClient.invalidateQueries({ queryKey: ["todos"] })
+
+			navigate('/todos', {
 				replace: true,
 				state: {
-					deleted: true
+					deleted: true,
 				}
-			}), 2000)
+			})
+		}
+	})
+
+	const updateTodoCompletedMutation = useMutation({
+		mutationFn: (newCompleted: boolean) => TodosAPI.updateTodo(todoId, {
+			completed: newCompleted,
+		}),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["todo", { id: todoId }] })
+			queryClient.invalidateQueries({ queryKey: ["todos"] })
 		},
 	})
 
-	const toggleTodo = useMutation({
-		mutationFn: (todo: PartialTodo) => TodosAPI.updateTodo(todoId, { completed: !todo.completed }),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['todo', { id: todoId }] })
-			queryClient.invalidateQueries({ queryKey: ['todos'] })
-			setTimeout(() => navigate(`/todos/${todoId}`), 2000)
-		},
-	})
+	const toggleTodo = async (todo: Todo) => {
+		updateTodoCompletedMutation.mutate(!todo.completed)
+	}
 
 	if (isError) {
 		return (
 			<Alert variant="warning">
 				<h1>Something went wrong!</h1>
+				<p>It wasn't me that did something /the server</p>
 
 				<Button variant='primary' onClick={() => getTodo()}>TRY AGAIN!!!</Button>
 			</Alert>
 		)
 	}
 
+	if (isLoading || !todo) {
+		return (<p>Loading...</p>)
+	}
+
 	return (
 		<>
-			{ todo &&
-				<>
-					<h1>{todo.title}</h1>
+			<h1>{todo.title}</h1>
 
-					<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
+			<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
 
-					<div className="buttons mb-3">
-						<Button variant='light' className="m-1" onClick={() => toggleTodo.mutate(todo)}>Toggle</Button>
+			<div className="buttons mb-3">
+				<Button variant="light" className="m-1" onClick={() => toggleTodo(todo)}>Toggle</Button>
 
-						<Link to={`/todos/${todoId}/edit`}>
-							<Button variant='light' className="m-1">Edit</Button>
-						</Link>
+				<Link to={`/todos/${todoId}/edit`}>
+					<Button variant="light" className="m-1">Edit</Button>
+				</Link>
 
-						<Button variant='danger' className="m-1" onClick={() => setShowConfirmDelete(true)}>Delete</Button>
-					</div>
+				<Button variant="light" className="m-1" onClick={() => setShowConfirmDelete(true)}>Delete</Button>
+			</div>
 
-					<ConfirmationModal
-						show={showConfirmDelete}
-						onCancel={() => setShowConfirmDelete(false)}
-						onConfirm={() => deleteTodo.mutate()}
-					>
-						ARE YOU SURE?
-					</ConfirmationModal>
-				</>
-			}
+			<ConfirmationModal
+				show={showConfirmDelete}
+				onCancel={() => setShowConfirmDelete(false)}
+				onConfirm={() => deleteTodoMutation.mutate()}
+			>
+				ARE YOU SURE?
+			</ConfirmationModal>
 
 			<Link to="/todos">
-				<Button variant='dark'>&laquo; All todos</Button>
+				<Button variant="dark">&laquo; All todos</Button>
 			</Link>
 		</>
 	)
