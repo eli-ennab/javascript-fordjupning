@@ -76,7 +76,14 @@ const TodoPage = () => {
 			<p><strong>Status:</strong> {todo.completed ? 'Completed' : 'Not completed'}</p>
 
 			<div className="buttons mb-3">
-				<Button variant="light" className="m-1" onClick={() => toggleTodo(todo)}>Toggle</Button>
+				<Button
+					variant="light"
+					className="m-1"
+					onClick={() => toggleTodo(todo)}
+					disabled={updateTodoCompletedMutation.isLoading}
+					>
+						Toggle
+				</Button>
 
 				<Link to={`/todos/${todoId}/edit`}>
 					<Button variant="light" className="m-1">Edit</Button>

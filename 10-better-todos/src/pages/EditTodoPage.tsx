@@ -78,8 +78,12 @@ const EditTodoPage = () => {
 					/>
 				</Form.Group>
 
-				<Button variant="light" type="submit">
-					Save
+				<Button
+					variant="light"
+					type="submit"
+					disabled={updateTodoTitleMutation.isLoading}
+					>
+						Save
 				</Button>
 			</Form>
 
