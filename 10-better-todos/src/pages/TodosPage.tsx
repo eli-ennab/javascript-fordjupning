@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { NewTodo } from '../types/TodosAPI.types'
 import Alert from 'react-bootstrap/Alert'
 import ListGroup from 'react-bootstrap/ListGroup'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import AddNewTodoForm from '../components/AddNewTodoForm'
 import AutoDismissingAlert from '../components/AutoDismissingAlert'
 import * as TodosAPI from '../services/TodosAPI'
@@ -10,14 +10,11 @@ import * as TodosAPI from '../services/TodosAPI'
 const TodosPage = () => {
 	const queryClient = useQueryClient()
 	const location = useLocation()
-	const [searchParams, setSearchParams] = useSearchParams()
-	const searchParams_deletedTodo = searchParams.get("deleted")
-	const deletedTodo = Boolean(searchParams_deletedTodo)
+	const deletedTodo = location.state?.deleted ?? false
 
 	const {
 		data: todos,
 		isError,
-		refetch: getTodos,
 	} = useQuery(
 		['todos'],
 		TodosAPI.getTodos
@@ -44,8 +41,6 @@ const TodosPage = () => {
 			<h1 className="mb-3">Todos</h1>
 
 			<AddNewTodoForm onAddTodo={addTodo} />
-
-			{createTodoMutation.isSuccess ? <p>New todo was successfully added!</p> : null}
 
 			{location.state?.message && (
 				<Alert variant="success">
