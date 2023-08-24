@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { NewTodo } from '../types/TodosAPI.types'
+import { NewTodo, Todos } from '../types/TodosAPI.types'
 import Alert from 'react-bootstrap/Alert'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { Link, useLocation } from 'react-router-dom'
@@ -22,12 +22,25 @@ const TodosPage = () => {
 
 	const createTodoMutation = useMutation({
 		mutationFn: TodosAPI.createTodo,
-		onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['todos'] }) }
+		onSuccess: (newTodo) => {
+			// instead of invalidating the ["todos"] query, we can construct
+			// new data based on the old data and the response from the create
+			// Todo request.
+			queryClient.setQueryData<Todos>(["todos"], (prevTodos) => {
+				return [
+					...prevTodos ?? [],
+					newTodo,
+				]
+			})
+
+			// also insert the new todo into the query cache
+			queryClient.setQueryData(["todo", { id: newTodo.id }], newTodo)
+		}
 	})
 
 	// Create a new todo in the API
 	const addTodo = async (todo: NewTodo) => {
-		createTodoMutation.mutateAsync(todo)
+		createTodoMutation.mutate(todo)
 	}
 
 	// // sort alphabetically by title
