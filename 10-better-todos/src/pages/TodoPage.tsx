@@ -81,7 +81,7 @@ const TodoPage = () => {
 					className="m-1"
 					onClick={() => toggleTodo(todo)}
 					disabled={updateTodoCompletedMutation.isLoading}
-					>
+				>
 						Toggle
 				</Button>
 
@@ -89,13 +89,20 @@ const TodoPage = () => {
 					<Button variant="light" className="m-1">Edit</Button>
 				</Link>
 
-				<Button variant="light" className="m-1" onClick={() => setShowConfirmDelete(true)}>Delete</Button>
+				<Button
+					variant="light"
+					className="m-1"
+					onClick={() => setShowConfirmDelete(true)}
+					disabled={deleteTodoMutation.isLoading}
+				>
+						Delete
+				</Button>
 			</div>
 
 			<ConfirmationModal
 				show={showConfirmDelete}
 				onCancel={() => setShowConfirmDelete(false)}
-				onConfirm={() => deleteTodoMutation.mutate()}
+				onConfirm={() => !deleteTodoMutation.isLoading && deleteTodoMutation.mutate()}
 			>
 				ARE YOU SURE?
 			</ConfirmationModal>

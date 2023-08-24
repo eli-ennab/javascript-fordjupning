@@ -82,7 +82,7 @@ const EditTodoPage = () => {
 					variant="light"
 					type="submit"
 					disabled={updateTodoTitleMutation.isLoading}
-					>
+				>
 						Save
 				</Button>
 			</Form>
