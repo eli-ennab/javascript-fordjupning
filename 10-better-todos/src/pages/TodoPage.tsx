@@ -28,8 +28,11 @@ const TodoPage = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['todo', { id: todoId }] })
 			queryClient.invalidateQueries({ queryKey: ['todos'] })
-			setTimeout(() => navigate('/todos?deleted=true', {
+			setTimeout(() => navigate('/todos', {
 				replace: true,
+				state: {
+					deleted: true
+				}
 			}), 2000)
 		},
 	})
