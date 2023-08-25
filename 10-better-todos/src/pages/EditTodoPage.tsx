@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import Alert from 'react-bootstrap/Alert'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
 import { useNavigate, useParams } from 'react-router-dom'
 import useTodo from '../hooks/useTodo'
 import useUpdateTodo from '../hooks/useUpdateTodo'
+import Alert from 'react-bootstrap/Alert'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 
 const EditTodoPage = () => {
 	const [newTodoTitle, setNewTodoTitle] = useState("")
@@ -19,7 +19,10 @@ const EditTodoPage = () => {
 		refetch: getTodo,
 	} = useTodo(todoId)
 
-	const updateTodoTitleMutation = useUpdateTodo(todoId)
+	const updateTodoTitleMutation = useUpdateTodo(todoId, (updatedTodo) => {
+		// redirect user to /todos/:id
+		navigate(`/todos/${updatedTodo.id}`)
+	})
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -29,7 +32,7 @@ const EditTodoPage = () => {
 		}
 
 		// Update a todo in the api
-		updateTodoTitleMutation.mutate(newTodoTitle)
+		updateTodoTitleMutation.mutate({ title: newTodoTitle })
 	}
 
 	useEffect(() => {

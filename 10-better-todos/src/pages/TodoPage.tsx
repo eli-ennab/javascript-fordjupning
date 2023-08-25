@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import Alert from 'react-bootstrap/Alert'
-import Button from 'react-bootstrap/Button'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Todo, Todos } from '../types/TodosAPI.types'
-import * as TodosAPI from '../services/TodosAPI'
 import ConfirmationModal from '../components/ConfirmationModal'
 import useTodo from '../hooks/useTodo'
+import useUpdateTodo from '../hooks/useUpdateTodo'
+import { Todo, Todos } from '../types/TodosAPI.types'
+import * as TodosAPI from '../services/TodosAPI'
+import Alert from 'react-bootstrap/Alert'
+import Button from 'react-bootstrap/Button'
 
 const TodoPage = () => {
 	const [queryEnabled, setQueryEnabled] = useState(true)
@@ -51,18 +52,10 @@ const TodoPage = () => {
 		}
 	})
 
-	const updateTodoCompletedMutation = useMutation({
-		mutationFn: (newCompleted: boolean) => TodosAPI.updateTodo(todoId, {
-			completed: newCompleted,
-		}),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["todo", { id: todoId }] })
-			queryClient.invalidateQueries({ queryKey: ["todos"] })
-		},
-	})
+	const updateTodoCompletedMutation = useUpdateTodo(todoId)
 
 	const toggleTodo = async (todo: Todo) => {
-		updateTodoCompletedMutation.mutate(!todo.completed)
+		updateTodoCompletedMutation.mutate({ completed: !todo.completed })
 	}
 
 	if (isError) {

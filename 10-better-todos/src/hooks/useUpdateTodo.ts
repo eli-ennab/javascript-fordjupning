@@ -1,21 +1,21 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
 import * as TodosAPI from '../services/TodosAPI'
+import { PartialTodo, Todo } from '../types/TodosAPI.types'
 
-const useUpdateTodo = (todoId: number) => {
+const useUpdateTodo = (
+	todoId: number,
+	onSuccess: (todo: Todo) => void = () => { return }
+) => {
 	const queryClient = useQueryClient()
-	const navigate = useNavigate()
 
 	return useMutation({
-		mutationFn: (newTodoTitle: string) => TodosAPI.updateTodo(todoId, {
-			title: newTodoTitle,
-		}),
+		mutationFn: (data: PartialTodo) => TodosAPI.updateTodo(todoId, data),
 		onSuccess: (updatedTodo) => {
 			queryClient.setQueryData(['todo', { id: todoId }], updatedTodo)
 
 			queryClient.refetchQueries({ queryKey: ["todos"] })
 
-			navigate(`/todos/${todoId}`)
+			onSuccess(updatedTodo)
 		},
 	})
 }
