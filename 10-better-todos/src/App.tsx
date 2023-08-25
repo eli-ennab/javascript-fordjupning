@@ -1,6 +1,7 @@
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import Container from 'react-bootstrap/Container'
 import { Routes, Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 import Navigation from './components/Navigation'
 import CreateTodoPage from './pages/CreateTodoPage'
 import EditTodoPage from './pages/EditTodoPage'
@@ -40,6 +41,7 @@ const App = () => {
 			</Container>
 
 			<ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
+			<ToastContainer />
 		</div>
 	)
 }
