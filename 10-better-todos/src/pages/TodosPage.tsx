@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { NewTodo, Todos } from '../types/TodosAPI.types'
 import Alert from 'react-bootstrap/Alert'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -6,6 +6,7 @@ import { Link, useLocation } from 'react-router-dom'
 import AddNewTodoForm from '../components/AddNewTodoForm'
 import AutoDismissingAlert from '../components/AutoDismissingAlert'
 import * as TodosAPI from '../services/TodosAPI'
+import useTodos from '../hooks/useTodos'
 
 const TodosPage = () => {
 	const queryClient = useQueryClient()
@@ -15,10 +16,7 @@ const TodosPage = () => {
 	const {
 		data: todos,
 		isError,
-	} = useQuery(
-		['todos'],
-		TodosAPI.getTodos
-	)
+	} = useTodos()
 
 	const createTodoMutation = useMutation({
 		mutationFn: TodosAPI.createTodo,
