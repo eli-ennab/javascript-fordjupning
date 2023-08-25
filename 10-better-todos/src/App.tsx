@@ -41,7 +41,9 @@ const App = () => {
 			</Container>
 
 			<ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
-			<ToastContainer />
+			<ToastContainer
+				theme='dark'
+			/>
 		</div>
 	)
 }

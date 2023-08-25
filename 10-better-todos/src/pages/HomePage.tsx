@@ -10,15 +10,15 @@ const HomePage = () => {
 			<ButtonGroup>
 				<Button
 					variant="light"
-					onClick={() => toast("så hungrig")}
+					onClick={() => toast("toast")}
 				>
-						??????????
+						toast
 				</Button>
 				<Button
 					variant="light"
-					onClick={() => toast.success("ät")}
+					onClick={() => toast.success("toast")}
 				>
-						!!!!!!!!!!!!!!!!!
+						toast
 				</Button>
 			</ButtonGroup>
 
