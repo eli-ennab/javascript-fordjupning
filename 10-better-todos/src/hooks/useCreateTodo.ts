@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { createTodo as TodosAPI_createTodo } from '../services/TodosAPI'
+import { Todos } from '../types/TodosAPI.types'
 
 const useCreateTodo = () => {
 	const navigate = useNavigate()
@@ -8,9 +9,16 @@ const useCreateTodo = () => {
 
 	return useMutation({
 		mutationFn: TodosAPI_createTodo,
-		onSuccess: () => {
-			// invalidate any ["todos"] queries
-			queryClient.invalidateQueries({ queryKey: ["todos"] })
+		onSuccess: (newTodo) => {
+			queryClient.setQueryData<Todos>(["todos"], (prevTodos) => {
+				return [
+					...prevTodos ?? [],
+					newTodo,
+				]
+			})
+
+			// also insert the new todo into the query cache
+			queryClient.setQueryData(["todo", { id: newTodo.id }], newTodo)
 
 			setTimeout(() => {
 				navigate("/todos")
