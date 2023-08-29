@@ -1,7 +1,27 @@
+import { ColumnDef } from '@tanstack/react-table'
 import WarningAlert from '../components/alerts/WarningAlert'
-// import BookList from '../components/BookList'
-import BSBookTable from '../components/BSBookTable'
 import useBooks from '../hooks/useBooks'
+import TanstackBasicTable from '../components/TanstackBasicTable'
+import { Book } from '../types/BooksAPI.types'
+
+const columns: ColumnDef<Book>[] = [
+	{
+		accessorKey: 'title',
+		header: 'Title',
+	},
+	{
+		accessorKey: 'author.name',
+		header: 'Author',
+	},
+	{
+		accessorKey: 'pages',
+		header: 'Pages',
+	},
+	{
+		accessorKey: 'published',
+		header: 'Published',
+	},
+]
 
 const BooksPage = () => {
 	const { data: books, isError, isLoading } = useBooks()
@@ -20,7 +40,7 @@ const BooksPage = () => {
 				<p>Loading books...</p>
 			)}
 
-			{books && <BSBookTable books={books} />}
+			{books && <TanstackBasicTable columns={columns} data={books} />}
 		</>
 	)
 }
