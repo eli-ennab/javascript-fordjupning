@@ -1,0 +1,33 @@
+import React from 'react'
+import { Author } from '../types/BooksAPI.types'
+import { Table } from 'react-bootstrap'
+
+interface IProps {
+	authors: Author[]
+}
+
+const BSAuthorTable: React.FC<IProps> = ({ authors }) => {
+	if (!authors) {
+		return <p>No authors for you.</p>
+	}
+
+
+	return (
+		<Table responsive striped bordered hover>
+			<thead>
+				<th>Name</th>
+				<th>Birthdate</th>
+			</thead>
+			<tbody>
+				{ authors.map(author => (
+					<tr key={author.id}>
+						<td>{author.name}</td>
+						<td>{author.date_of_birth}</td>
+					</tr>
+				))}
+			</tbody>
+		</Table>
+	)
+}
+
+export default BSAuthorTable
