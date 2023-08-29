@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Author } from '../types/BooksAPI.types'
 import { Table } from 'react-bootstrap'
 
@@ -21,7 +22,9 @@ const BSAuthorTable: React.FC<IProps> = ({ authors }) => {
 			<tbody>
 				{ authors.map(author => (
 					<tr key={author.id}>
-						<td>{author.name}</td>
+						<td>
+							<Link to={`/authors/${author.id}`}>{author.name}</Link>
+						</td>
 						<td>{author.date_of_birth}</td>
 					</tr>
 				))}
