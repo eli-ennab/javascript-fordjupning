@@ -28,7 +28,7 @@ const BooksPage = () => {
 	const { data: books, isError, isLoading } = useBooks()
 
 	return (
-		<PageTransition key="books-page">
+		<PageTransition page="books-page">
 			<h1 className="mb-3">Books</h1>
 
 			{isError && (
