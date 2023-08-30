@@ -1,12 +1,20 @@
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
 import { toast } from 'react-toastify'
 import useCreateAuthor from '../../hooks/useCreateAuthor'
-import { FormGroup } from 'react-bootstrap'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { NewAuthor } from '../../types/BooksAPI.types'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import FormGroup from 'react-bootstrap/FormGroup'
 
 const CreateAuthorForm = () => {
+	const { handleSubmit, register } = useForm<NewAuthor>()
+
+	const onCreateAuthorSubmit: SubmitHandler<NewAuthor> = (data) => {
+		console.log("Submitted data", data)
+	}
+
 	return (
-		<Form>
+		<Form onSubmit={handleSubmit(onCreateAuthorSubmit)}>
 			<FormGroup className="mb-3" controlId="name">
 				<Form.Label>Author Name</Form.Label>
 				<Form.Control
@@ -14,7 +22,7 @@ const CreateAuthorForm = () => {
 					placeholder="Author Authorian"
 					minLength={2}
 					maxLength={20}
-					required
+					{... register('name')}
 				/>
 			</FormGroup>
 
@@ -22,6 +30,7 @@ const CreateAuthorForm = () => {
 				<Form.Label>Date of Birth</Form.Label>
 				<Form.Control
 					type="date"
+					{... register('date_of_birth')}
 				/>
 			</FormGroup>
 
