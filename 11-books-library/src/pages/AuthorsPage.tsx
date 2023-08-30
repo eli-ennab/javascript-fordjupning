@@ -1,8 +1,8 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import WarningAlert from '../components/alerts/WarningAlert'
 import PageTransition from '../components/animations/PageTransition'
-// import BSAuthorTable from '../components/BSAuthorTable'
-import TanstackSortableTable from '../components/TanstackSortableTable'
+import BSAuthorTable from '../components/BSAuthorTable'
+// import TanstackSortableTable from '../components/TanstackSortableTable'
 import useAuthors from '../hooks/useAuthors'
 import { Author } from '../types/BooksAPI.types'
 
@@ -53,7 +53,8 @@ const AuthorsPage = () => {
 				<p>Loading authors...</p>
 			)}
 
-			{authors && <TanstackSortableTable columns={columns} data={authors} />}
+			{/* {authors && <TanstackSortableTable columns={columns} data={authors} />} */}
+			{authors && <BSAuthorTable authors={authors} />}
 		</PageTransition>
 	)
 }
