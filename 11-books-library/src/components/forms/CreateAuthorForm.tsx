@@ -7,10 +7,12 @@ import Form from 'react-bootstrap/Form'
 import FormGroup from 'react-bootstrap/FormGroup'
 
 const CreateAuthorForm = () => {
-	const { handleSubmit, register } = useForm<NewAuthor>()
+	const { handleSubmit, register, formState: { errors } } = useForm<NewAuthor>()
+	const createAuthorMutation = useCreateAuthor()
 
 	const onCreateAuthorSubmit: SubmitHandler<NewAuthor> = (data) => {
 		console.log("Submitted data", data)
+		createAuthorMutation.mutate(data)
 	}
 
 	return (
@@ -22,16 +24,23 @@ const CreateAuthorForm = () => {
 					placeholder="Author Authorian"
 					minLength={2}
 					maxLength={20}
-					{... register('name')}
+					{... register('name', {
+						required: true,
+						minLength: 3,
+					})}
 				/>
+				{errors.name && <p className="text-danger">Too short name.</p>}
 			</FormGroup>
 
 			<FormGroup className="mb-3" controlId="date_of_birth">
 				<Form.Label>Date of Birth</Form.Label>
 				<Form.Control
 					type="date"
-					{... register('date_of_birth')}
+					{... register('date_of_birth', {
+						required: true,
+					})}
 				/>
+				{errors.date_of_birth && <p className="text-danger">Date of Birth missing.</p>}
 			</FormGroup>
 
 			<div className="d-flex justify-content-end">
