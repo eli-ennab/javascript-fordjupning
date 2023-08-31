@@ -7,7 +7,7 @@ import { NewBook } from '../../types/BooksAPI.types'
 
 const currentYear = new Date().getFullYear()
 
-const CreateBookForm = () => {
+const CreateAuthorBookForm = () => {
 	const { handleSubmit, register, formState: { errors } } = useForm<NewBook>()
 	const createAuthorMutation = useCreateBook()
 	const { id } = useParams()
@@ -72,4 +72,4 @@ const CreateBookForm = () => {
 	)
 }
 
-export default CreateBookForm
+export default CreateAuthorBookForm

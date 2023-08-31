@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import CreateBookForm from '../components/forms/CreateBookForm'
+import CreateAuthorBookForm from '../components/forms/CreateAuthorBookForm'
 import PageTransition from '../components/animations/PageTransition'
 import WarningAlert from '../components/alerts/WarningAlert'
 import useAuthor from '../hooks/useAuthor'
@@ -39,7 +39,7 @@ const AuthorPage = () => {
 			<Card>
 				<Card.Body>
 					<Card.Title>Create Book</Card.Title>
-					<CreateBookForm />
+					<CreateAuthorBookForm />
 				</Card.Body>
 			</Card>
 			</PageTransition>
