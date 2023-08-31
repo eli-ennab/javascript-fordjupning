@@ -5,6 +5,8 @@ import PageTransition from '../components/animations/PageTransition'
 import TanstackSortableTable from '../components/TanstackSortableTable'
 import useBooks from '../hooks/useBooks'
 import { Book } from '../types/BooksAPI.types'
+import Card from 'react-bootstrap/Card'
+import CreateBookForm from '../components/forms/CreateBookForm'
 
 const columns: ColumnDef<Book>[] = [
 	{
@@ -43,6 +45,15 @@ const BooksPage = () => {
 			)}
 
 			{books && <TanstackSortableTable columns={columns} data={books} />}
+
+			<hr className="mb-5" />
+
+			<Card>
+				<Card.Body>
+					<Card.Title>Create Book</Card.Title>
+					<CreateBookForm />
+				</Card.Body>
+			</Card>
 		</PageTransition>
 	)
 }

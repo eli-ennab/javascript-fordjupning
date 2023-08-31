@@ -42,7 +42,7 @@ const AuthorPage = () => {
 					<CreateAuthorBookForm />
 				</Card.Body>
 			</Card>
-			</PageTransition>
+		</PageTransition>
 	)
 }
 
