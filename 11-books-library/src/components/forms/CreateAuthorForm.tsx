@@ -1,13 +1,16 @@
-import { toast } from 'react-toastify'
+import { zodResolver } from '@hookform/resolvers/zod'
 import useCreateAuthor from '../../hooks/useCreateAuthor'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { NewAuthor } from '../../types/BooksAPI.types'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import FormGroup from 'react-bootstrap/FormGroup'
+import { AuthorSchema, authorSchema } from '../../schemas/AuthorSchema'
 
 const CreateAuthorForm = () => {
-	const { handleSubmit, register, formState: { errors } } = useForm<NewAuthor>()
+	const { handleSubmit, register, formState: { errors } } = useForm<AuthorSchema>({
+		resolver: zodResolver(authorSchema)
+	})
 	const createAuthorMutation = useCreateAuthor()
 
 	const onCreateAuthorSubmit: SubmitHandler<NewAuthor> = (data) => {
@@ -22,25 +25,18 @@ const CreateAuthorForm = () => {
 				<Form.Control
 					type="text"
 					placeholder="Author Authorian"
-					minLength={2}
-					maxLength={20}
-					{... register('name', {
-						required: true,
-						minLength: 3,
-					})}
+					{... register('name')}
 				/>
-				{errors.name && <p className="text-danger">Too short name.</p>}
+				{errors.name && <p className="text-danger">{errors.name.message}</p>}
 			</FormGroup>
 
 			<FormGroup className="mb-3" controlId="date_of_birth">
 				<Form.Label>Date of Birth</Form.Label>
 				<Form.Control
 					type="date"
-					{... register('date_of_birth', {
-						required: true,
-					})}
+					{... register('date_of_birth')}
 				/>
-				{errors.date_of_birth && <p className="text-danger">Date of Birth missing.</p>}
+				{errors.date_of_birth && <p className="text-danger">{errors.date_of_birth.message ?? "Invalid value"}</p>}
 			</FormGroup>
 
 			<div className="d-flex justify-content-end">
