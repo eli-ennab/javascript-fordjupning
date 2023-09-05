@@ -2,6 +2,7 @@ import { collection, getDocs } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { Todo, Todos } from "../types/Todo.types"
 import { db } from '../services/firebase'
+import { CollectionReference } from 'firebase/firestore/lite'
 
 
 export const useGetTodos = () => {
@@ -12,7 +13,7 @@ export const useGetTodos = () => {
 		setLoading(true)
 
 		// Get reference to collection 'todos'
-		const colRef = collection(db, 'todos')
+		const colRef = collection(db, 'todos') as CollectionReference<Todo>
 
 		// Get query snapshot of collecton
 		const snapshot = await getDocs(colRef)
@@ -20,8 +21,10 @@ export const useGetTodos = () => {
 		// Loop over all docs
 		const data = snapshot.docs.map(doc => {
 			return {
-				_id: doc.id,
 				...doc.data(),
+				_id: doc.id,
+				// title: doc.data().title,
+				// completed: doc.data().completed,
 			} as Todo
 		})
 

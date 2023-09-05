@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { useParams } from "react-router-dom"
 import { Todo } from "../types/Todo.types"
 
-
 export const useGetTodo = () => {
 	const [todo, setTodo] = useState<Todo|null>(null)
 	const { id } = useParams()
