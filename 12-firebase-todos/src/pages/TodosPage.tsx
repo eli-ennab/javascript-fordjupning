@@ -4,10 +4,12 @@ import { Link } from "react-router-dom"
 import AddNewTodoForm from "../components/AddNewTodoForm"
 import { NewTodo, Todo, Todos } from "../types/Todo.types"
 import ListGroup from "react-bootstrap/ListGroup"
+import Button from "react-bootstrap/Button"
 import { db } from '../services/firebase'
 
 const TodosPage = () => {
 	const [todos, setTodos] = useState<Todos|null>(null)
+	const [loading, setLoading] = useState(true)
 
 	// Create a new todo in the API
 	const addTodo = (todo: NewTodo) => {
@@ -16,6 +18,8 @@ const TodosPage = () => {
 
 	// Get todos
 	const getTodos = async () => {
+		setLoading(true)
+
 		// Get reference to collection 'todos'
 		const colRef = collection(db, 'todos')
 
@@ -31,6 +35,7 @@ const TodosPage = () => {
 		})
 
 		setTodos(data)
+		setLoading(false)
 	}
 
 	// Get todos on component mount
@@ -40,9 +45,21 @@ const TodosPage = () => {
 
 	return (
 		<>
-			<h1 className="mb-3">Todos</h1>
+			<div className="d-flex justify-content-between align-items-center">
+				<h1 className="mb-3">Todos</h1>
+				<Button
+					variant="dark"
+					onClick={() => getTodos()}
+				>
+						Refresh
+				</Button>
+			</div>
 
 			<AddNewTodoForm onAddTodo={addTodo} />
+
+			{loading && (
+				<p>Loading todos...</p>
+			)}
 
 			{todos && todos.length > 0 && (
 				<ListGroup className="todolist">
