@@ -1,18 +1,18 @@
-import { Link } from "react-router-dom"
-import AddNewTodoForm from "../components/AddNewTodoForm"
-import { NewTodo } from "../types/Todo.types"
-import ListGroup from "react-bootstrap/ListGroup"
-import Button from "react-bootstrap/Button"
+import { Link } from 'react-router-dom'
+import AddNewTodoForm from '../components/AddNewTodoForm'
+import { NewTodo } from '../types/Todo.types'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Button from 'react-bootstrap/Button'
 import useGetTodos from '../hooks/useGetTodos'
 
 const TodosPage = () => {
+	// Get todos
+	const { data: todos, loading, getData: getTodos } = useGetTodos()
+
 	// Create a new todo in the API
 	const addTodo = (todo: NewTodo) => {
 		console.log("Would add a new todo:", todo)
 	}
-
-	// Get todos
-	const { todos, loading, getTodos } = useGetTodos()
 
 	return (
 		<>

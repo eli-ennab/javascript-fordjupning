@@ -4,10 +4,10 @@ import { todosCol } from '../services/firebase'
 import { Todo, Todos } from '../types/Todo.types'
 
 export const useGetTodos = () => {
-	const [todos, setTodos] = useState<Todos|null>(null)
+	const [data, setData] = useState<Todos|null>(null)
 	const [loading, setLoading] = useState(true)
 
-	const getTodos = async () => {
+	const getData = async () => {
 		setLoading(true)
 
 		// Get query snapshot of collecton
@@ -23,18 +23,18 @@ export const useGetTodos = () => {
 			} as Todo
 		})
 
-		setTodos(data)
+		setData(data)
 		setLoading(false)
 	}
 
 	useEffect(() => {
-		getTodos()
+		getData()
 	}, [])
 
 	return {
-		todos,
+		data,
 		loading,
-		getTodos
+		getData
 	}
 }
 
