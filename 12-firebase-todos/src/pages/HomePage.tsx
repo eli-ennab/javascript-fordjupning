@@ -6,7 +6,7 @@ const HomePage = () => {
 	return (
 		<>
 			<h1>Firebase Todos</h1>
-			<h2>Because when you're life is on fire, you need a todo list</h2>
+			<h2>Because when your life is on fire, you need a todo list</h2>
 
 			<ButtonGroup>
 				<Button
