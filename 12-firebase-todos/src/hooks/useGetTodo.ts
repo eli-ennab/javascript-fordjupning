@@ -1,35 +1,45 @@
-import { doc, getDoc } from "firebase/firestore"
-import { db } from '../services/firebase'
+import { doc, getDoc } from 'firebase/firestore'
+import { todosCol } from '../services/firebase'
 import { useEffect, useState } from 'react'
-import { useParams } from "react-router-dom"
-import { Todo } from "../types/Todo.types"
+import { Todo } from '../types/Todo.types'
 
-export const useGetTodo = () => {
-	const [todo, setTodo] = useState<Todo|null>(null)
-	const { id } = useParams()
-	const todoId = Number(id)
+export const useGetTodo = (documentId: string) => {
+	const [data, setData] = useState<Todo|null>(null)
+	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState(false)
 
-	const getTodo = async (id: string) => {
-		const docRef = doc(db, 'todos', id)
+	const getData = async (documentId: string) => {
+		setLoading(true)
+
+		const docRef = doc(todosCol, documentId)
 		const docSnap = await getDoc(docRef)
 
-		const data = docSnap.data() as Todo
-
-		setTodo(data)
-	}
-
-	useEffect(() => {
-		if (!id) {
+		if (!docSnap.exists()) {
+			setData(null)
+			setError(true)
+			setLoading(false)
 			return
 		}
 
-		getTodo(id)
-	}, [id])
+		const data: Todo = {
+			...docSnap.data(),
+			_id: docSnap.id,
+		}
+
+		setData(data)
+		setError(false)
+		setLoading(false)
+	}
+
+	useEffect(() => {
+		getData(documentId)
+	}, [documentId])
 
 	return {
-		todo,
-		todoId,
-		getTodo
+		data,
+		error,
+		getData,
+		loading,
 	}
 }
 

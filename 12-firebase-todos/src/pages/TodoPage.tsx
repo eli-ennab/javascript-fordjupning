@@ -1,24 +1,38 @@
-import Button from "react-bootstrap/Button"
-import { Link } from "react-router-dom"
-// import ConfirmationModal from "../components/ConfirmationModal"
-import useGetTodo from "../hooks/useGetTodo"
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
+import { Link } from 'react-router-dom'
+// import ConfirmationModal from '../components/ConfirmationModal'
+import useGetTodo from '../hooks/useGetTodo'
 
 const TodoPage = () => {
+	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
+	const { id } = useParams()
+	const documentId = id as string
 
-	const { todo, todoId } = useGetTodo()
+	const { data: todo, error, loading, getData: getTodo } = useGetTodo(documentId)
+
+	if (loading || !todo) {
+		return <p>Loading todo...</p>
+	}
 
 	return (
 		<>
-			{todo && (
-				<>
-					<h1>{todo.title}</h1>
 
-					<p>
-						<strong>Status:</strong>{" "}
-						{todo.completed ? "Completed" : "Not completed"}
-					</p>
-				</>
-			)}
+			<div className="d-flex justify-content-between align-items-center">
+				<h1 className="mb-3">{todo.title}</h1>
+				<Button
+					variant="dark"
+					onClick={() => getTodo(documentId)}
+				>
+						Refresh
+				</Button>
+			</div>
+
+			<p>
+				<strong>Status:</strong>{" "}
+				{todo.completed ? "Completed" : "Not completed"}
+			</p>
 
 			<div className="buttons mb-3">
 				<Button
@@ -28,7 +42,7 @@ const TodoPage = () => {
 					Toggle
 				</Button>
 
-				<Link to={`/todos/${todoId}/edit`}>
+				<Link to={`/todos/${id}/edit`}>
 					<Button variant="warning">Edit</Button>
 				</Link>
 
