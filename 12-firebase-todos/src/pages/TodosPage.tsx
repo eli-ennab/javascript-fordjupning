@@ -1,37 +1,42 @@
-import ListGroup from "react-bootstrap/ListGroup"
+import { collection, getDocs } from 'firebase/firestore'
+import { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
 import AddNewTodoForm from "../components/AddNewTodoForm"
-import { NewTodo, Todos } from "../types/Todo.types"
-
-const todos: Todos = [
-	{
-		id: "14c9b3244b4a",
-		title: "Learn React 😊",
-		completed: true,
-	},
-	{
-		id: "5e584050fc4f",
-		title: "Learn Firebase 🔥",
-		completed: false,
-	},
-	{
-		id: "d3329c34dc67",
-		title: "Profit 💰",
-		completed: false,
-	},
-	{
-		id: "44fd9cc7e1a4",
-		title: "Take over the world 😈",
-		completed: false,
-	},
-]
+import { NewTodo, Todo, Todos } from "../types/Todo.types"
+import ListGroup from "react-bootstrap/ListGroup"
+import { db } from '../services/firebase'
 
 const TodosPage = () => {
+	const [todos, setTodos] = useState<Todos|null>(null)
+
 	// Create a new todo in the API
 	const addTodo = (todo: NewTodo) => {
-		// 👻
 		console.log("Would add a new todo:", todo)
 	}
+
+	// Get todos
+	const getTodos = async () => {
+		// Get reference to collection 'todos'
+		const colRef = collection(db, 'todos')
+
+		// Get query snapshot of collecton
+		const snapshot = await getDocs(colRef)
+
+		// Loop over all docs
+		const data = snapshot.docs.map(doc => {
+			return {
+				_id: doc.id,
+				...doc.data(),
+			} as Todo
+		})
+
+		setTodos(data)
+	}
+
+	// Get todos on component mount
+	useEffect(() => {
+		getTodos()
+	}, [])
 
 	return (
 		<>
@@ -45,9 +50,9 @@ const TodosPage = () => {
 						<ListGroup.Item
 							action
 							as={Link}
-							key={todo.id}
+							key={todo._id}
 							className={todo.completed ? "done" : ""}
-							to={`/todos/${todo.id}`}
+							to={`/todos/${todo._id}`}
 						>
 							{todo.title}
 						</ListGroup.Item>
