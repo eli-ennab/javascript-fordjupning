@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app"
-import { getFirestore } from "firebase/firestore"
+import { CollectionReference, collection, getFirestore, DocumentData } from "firebase/firestore"
+import { Todo } from "../types/Todo.types"
 
 // Firebase configuration
 const firebaseConfig = {
@@ -13,6 +14,14 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
+
+// A helper to add the type to the db response
+const createCollection = <T = DocumentData>(collectionName: string) => {
+	return collection(db, collectionName) as CollectionReference<T>
+}
+
+// Export collection references
+export const todosCol = createCollection<Todo>("todos")
 
 // Get Firestore instance
 export const db = getFirestore(app)

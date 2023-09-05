@@ -1,9 +1,7 @@
-import { collection, getDocs } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
-import { Todo, Todos } from "../types/Todo.types"
-import { db } from '../services/firebase'
-import { CollectionReference } from 'firebase/firestore/lite'
-
+import { getDocs } from 'firebase/firestore'
+import { todosCol } from '../services/firebase'
+import { Todo, Todos } from '../types/Todo.types'
 
 export const useGetTodos = () => {
 	const [todos, setTodos] = useState<Todos|null>(null)
@@ -12,11 +10,8 @@ export const useGetTodos = () => {
 	const getTodos = async () => {
 		setLoading(true)
 
-		// Get reference to collection 'todos'
-		const colRef = collection(db, 'todos') as CollectionReference<Todo>
-
 		// Get query snapshot of collecton
-		const snapshot = await getDocs(colRef)
+		const snapshot = await getDocs(todosCol)
 
 		// Loop over all docs
 		const data = snapshot.docs.map(doc => {
