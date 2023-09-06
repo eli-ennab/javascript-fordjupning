@@ -30,12 +30,12 @@ export const useGetTodos = () => {
 	}
 
 	const addData = async (todo: NewTodo) => {
-		console.log("Would add a new todo:", todo)
-
 		await addDoc(collection(db, "todos"), {
 			title: todo.title,
 			completed: false,
 		})
+
+		getData()
 	}
 
 	useEffect(() => {

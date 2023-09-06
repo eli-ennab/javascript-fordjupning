@@ -1,5 +1,5 @@
-import { doc, getDoc } from 'firebase/firestore'
-import { todosCol } from '../services/firebase'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { db, todosCol } from '../services/firebase'
 import { useEffect, useState } from 'react'
 import { Todo } from '../types/Todo.types'
 
@@ -31,6 +31,19 @@ export const useGetTodo = (documentId: string) => {
 		setLoading(false)
 	}
 
+
+	const toggleData = async () => {
+		const newValue = !data?.completed
+
+		const todoRef = doc(db, "todos", documentId)
+
+		await updateDoc(todoRef, {
+			completed: newValue
+		})
+
+		getData(documentId)
+	}
+
 	useEffect(() => {
 		getData(documentId)
 	}, [documentId])
@@ -39,6 +52,7 @@ export const useGetTodo = (documentId: string) => {
 		data,
 		error,
 		getData,
+		toggleData,
 		loading,
 	}
 }

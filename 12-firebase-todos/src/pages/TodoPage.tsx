@@ -10,7 +10,7 @@ const TodoPage = () => {
 	const { id } = useParams()
 	const documentId = id as string
 
-	const { data: todo, error, loading, getData: getTodo } = useGetTodo(documentId)
+	const { data: todo, error, loading, getData: getTodo, toggleData: toggleTodo } = useGetTodo(documentId)
 
 	if (loading || !todo) {
 		return <p>Loading todo...</p>
@@ -37,7 +37,7 @@ const TodoPage = () => {
 			<div className="buttons mb-3">
 				<Button
 					variant="success"
-					onClick={() => console.log("Would toggle todo")}
+					onClick={() => toggleTodo()}
 				>
 					Toggle
 				</Button>
