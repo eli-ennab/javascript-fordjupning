@@ -3,23 +3,11 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
 import useGetTodos from '../hooks/useGetTodos'
 import ReactHookForm from '../components/ReactHookForm'
-import { collection, addDoc } from 'firebase/firestore'
-import { db } from '../services/firebase'
-import { NewTodo } from '../types/Todo.types'
 
 const TodosPage = () => {
-	const { data: todos, loading, getData: getTodos } = useGetTodos()
+	const { data: todos, loading, getData: getTodos, addData: addTodo } = useGetTodos()
 
 	console.log(todos)
-
-	const addTodo = async (todo: NewTodo) => {
-		console.log("Would add a new todo:", todo)
-
-		await addDoc(collection(db, "todos"), {
-			title: todo.title,
-			completed: false,
-		})
-	}
 
 	return (
 		<>

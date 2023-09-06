@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { getDocs } from 'firebase/firestore'
 import { todosCol } from '../services/firebase'
-import { Todo, Todos } from '../types/Todo.types'
+import { NewTodo, Todo, Todos } from '../types/Todo.types'
+import { collection, addDoc } from 'firebase/firestore'
+import { db } from '../services/firebase'
 
 export const useGetTodos = () => {
 	const [data, setData] = useState<Todos|null>(null)
@@ -27,6 +29,15 @@ export const useGetTodos = () => {
 		setLoading(false)
 	}
 
+	const addData = async (todo: NewTodo) => {
+		console.log("Would add a new todo:", todo)
+
+		await addDoc(collection(db, "todos"), {
+			title: todo.title,
+			completed: false,
+		})
+	}
+
 	useEffect(() => {
 		getData()
 	}, [])
@@ -34,7 +45,8 @@ export const useGetTodos = () => {
 	return {
 		data,
 		loading,
-		getData
+		getData,
+		addData
 	}
 }
 
