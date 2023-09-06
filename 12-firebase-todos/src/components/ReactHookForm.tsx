@@ -19,8 +19,13 @@ const ReactHookForm: React.FC<IProps> = ({ onAddTodo }) => {
 				<input
 					{...register("title")}
 					className="form-control"
-					/>
-				<button type="submit">Create</button>
+				/>
+				<button
+					type="submit"
+					className="btn btn-success"
+					>
+						Create
+				</button>
 			</div>
 		</form>
 	)
