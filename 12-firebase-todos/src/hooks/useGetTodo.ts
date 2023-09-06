@@ -31,7 +31,6 @@ export const useGetTodo = (documentId: string) => {
 		setLoading(false)
 	}
 
-
 	const toggleData = async () => {
 		const newValue = !data?.completed
 

@@ -7,8 +7,6 @@ import ReactHookForm from '../components/ReactHookForm'
 const TodosPage = () => {
 	const { data: todos, loading, getData: getTodos, addData: addTodo } = useGetTodos()
 
-	console.log(todos)
-
 	return (
 		<>
 			<div className="d-flex justify-content-between align-items-center">
