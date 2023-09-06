@@ -1,16 +1,15 @@
-import { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom'
-// import ConfirmationModal from '../components/ConfirmationModal'
 import useGetTodo from '../hooks/useGetTodo'
+import { toast } from "react-toastify"
 
 const TodoPage = () => {
-	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 	const { id } = useParams()
 	const documentId = id as string
+	const navigate = useNavigate()
 
-	const { data: todo, error, loading, getData: getTodo, toggleData: toggleTodo } = useGetTodo(documentId)
+	const { data: todo, error, loading, getData: getTodo, toggleData: toggleTodo, deleteData: deleteTodo } = useGetTodo(documentId)
 
 	if (loading || !todo) {
 		return <p>Loading todo...</p>
@@ -46,23 +45,17 @@ const TodoPage = () => {
 					<Button variant="warning">Edit</Button>
 				</Link>
 
-				{/* <Button
+				<Button
 					variant="danger"
-					onClick={() => setShowConfirmDelete(true)}
+					onClick={() => {
+						deleteTodo();
+						navigate("/todos");
+						toast.info("Todo was deleted successfully")
+					}}
 				>
 					Delete
-				</Button> */}
+				</Button>
 			</div>
-
-			{/* <ConfirmationModal
-				show={showConfirmDelete}
-				onCancel={() => setShowConfirmDelete(false)}
-				onConfirm={() =>
-					console.log("Would delete todo with id:", todoId)
-				}
-			>
-				U SURE BRO?!
-			</ConfirmationModal> */}
 
 			<Link to="/todos">
 				<Button variant="secondary">&laquo; All todos</Button>
