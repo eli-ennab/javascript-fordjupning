@@ -2,10 +2,10 @@ import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import ListGroup from "react-bootstrap/ListGroup"
 import { Link } from "react-router-dom"
 import { toast } from 'react-toastify'
-import AddNewTodoForm from "../components/AddNewTodoForm"
+import TodoForm from '../components/TodoForm'
 import useGetTodos from '../hooks/useGetTodos'
 import { newTodosCol } from '../services/firebase'
-import { NewTodoFormData } from "../types/Todo.types"
+import { TodoFormData } from "../types/Todo.types"
 
 const TodosPage = () => {
 	const {
@@ -14,14 +14,13 @@ const TodosPage = () => {
 	} = useGetTodos()
 
 	// Create a new todo in the API
-	const addTodo = async (data: NewTodoFormData) => {
+	const addTodo = async (data: TodoFormData) => {
 		// Add a new document with a generated ID
 		const docRef = doc(newTodosCol)
 
 		// Set the contents of the document
 		await setDoc(docRef, {
-			title: data.title,
-			completed: false,
+			...data,
 			created_at: serverTimestamp(),
 			updated_at: serverTimestamp(),
 		})
@@ -36,7 +35,7 @@ const TodosPage = () => {
 				<h1 className="mb-3">Todos</h1>
 			</div>
 
-			<AddNewTodoForm onAddTodo={addTodo} />
+			<TodoForm onSave={addTodo} />
 
 			{loading && <p>Loading todos...</p>}
 

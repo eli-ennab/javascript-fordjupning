@@ -8,7 +8,9 @@ const useStreamCollection = <T>(colRef: CollectionReference<T>) => {
 	// Get data on component mount
 	useEffect(() => {
 		// Subscribe to changes in the collection
-		const unsubscribe = onSnapshot(colRef, (snapshot) => {			// loop over all docs
+		const unsubscribe = onSnapshot(colRef, (snapshot) => {
+			console.log("Got me some data 🤑")
+			// loop over all docs
 			const data: T[] = snapshot.docs.map(doc => {
 				return {
 					...doc.data(),
@@ -20,7 +22,7 @@ const useStreamCollection = <T>(colRef: CollectionReference<T>) => {
 			setLoading(false)
 		})
 
-		// Return unsubscribe-function as cleanup
+		// Return unsubscribe function as cleanup
 		return unsubscribe
 	}, [colRef])
 
