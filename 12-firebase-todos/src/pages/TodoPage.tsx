@@ -1,15 +1,41 @@
-import { useNavigate, useParams } from 'react-router-dom'
-import Button from 'react-bootstrap/Button'
-import { Link } from 'react-router-dom'
-import useGetTodo from '../hooks/useGetTodo'
-import { toast } from "react-toastify"
+import { doc, deleteDoc } from 'firebase/firestore'
+import { useState } from "react"
+import Button from "react-bootstrap/Button"
+import { Link, useNavigate, useParams } from "react-router-dom"
+import { toast } from 'react-toastify'
+import ConfirmationModal from "../components/ConfirmationModal"
+import useGetTodo from "../hooks/useGetTodo"
+import { todosCol } from '../services/firebase'
 
 const TodoPage = () => {
-	const { id } = useParams()
-	const documentId = id as string
+	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 	const navigate = useNavigate()
+	const { id } = useParams()
 
-	const { data: todo, error, loading, getData: getTodo, toggleData: toggleTodo, deleteData: deleteTodo } = useGetTodo(documentId)
+	const documentId = id as string
+
+	const {
+		data: todo,
+		getData: getTodo,
+		loading
+	} = useGetTodo(documentId)
+
+	const deleteTodo = async () => {
+		// Get a reference to the document
+		const docRef = doc(todosCol, documentId)
+
+		// Delete the document
+		await deleteDoc(docRef)
+
+		// 🥂
+		toast.success("💣 Todo deleted")
+
+		// Redirect user to todos list
+		// (and replace the current history entry for this page)
+		navigate('/todos', {
+			replace: true,
+		})
+	}
 
 	if (loading || !todo) {
 		return <p>Loading todo...</p>
@@ -17,15 +43,9 @@ const TodoPage = () => {
 
 	return (
 		<>
-
-			<div className="d-flex justify-content-between align-items-center">
-				<h1 className="mb-3">{todo.title}</h1>
-				<Button
-					variant="dark"
-					onClick={() => getTodo(documentId)}
-				>
-						Refresh
-				</Button>
+			<div className="d-flex justify-content-between align-items-start">
+				<h1>{todo.title}</h1>
+				<Button variant="primary" onClick={() => getTodo()}>Refresh</Button>
 			</div>
 
 			<p>
@@ -36,7 +56,7 @@ const TodoPage = () => {
 			<div className="buttons mb-3">
 				<Button
 					variant="success"
-					onClick={() => toggleTodo()}
+					onClick={() => console.log("Would toggle todo")}
 				>
 					Toggle
 				</Button>
@@ -47,15 +67,19 @@ const TodoPage = () => {
 
 				<Button
 					variant="danger"
-					onClick={() => {
-						deleteTodo();
-						navigate("/todos");
-						toast.info("Todo was deleted successfully")
-					}}
+					onClick={() => setShowConfirmDelete(true)}
 				>
 					Delete
 				</Button>
 			</div>
+
+			<ConfirmationModal
+				show={showConfirmDelete}
+				onCancel={() => setShowConfirmDelete(false)}
+				onConfirm={deleteTodo}
+			>
+				U SURE BRO?!
+			</ConfirmationModal>
 
 			<Link to="/todos">
 				<Button variant="secondary">&laquo; All todos</Button>

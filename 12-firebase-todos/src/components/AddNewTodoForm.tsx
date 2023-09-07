@@ -1,56 +1,50 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { NewTodo } from '../types/Todo.types'
+import React, { useEffect } from 'react'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import InputGroup from 'react-bootstrap/InputGroup'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { NewTodoFormData } from '../types/Todo.types'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {
-	onAddTodo: (todo: NewTodo) => void
+	onAddTodo: (data: NewTodoFormData) => Promise<void>
 }
 
 const AddNewTodoForm: React.FC<IProps> = ({ onAddTodo }) => {
-	const [newTodoTitle, setNewTodoTitle] = useState("")
-	const newTodoTitleRef = useRef<HTMLInputElement>(null)
+	const { handleSubmit, register, formState: { errors, isSubmitSuccessful }, reset } = useForm<NewTodoFormData>()
 
-	const handleSubmit = (e: React.FormEvent) => {
-		// stop form from submitting
-		e.preventDefault()
-
-		// create a new todo and set a new todos state
-		const newTodo: NewTodo = {
-			title: newTodoTitle,
-			completed: false,
-		}
-		onAddTodo(newTodo)   // <-- calls `addTodo()` in `App.tsx`
-
-		// clear newTodoTitle state
-		setNewTodoTitle("")
+	const onFormSubmit: SubmitHandler<NewTodoFormData> = async (data: NewTodoFormData) => {
+		// Pass form data along to parent component
+		await onAddTodo(data)   // <-- calls `addTodo()` in `App.tsx`
 	}
 
-	// On component mount, focus on input field
 	useEffect(() => {
-		newTodoTitleRef.current?.focus()
-	}, [])
-
-	// console.log("AddNewTodoForm rendering...")
+		// Reset form when submit is successful
+		reset()
+	}, [isSubmitSuccessful, reset])
 
 	return (
-		<form onSubmit={handleSubmit} className="mb-3">
-			<div className="input-group">
-				<input
-					ref={newTodoTitleRef}
+		<Form onSubmit={handleSubmit(onFormSubmit)} className="mb-3">
+			<InputGroup>
+				<Form.Control
 					type="text"
 					className="form-control"
-					placeholder="Todo title"
-					onChange={e => setNewTodoTitle(e.target.value)}
-					value={newTodoTitle}
+					aria-label="The title of the new Todo"
+					{...register('title', {
+						required: "You have to write something at least...",
+						minLength: {
+							value: 5,
+							message: "That's too short to be a todo, better do it right now instead!"
+						},
+					})}
 				/>
 
-				<button
-					disabled={!newTodoTitle.trim()}
+				<Button
 					type="submit"
-					className="btn btn-success"
-				>Create</button>
-			</div>
-		</form>
+					variant="success"
+				>Create</Button>
+			</InputGroup>
+			{errors.title && <p className="invalid">{errors.title.message ?? "Invalid value"}</p>}
+		</Form>
 	)
 }
 

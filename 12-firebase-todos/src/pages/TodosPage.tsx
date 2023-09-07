@@ -1,29 +1,47 @@
-import { Link } from 'react-router-dom'
-import ListGroup from 'react-bootstrap/ListGroup'
-import Button from 'react-bootstrap/Button'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
+import Button from "react-bootstrap/Button"
+import ListGroup from "react-bootstrap/ListGroup"
+import { Link } from "react-router-dom"
+import { toast } from 'react-toastify'
+import AddNewTodoForm from "../components/AddNewTodoForm"
 import useGetTodos from '../hooks/useGetTodos'
-import ReactHookForm from '../components/ReactHookForm'
+import { newTodosCol } from '../services/firebase'
+import { NewTodoFormData } from "../types/Todo.types"
 
 const TodosPage = () => {
-	const { data: todos, loading, getData: getTodos, addData: addTodo } = useGetTodos()
+	const {
+		data: todos,
+		getData: getTodos,
+		loading
+	} = useGetTodos()
+
+	// Create a new todo in the API
+	const addTodo = async (data: NewTodoFormData) => {
+		// Add a new document with a generated ID
+		const docRef = doc(newTodosCol)
+
+		// Set the contents of the document
+		await setDoc(docRef, {
+			title: data.title,
+			completed: false,
+			created_at: serverTimestamp(),
+			updated_at: serverTimestamp(),
+		})
+
+		// 🥂
+		toast.success("Yay, even MORE stuff to do... 😁")
+	}
 
 	return (
 		<>
-			<div className="d-flex justify-content-between align-items-center">
+			<div className="d-flex justify-content-between align-items-start">
 				<h1 className="mb-3">Todos</h1>
-				<Button
-					variant="dark"
-					onClick={() => getTodos()}
-				>
-						Refresh
-				</Button>
+				<Button variant="primary" onClick={() => getTodos()}>Refresh</Button>
 			</div>
 
-			<ReactHookForm onAddTodo={addTodo} />
+			<AddNewTodoForm onAddTodo={addTodo} />
 
-			{loading && (
-				<p>Loading todos...</p>
-			)}
+			{loading && <p>Loading todos...</p>}
 
 			{todos && todos.length > 0 && (
 				<ListGroup className="todolist">
