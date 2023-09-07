@@ -1,9 +1,9 @@
 import { todosCol } from '../services/firebase'
 import { Todo } from '../types/Todo.types'
-import useGetDocument from './useGetDocument'
+import useStreamDocument from './useStreamDocument'
 
 const useGetTodo = (documentId: string) => {
-	return useGetDocument<Todo>(todosCol, documentId)
+	return useStreamDocument<Todo>(todosCol, documentId)
 }
 
 export default useGetTodo
