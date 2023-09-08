@@ -8,16 +8,22 @@ import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
+import useAuth from '../hooks/useAuth'
 
 const SignupPage = () => {
 	const { register, handleSubmit, formState: { errors }, watch } = useForm<SignUpCredentials>()
+
+	const { signup } = useAuth()
 
 	// Watch the current value of the password form field
 	const passwordRef = useRef("")
 	passwordRef.current = watch('password')
 
-	const onSignup: SubmitHandler<SignUpCredentials> = async (data) => {
+	const onSignup: SubmitHandler<SignUpCredentials> = (data) => {
 		console.log("Would sign up user:", data)
+
+		// Pass email and password along to signup in auth context
+		signup(data.email, data.password)
 	}
 
 	return (
