@@ -19,11 +19,11 @@ const SignupPage = () => {
 	const passwordRef = useRef("")
 	passwordRef.current = watch('password')
 
-	const onSignup: SubmitHandler<SignUpCredentials> = (data) => {
+	const onSignup: SubmitHandler<SignUpCredentials> = async (data) => {
 		console.log("Would sign up user:", data)
 
 		// Pass email and password along to signup in auth context
-		signup(data.email, data.password)
+		await signup(data.email, data.password)
 	}
 
 	return (
