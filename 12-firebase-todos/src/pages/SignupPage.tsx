@@ -23,7 +23,8 @@ const SignupPage = () => {
 		console.log("Would sign up user:", data)
 
 		// Pass email and password along to signup in auth context
-		await signup(data.email, data.password)
+		const userCredential = await signup(data.email, data.password)
+		console.log("Got account:", userCredential)
 	}
 
 	return (
