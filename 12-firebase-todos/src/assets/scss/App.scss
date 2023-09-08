@@ -19,3 +19,19 @@ h1, h2, h3, h4, h5, h6 {
 		text-decoration: line-through;
 	}
 }
+
+.todolist {
+	.list-group-item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		.todo-title {
+		}
+
+		.created {
+			color: $text-muted;
+			font-size: small;
+		}
+	}
+}
