@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify'
 import Navigation from './pages/partials/Navigation'
 import EditTodoPage from './pages/EditTodoPage'
 import HomePage from './pages/HomePage'
+import LoginPage from './pages/LoginPage'
 import NotFound from './pages/NotFound'
 import TodoPage from './pages/TodoPage'
 import TodosPage from './pages/TodosPage'
@@ -21,6 +22,9 @@ const App = () => {
 
 					{/* /signup */}
 					<Route path="/signup" element={<SignupPage />} />
+
+					{/* /login */}
+					<Route path="/login" element={<LoginPage />} />
 
 					<Route path="/todos">
 						{/* /todos */}
