@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage'
 import NotFound from './pages/NotFound'
 import TodoPage from './pages/TodoPage'
 import TodosPage from './pages/TodosPage'
+import SignupPage from './pages/SignupPage'
 import './assets/scss/App.scss'
 
 const App = () => {
@@ -18,6 +19,9 @@ const App = () => {
 				<Routes>
 					<Route path="/" element={<HomePage />} />
 
+					{/* /signup */}
+					<Route path="/signup" element={<SignupPage />} />
+
 					<Route path="/todos">
 						{/* /todos */}
 						<Route path="" element={<TodosPage />} />
@@ -27,6 +31,7 @@ const App = () => {
 
 						{/* /todos/:id/edit */}
 						<Route path=":id/edit" element={<EditTodoPage />} />
+
 					</Route>
 
 					<Route path="*" element={<NotFound />} />

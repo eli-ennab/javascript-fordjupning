@@ -51,7 +51,11 @@ const TodosPage = () => {
 							to={`/todos/${todo._id}`}
 						>
 							<span className="todo-title">{todo.title}</span>
-							<span className="created">{firebaseTimestampToString(todo.created_at)}</span>
+							<span className="created">
+								{ todo.created_at && todo.updated_at && (
+									firebaseTimestampToString(todo.created_at)
+								)}
+								</span>
 						</ListGroup.Item>
 					))}
 				</ListGroup>
