@@ -39,7 +39,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 
 		try {
 			await signOut(auth);
-			console.log("User logged out successfully.")
+			toast.success("User logged out successfully.")
 		} catch (error) {
 			console.error("Error logging out:", error)
 		}
