@@ -18,13 +18,8 @@ const LoginPage = () => {
 		console.log("Would log in user", data)
 
 		// Pass email and password along to signup in auth-context
-		const userCredential = await login(data.email, data.password)
+		await login(data.email, data.password)
 
-		if (userCredential === undefined) {
-			return
-		}
-
-		console.log("This user is logged in:", userCredential)
 		navigate("/")
 	}
 
