@@ -2,8 +2,11 @@ import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import { NavLink, Link } from 'react-router-dom'
+import useAuth from '../../hooks/useAuth'
 
 const Navigation = () => {
+	const { userEmail } = useAuth()
+
 	return (
 		<Navbar bg="dark" variant="dark" expand="sm">
 			<Container>
@@ -12,6 +15,7 @@ const Navigation = () => {
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="ms-auto">
+						<p className="small">{userEmail}</p>
 						<Nav.Link as={NavLink} end to="/login">Login</Nav.Link>
 						<Nav.Link as={NavLink} end to="/logout">Logout</Nav.Link>
 						<Nav.Link as={NavLink} end to="/signup">Signup</Nav.Link>
