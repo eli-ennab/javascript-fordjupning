@@ -31,13 +31,13 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 	// 	setCurrentUser(user)
 	// })
 
-	const login = async (email: string, password: string) => {
+	const login = async (email: string, password: string): Promise<UserCredential> => {
 		try {
-			await signInWithEmailAndPassword(auth, email, password)
-		} catch (err: any) {
-			toast.error(
-				`${err.message}`
-			)
+			const userCredential = await signInWithEmailAndPassword(auth, email, password)
+			return userCredential
+		} catch (error: any) {
+			toast.error(`${error.message}`)
+			throw error
 		}
 	}
 
@@ -45,13 +45,13 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return signOut(auth)
 	}
 
-	const signup = async (email: string, password: string) => {
+	const signup = async (email: string, password: string): Promise<UserCredential> => {
 		try {
-			await createUserWithEmailAndPassword(auth, email, password)
-		} catch (err: any) {
-			toast.error(
-				`${err.message}`
-			)
+			const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+			return userCredential
+		} catch (error: any) {
+			toast.error(`${error.message}`)
+			throw error
 		}
 	}
 
