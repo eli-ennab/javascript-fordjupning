@@ -1,5 +1,5 @@
-import { useContext } from 'react'
-import { AuthContext } from '../contexts/AuthContextProvider'
+import { useContext } from "react"
+import { AuthContext } from "../contexts/AuthContextProvider"
 
 const useAuth = () => {
 	const authContext = useContext(AuthContext)
@@ -8,7 +8,7 @@ const useAuth = () => {
 		throw new Error("Trying to use AuthContext outside of AuthContextProvider")
 	}
 
-	return  authContext
+	return authContext
 }
 
 export default useAuth

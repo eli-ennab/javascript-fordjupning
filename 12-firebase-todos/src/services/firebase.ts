@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app"
-import { getAuth } from 'firebase/auth'
+import { getAuth } from "firebase/auth"
 import { CollectionReference, collection, DocumentData, getFirestore } from "firebase/firestore"
 import { NewTodo, Todo } from "../types/Todo.types"
 

@@ -2,8 +2,9 @@ import { Timestamp } from "firebase/firestore";
 
 /**
  * Convert a Firebase Timestamp to a Date
+ *
  * @param firebaseTimestamp
- * @returns
+ * @returns {Date}
  */
 export const firebaseTimestampToDate = (firebaseTimestamp: Timestamp) => {
 	return firebaseTimestamp.toDate()
@@ -12,29 +13,29 @@ export const firebaseTimestampToDate = (firebaseTimestamp: Timestamp) => {
 /**
  * Convert a Date to an ISO string
  * @param date
- * @returns
+ * @returns {string}
  */
-export const dateToIsoLocal = (date: Date) => {
+export const dateToIsoString = (date: Date) => {
 	return date.toISOString()
 }
 
 /**
- * Convert a Date to a YYYY-MM-DD hh:mm:ss string
+ * Convert a Date to `YYYY-MM-DD HH:mm:ss` string
  * @param date
- * @returns
+ * @returns {string}
  */
 export const dateToYmdHms = (date: Date) => {
-	return Intl.DateTimeFormat(['sv-SE'],
-	{
+	return Intl.DateTimeFormat('sv-SE', {
 		dateStyle: 'short',
 		timeStyle: 'short',
 	}).format(date)
 }
 
 /**
- * Convert a firebase Timestamp to an
+ * Convert a Firebase Timestamp to an string
+ *
  * @param firebaseTimestamp
- * @returns
+ * @returns {string}
  */
 export const firebaseTimestampToString = (firebaseTimestamp: Timestamp) => {
 	return dateToYmdHms( firebaseTimestampToDate(firebaseTimestamp) )

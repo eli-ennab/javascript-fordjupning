@@ -6,10 +6,24 @@ h1, h2, h3, h4, h5, h6 {
 	margin-bottom: 0.75em;
 }
 
+#App {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	position: relative;
+}
+
 #global-loading-spinner-wrapper {
 	position: absolute;
 	top: 4.5rem;
 	right: 3.5rem;
+}
+
+.center-y {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .todolist {
@@ -32,8 +46,8 @@ h1, h2, h3, h4, h5, h6 {
 		justify-content: space-between;
 		align-items: center;
 
-		// .todo-title {
-		// }
+		.todo-title {
+		}
 
 		.created {
 			color: $text-muted;

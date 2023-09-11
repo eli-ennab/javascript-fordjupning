@@ -1,6 +1,7 @@
 import { doc, deleteDoc } from 'firebase/firestore'
 import { useState } from "react"
 import Button from "react-bootstrap/Button"
+import Container from "react-bootstrap/Container"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { toast } from 'react-toastify'
 import ConfirmationModal from "../components/ConfirmationModal"
@@ -41,7 +42,7 @@ const TodoPage = () => {
 	}
 
 	return (
-		<>
+		<Container className="py-3">
 			<div className="d-flex justify-content-between align-items-start">
 				<h1>{todo.title}</h1>
 			</div>
@@ -82,7 +83,7 @@ const TodoPage = () => {
 			<Link to="/todos">
 				<Button variant="secondary">&laquo; All todos</Button>
 			</Link>
-		</>
+		</Container>
 	)
 }
 

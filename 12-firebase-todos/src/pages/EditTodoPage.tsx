@@ -1,5 +1,6 @@
 import { doc, serverTimestamp, updateDoc } from 'firebase/firestore'
 import Button from 'react-bootstrap/Button'
+import Container from "react-bootstrap/Container"
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import useGetTodo from '../hooks/useGetTodo'
@@ -38,13 +39,13 @@ const EditTodoPage = () => {
 	}
 
 	return (
-		<>
+		<Container className="py-3">
 			<h1>Edit: {todo.title}</h1>
 
 			<TodoForm onSave={updateTodo} initialValues={todo} />
 
 			<Button variant='secondary' onClick={() => navigate(-1)}>&laquo; Go back</Button>
-		</>
+		</Container>
 	)
 }
 
