@@ -6,13 +6,26 @@ import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
+import useAuth from '../hooks/useAuth'
 import { LoginCredentials } from '../types/User.types'
 
 const LoginPage = () => {
-	const { handleSubmit, register, formState: { errors } } = useForm<LoginCredentials>()
+	const { handleSubmit, register, watch, formState: { errors } } = useForm<LoginCredentials>()
+	const { login } = useAuth()
+	const navigate = useNavigate()
 
 	const onLogin: SubmitHandler<LoginCredentials> = async (data) => {
-		console.log("WOuld log in user", data)
+		console.log("Would log in user", data)
+
+		// Pass email and password along to signup in auth-context
+		const userCredential = await login(data.email, data.password)
+
+		if (userCredential === undefined) {
+			return
+		}
+
+		console.log("This user is logged in:", userCredential)
+		navigate("/")
 	}
 
 	return (
