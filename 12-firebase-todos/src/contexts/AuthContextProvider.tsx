@@ -20,16 +20,16 @@ type AuthContextProps = {
 }
 
 const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
-	const [currentUser, setCurrentUser] = useState<User|null>(null)
+	const [currentUser, setCurrentUser] = useState<UserCredential|null>(null)
 	const [userEmail, setUserEmail] = useState<string | null>(null)
 
-	// onAuthStateChanged(auth, (user) => {
-	// 	if (!user) {
-	// 		throw new Error("That is not a user")
-	// 	}
+	onAuthStateChanged(auth, (user) => {
+		if (user === null) {
+			throw new Error("User was null")
+		}
 
-	// 	setCurrentUser(user)
-	// })
+		setUserEmail(user.email)
+	})
 
 	const login = async (email: string, password: string): Promise<UserCredential> => {
 		try {
