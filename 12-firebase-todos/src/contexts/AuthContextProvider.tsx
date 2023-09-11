@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { User, UserCredential, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { Auth, UserCredential, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { createContext, useState } from 'react'
 import { auth } from '../services/firebase'
 import { toast } from "react-toastify"
@@ -7,7 +7,7 @@ import { toast } from "react-toastify"
 type AuthContextType = {
 	currentUser: UserCredential | null
 	login: (email: string, password: string) => Promise<UserCredential>
-	// logout: ?
+	logout: (email: string, password: string) => Promise<void>
 	signup: (email: string, password: string) => Promise<UserCredential>
 	userEmail: string | null
 }
@@ -20,35 +20,37 @@ type AuthContextProps = {
 }
 
 const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
-	const [currentUser, setCurrentUser] = useState<UserCredential|null>(null)
+	const [currentUser, setCurrentUser] = useState(null)
 	const [userEmail, setUserEmail] = useState<string | null>(null)
-
-	onAuthStateChanged(auth, (user) => {
-		if (user === null) {
-			throw new Error("User was null")
-		}
-
-		setUserEmail(user.email)
-	})
 
 	const login = async (email: string, password: string): Promise<UserCredential> => {
 		try {
 			const userCredential = await signInWithEmailAndPassword(auth, email, password)
 			return userCredential
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			toast.error(`${error.message}`)
 			throw error
 		}
 	}
 
-	const logout = (auth: any) => {
-		return signOut(auth)
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const logout = async (auth: Auth) => {
+		try {
+			const userCredential = await signOut(auth)
+			return userCredential
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		} catch (error: any) {
+			toast.error(`${error.message}`)
+			throw error
+		}
 	}
 
 	const signup = async (email: string, password: string): Promise<UserCredential> => {
 		try {
 			const userCredential = await createUserWithEmailAndPassword(auth, email, password)
 			return userCredential
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			toast.error(`${error.message}`)
 			throw error
@@ -56,6 +58,15 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 	}
 
 	// add auth-state observer here (somehow... 😈)
+	onAuthStateChanged(auth, (user: any) => {
+		if (user === null) {
+			throw new Error("User was null")
+		}
+
+		setCurrentUser(user)
+
+		setUserEmail(user.email)
+	})
 
 	return (
 		<AuthContext.Provider value={{
