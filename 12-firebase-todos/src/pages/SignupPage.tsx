@@ -9,7 +9,6 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 import { SignUpCredentials } from '../types/User.types'
-import { toast } from "react-toastify"
 
 const SignupPage = () => {
 	const { handleSubmit, register, watch, formState: { errors } } = useForm<SignUpCredentials>()
@@ -25,10 +24,6 @@ const SignupPage = () => {
 
 		// Pass email and password along to signup in auth-context
 		const userCredential = await signup(data.email, data.password)
-
-		if (userCredential === undefined) {
-			return
-		}
 
 		console.log("YAYYYYY I GOTS ACCOUNT!!!!!!!!!!!", userCredential)
 		navigate("/")
