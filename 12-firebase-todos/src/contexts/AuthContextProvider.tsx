@@ -7,7 +7,7 @@ import { toast } from "react-toastify"
 type AuthContextType = {
 	currentUser: UserCredential | null
 	login: (email: string, password: string) => Promise<UserCredential>
-	logout: (email: string, password: string) => Promise<void>
+	logout: () => Promise<void>
 	signup: (email: string, password: string) => Promise<UserCredential>
 	userEmail: string | null
 }
@@ -34,15 +34,14 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const logout = async (auth: Auth) => {
+	const logout = async () => {
+		console.log("Logging out user:", currentUser)
+
 		try {
-			const userCredential = await signOut(auth)
-			return userCredential
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		} catch (error: any) {
-			toast.error(`${error.message}`)
-			throw error
+			await signOut(auth);
+			console.log("User logged out successfully.")
+		} catch (error) {
+			console.error("Error logging out:", error)
 		}
 	}
 
@@ -59,9 +58,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 
 	// add auth-state observer here (somehow... 😈)
 	onAuthStateChanged(auth, (user: any) => {
-		if (user === null) {
-			throw new Error("User was null")
-		}
+		console.log("Auth state changed:", user)
 
 		setCurrentUser(user)
 

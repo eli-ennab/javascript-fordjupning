@@ -10,11 +10,11 @@ const HomePage = () => {
 	return (
 		<Container className="py-3">
 
-			<p>Welcome, {userEmail}!</p>
-
 			<h1>Firebase Todos</h1>
-			<h2>Because when you're life is on fire, you need a todo list</h2>
 
+			{userEmail && (<p>Welcome, {userEmail}!</p>)}
+
+			<h2>Because when you're life is on fire, you need a todo list</h2>
 
 			<ButtonGroup>
 				<Button
