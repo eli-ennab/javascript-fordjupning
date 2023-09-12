@@ -1,6 +1,6 @@
-import Container from 'react-bootstrap/Container'
 import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
+import RequireAuth from './components/RequireAuth'
 import Navigation from './pages/partials/Navigation'
 import EditTodoPage from './pages/EditTodoPage'
 import HomePage from './pages/HomePage'
@@ -18,24 +18,37 @@ const App = () => {
 			<Navigation />
 
 			<Routes>
-				<Route path="/" element={<HomePage />} />
-
+				{/* Guest routes */}
+				<Route path="*" element={<NotFound />} />
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/logout" element={<LogoutPage />} />
 				<Route path="/signup" element={<SignupPage />} />
 
+				{/* Protected routes */}
+				<Route path="/" element={
+					<RequireAuth>
+						<HomePage />
+					</RequireAuth>
+				}/>
+
 				<Route path="/todos">
-					{/* /todos */}
-					<Route path="" element={<TodosPage />} />
-
-					{/* /todos/:id */}
-					<Route path=":id" element={<TodoPage />} />
-
-					{/* /todos/:id/edit */}
-					<Route path=":id/edit" element={<EditTodoPage />} />
+					<Route path="" element={
+						<RequireAuth>
+							<TodosPage />
+						</RequireAuth>
+					}/>
+					<Route path=":id" element={
+						<RequireAuth>
+							<TodoPage />
+						</RequireAuth>
+					} />
+					<Route path=":id/edit" element={
+						<RequireAuth>
+							<EditTodoPage />
+						</RequireAuth>
+					} />
 				</Route>
 
-				<Route path="*" element={<NotFound />} />
 			</Routes>
 
 			<ToastContainer
