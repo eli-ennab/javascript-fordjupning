@@ -49,6 +49,12 @@ const App = () => {
 					} />
 				</Route>
 
+				{/* <Route path="/update-profile" element={
+					<RequireAuth>
+						<UpdateProfile />
+					</RequireAuth>
+				}/> */}
+
 			</Routes>
 
 			<ToastContainer
