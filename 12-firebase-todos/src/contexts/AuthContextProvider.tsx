@@ -8,6 +8,7 @@ import {
 	signOut,
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
+import SyncLoader from 'react-spinners/SyncLoader'
 import { auth } from '../services/firebase'
 
 type AuthContextType = {
@@ -28,6 +29,7 @@ type AuthContextProps = {
 const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState<User | null>(null)
 	const [userEmail, setUserEmail] = useState<string | null>(null)
+	const [loading, setLoading] = useState(true)
 
 	const login = (email: string, password: string) => {
 		return signInWithEmailAndPassword(auth, email, password)
@@ -62,6 +64,8 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			} else {
 				setUserEmail(null)
 			}
+
+			setLoading(false)
 		})
 	}, [])
 
@@ -75,7 +79,13 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			signup,
 			userEmail,
 		}}>
-			{children}
+			{loading ? (
+				<div id="initial-loader">
+					<SyncLoader color={'#888'} size={15} speedMultiplier={1.1} />
+				</div>
+			) : (
+				<>{children}</>
+			)}
 		</AuthContext.Provider>
 	)
 }

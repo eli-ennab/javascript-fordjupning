@@ -19,6 +19,14 @@ h1, h2, h3, h4, h5, h6 {
 	right: 3.5rem;
 }
 
+#initial-loader {
+	// background-color: #3f7bc2;
+	display: flex;
+	min-height: 100vh;
+	justify-content: center;
+	align-items: center;
+}
+
 .center-y {
 	flex-grow: 1;
 	display: flex;
