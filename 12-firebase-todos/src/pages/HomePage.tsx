@@ -5,14 +5,17 @@ import { toast } from "react-toastify"
 import useAuth from '../hooks/useAuth'
 
 const HomePage = () => {
-	const { userEmail } = useAuth()
+	const { currentUser } = useAuth()
+	if (!currentUser) {
+		throw new Error("You are no user.")
+	}
 
 	return (
 		<Container className="py-3">
 
 			<h1>Firebase Todos</h1>
 
-			{userEmail && (<p>Welcome, {userEmail}!</p>)}
+			<p>You are logged in as {currentUser.email}.</p>
 
 			<h2>Because when you're life is on fire, you need a todo list</h2>
 
