@@ -56,7 +56,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 
 		// the result is returned as a cleanup (unsubscribe)
 		return onAuthStateChanged(auth, (user) => {
-			console.log("Auth state changed:", user)
+			// console.log("Auth state changed:", user)
 			setCurrentUser(user)
 
 			if (user) {
@@ -69,7 +69,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		})
 	}, [])
 
-	console.log("Current user:", currentUser)
+	// console.log("Current user:", currentUser)
 
 	return (
 		<AuthContext.Provider value={{
