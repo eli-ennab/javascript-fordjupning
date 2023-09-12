@@ -10,15 +10,14 @@ const LogoutPage = () => {
 	const navigate = useNavigate()
 	const { logout } = useAuth()
 
-	const onLogout = () => {
-		logout()
-
-		setTimeout(() => {navigate("/login")}, 2000)
-	}
-
 	useEffect(() => {
+		const onLogout = async () => {
+			await logout()
+			navigate("/login")
+		}
+
 		onLogout()
-	}, [])
+	}, [logout, navigate])
 
 	return (
 		<Container className="py-3 center-y">
