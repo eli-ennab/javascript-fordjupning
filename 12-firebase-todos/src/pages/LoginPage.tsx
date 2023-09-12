@@ -1,3 +1,6 @@
+import { FirebaseError } from 'firebase/app'
+import { useState } from 'react'
+import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
@@ -10,17 +13,32 @@ import useAuth from '../hooks/useAuth'
 import { LoginCredentials } from '../types/User.types'
 
 const LoginPage = () => {
-	const { handleSubmit, register, watch, formState: { errors } } = useForm<LoginCredentials>()
+	const [errorMessage, setErrorMessage] = useState<string | null>(null)
+	const [loading, setLoading] = useState(false)
+	const { handleSubmit, register, formState: { errors } } = useForm<LoginCredentials>()
 	const { login } = useAuth()
 	const navigate = useNavigate()
 
 	const onLogin: SubmitHandler<LoginCredentials> = async (data) => {
-		console.log("Would log in user", data)
+		// Clear any previous error state
+		setErrorMessage(null)
 
-		// Pass email and password along to signup in auth-context
-		await login(data.email, data.password)
+		// Try to log in the user with the provided credentials
+		try {
+			setLoading(true)
+			await login(data.email, data.password)
 
-		navigate("/")
+			// If successful, redirect to the home page
+			navigate('/')
+
+		} catch (error) {
+			if (error instanceof FirebaseError) {
+				setErrorMessage(error.message)
+			} else {
+				setErrorMessage("Something went wrong. Have you tried turning it off and on again?")
+			}
+			setLoading(false)
+		}
 	}
 
 	return (
@@ -30,6 +48,8 @@ const LoginPage = () => {
 					<Card>
 						<Card.Body>
 							<Card.Title className="mb-3">Login</Card.Title>
+
+							{errorMessage && (<Alert variant="danger">{errorMessage}</Alert>)}
 
 							<Form onSubmit={handleSubmit(onLogin)}>
 								<Form.Group controlId="email" className="mb-3">
@@ -53,7 +73,7 @@ const LoginPage = () => {
 											required: "You're kidding, right? Enter your password, stupid",
 											minLength: {
 												value: 3,
-												message: "Please enter at least 3 characters"
+												message: "Your password is at least 3 characters"
 											},
 										})}
 									/>
@@ -61,7 +81,15 @@ const LoginPage = () => {
 									<Form.Text>At least 6 characters</Form.Text>
 								</Form.Group>
 
-								<Button variant="primary" type="submit">Log In</Button>
+								<Button
+									disabled={loading}
+									variant="primary"
+									type="submit"
+								>
+									{loading
+										? "Logging in..."
+										: "Log In"}
+								</Button>
 							</Form>
 
 							<div className="text-center">

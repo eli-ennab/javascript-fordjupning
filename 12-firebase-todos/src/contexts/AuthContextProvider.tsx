@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Auth, UserCredential, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { createContext, useState } from 'react'
+import {
+	UserCredential,
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+	onAuthStateChanged,
+	User,
+} from 'firebase/auth'
+import { createContext, useEffect, useState } from 'react'
 import { auth } from '../services/firebase'
-import { toast } from "react-toastify"
 
 type AuthContextType = {
-	currentUser: UserCredential | null
+	currentUser: User | null
 	login: (email: string, password: string) => Promise<UserCredential>
-	logout: () => Promise<void>
+	// logout: ?
 	signup: (email: string, password: string) => Promise<UserCredential>
 	userEmail: string | null
 }
@@ -20,56 +25,51 @@ type AuthContextProps = {
 }
 
 const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
-	const [currentUser, setCurrentUser] = useState(null)
+	const [currentUser, setCurrentUser] = useState<User | null>(null)
 	const [userEmail, setUserEmail] = useState<string | null>(null)
 
-	const login = async (email: string, password: string): Promise<UserCredential> => {
-		try {
-			const userCredential = await signInWithEmailAndPassword(auth, email, password)
-			return userCredential
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		} catch (error: any) {
-			toast.error(`${error.message}`)
-			throw error
-		}
+	const login = (email: string, password: string) => {
+		return signInWithEmailAndPassword(auth, email, password)
 	}
 
-	const logout = async () => {
-		console.log("Logging out user:", currentUser)
-
-		try {
-			await signOut(auth);
-			toast.success("User logged out successfully.")
-		} catch (error) {
-			console.error("Error logging out:", error)
-		}
+	const logout = () => {
 	}
 
-	const signup = async (email: string, password: string): Promise<UserCredential> => {
-		try {
-			const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-			return userCredential
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		} catch (error: any) {
-			toast.error(`${error.message}`)
-			throw error
-		}
+	const signup = (email: string, password: string) => {
+		return createUserWithEmailAndPassword(auth, email, password)
 	}
 
 	// add auth-state observer here (somehow... 😈)
-	onAuthStateChanged(auth, (user: any) => {
-		console.log("Auth state changed:", user)
+	useEffect(() => {
+		/*
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+			setCurrentUser(user)
+		})
 
-		setCurrentUser(user)
+		// runs when we leave the page, not when we log out
+		return unsubscribe
+		*/
 
-		setUserEmail(user.email)
-	})
+		// the result is returned as a cleanup (unsubscribe)
+		return onAuthStateChanged(auth, (user) => {
+			console.log("Auth state changed:", user)
+			setCurrentUser(user)
+
+			if (user) {
+				setUserEmail(user.email)
+			} else {
+				setUserEmail(null)
+			}
+		})
+	}, [])
+
+	console.log("Current user:", currentUser)
 
 	return (
 		<AuthContext.Provider value={{
 			currentUser,
 			login,
-			logout,
+			// logout,
 			signup,
 			userEmail,
 		}}>

@@ -1,16 +1,20 @@
+import { FirebaseError } from 'firebase/app'
+import { useRef, useState } from 'react'
+import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Container from "react-bootstrap/Container"
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
-import { useRef } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 import { SignUpCredentials } from '../types/User.types'
 
 const SignupPage = () => {
+	const [errorMessage, setErrorMessage] = useState<string | null>(null)
+	const [loading, setLoading] = useState(false)
 	const { handleSubmit, register, watch, formState: { errors } } = useForm<SignUpCredentials>()
 	const { signup } = useAuth()
 	const navigate = useNavigate()
@@ -20,13 +24,25 @@ const SignupPage = () => {
 	passwordRef.current = watch('password')
 
 	const onSignup: SubmitHandler<SignUpCredentials> = async (data) => {
-		console.log("Would sign up user", data)
+		// Clear any previous error state
+		setErrorMessage(null)
 
-		// Pass email and password along to signup in auth-context
-		const userCredential = await signup(data.email, data.password)
+		// Try to sign up the user with the provided credentials
+		try {
+			setLoading(true)
+			await signup(data.email, data.password)
 
-		console.log("YAYYYYY I GOTS ACCOUNT!!!!!!!!!!!", userCredential)
-		navigate("/")
+			// If successful, redirect to the home page
+			navigate('/')
+
+		} catch (error) {
+			if (error instanceof FirebaseError) {
+				setErrorMessage(error.message)
+			} else {
+				setErrorMessage("Something went wrong. Have you tried turning it off and on again?")
+			}
+			setLoading(false)
+		}
 	}
 
 	return (
@@ -36,6 +52,8 @@ const SignupPage = () => {
 					<Card>
 						<Card.Body>
 							<Card.Title className="mb-3">Sign Up</Card.Title>
+
+							{errorMessage && (<Alert variant="danger">{errorMessage}</Alert>)}
 
 							<Form onSubmit={handleSubmit(onSignup)}>
 								<Form.Group controlId="email" className="mb-3">
@@ -86,7 +104,15 @@ const SignupPage = () => {
 									{errors.passwordConfirm && <p className="invalid">{errors.passwordConfirm.message ?? "Invalid value"}</p>}
 								</Form.Group>
 
-								<Button variant="primary" type="submit">Create Account</Button>
+								<Button
+									disabled={loading}
+									variant="primary"
+									type="submit"
+								>
+									{loading
+										? "Creating account..."
+										: "Create Account"}
+								</Button>
 							</Form>
 
 							{/* <div className="text-center">
