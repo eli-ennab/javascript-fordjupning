@@ -38,5 +38,8 @@ export const dateToYmdHms = (date: Date) => {
  * @returns {string}
  */
 export const firebaseTimestampToString = (firebaseTimestamp: Timestamp) => {
+	if (!firebaseTimestamp) {
+		return ''
+	}
 	return dateToYmdHms( firebaseTimestampToDate(firebaseTimestamp) )
 }

@@ -10,6 +10,7 @@ interface IProps {
 }
 
 const TodoForm: React.FC<IProps> = ({ onSave, initialValues }) => {
+
 	const { handleSubmit, register, formState: { errors, isSubmitSuccessful }, reset } = useForm<TodoFormData>({
 		defaultValues: {
 			...initialValues,

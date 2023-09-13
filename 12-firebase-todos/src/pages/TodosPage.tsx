@@ -8,12 +8,17 @@ import useGetTodos from '../hooks/useGetTodos'
 import { newTodosCol } from '../services/firebase'
 import { TodoFormData } from "../types/Todo.types"
 import { firebaseTimestampToString } from '../helpers/time'
+import useAuth from '../hooks/useAuth'
 
 const TodosPage = () => {
 	const {
 		data: todos,
 		loading
 	} = useGetTodos()
+
+	const {
+		currentUser,
+	} = useAuth()
 
 	// Create a new todo in the API
 	const addTodo = async (data: TodoFormData) => {
@@ -25,6 +30,7 @@ const TodosPage = () => {
 			...data,
 			created_at: serverTimestamp(),
 			updated_at: serverTimestamp(),
+			user: currentUser?.uid,
 		})
 
 		// 🥂
@@ -41,9 +47,9 @@ const TodosPage = () => {
 
 			{loading && <p>Loading todos...</p>}
 
-			{todos && todos.length > 0 && (
+			{currentUser && todos && todos.length > 0 && (
 				<ListGroup className="todolist">
-					{todos.map((todo) => (
+					{todos.map((todo) => ( todo.user === currentUser.uid ?
 						<ListGroup.Item
 							action
 							as={Link}
@@ -55,7 +61,7 @@ const TodosPage = () => {
 							<span className="created">
 								{firebaseTimestampToString(todo.created_at)}
 							</span>
-						</ListGroup.Item>
+						</ListGroup.Item> : null
 					))}
 				</ListGroup>
 			)}
