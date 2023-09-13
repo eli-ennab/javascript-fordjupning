@@ -2,16 +2,22 @@ import { doc, deleteDoc } from 'firebase/firestore'
 import { useState } from "react"
 import Button from "react-bootstrap/Button"
 import Container from "react-bootstrap/Container"
+import Image from "react-bootstrap/Image"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { toast } from 'react-toastify'
 import ConfirmationModal from "../components/ConfirmationModal"
 import useGetTodo from "../hooks/useGetTodo"
 import { todosCol } from '../services/firebase'
+import useAuth from '../hooks/useAuth'
 
 const TodoPage = () => {
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 	const navigate = useNavigate()
 	const { id } = useParams()
+
+	const {
+		currentUser,
+	} = useAuth()
 
 	const documentId = id as string
 
@@ -19,6 +25,10 @@ const TodoPage = () => {
 		data: todo,
 		loading
 	} = useGetTodo(documentId)
+
+	if (!loading && todo?.user !== currentUser?.uid) {
+		return <Image src={'https://media.tenor.com/hYVsWvkpdrMAAAAC/you-didnt-say-the-magic-word-ah-ah.gif'} fluid />
+	}
 
 	const deleteTodo = async () => {
 		// Get a reference to the document
