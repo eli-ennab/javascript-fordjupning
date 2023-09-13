@@ -10,6 +10,7 @@ import NotFound from './pages/NotFound'
 import SignupPage from './pages/SignupPage'
 import TodoPage from './pages/TodoPage'
 import TodosPage from './pages/TodosPage'
+import UpdateProfile from './pages/UpdateProfile'
 import './assets/scss/App.scss'
 
 const App = () => {
@@ -18,30 +19,35 @@ const App = () => {
 			<Navigation />
 
 			<Routes>
-				{/* Guest routes */}
+				{/* Guest Routes */}
 				<Route path="*" element={<NotFound />} />
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/logout" element={<LogoutPage />} />
 				<Route path="/signup" element={<SignupPage />} />
 
-				{/* Protected routes */}
+				{/* Protected Routes */}
 				<Route path="/" element={
 					<RequireAuth>
 						<HomePage />
 					</RequireAuth>
-				}/>
+				} />
 
 				<Route path="/todos">
+					{/* /todos */}
 					<Route path="" element={
 						<RequireAuth>
 							<TodosPage />
 						</RequireAuth>
-					}/>
+					} />
+
+					{/* /todos/:id */}
 					<Route path=":id" element={
 						<RequireAuth>
 							<TodoPage />
 						</RequireAuth>
 					} />
+
+					{/* /todos/:id/edit */}
 					<Route path=":id/edit" element={
 						<RequireAuth>
 							<EditTodoPage />
@@ -49,12 +55,11 @@ const App = () => {
 					} />
 				</Route>
 
-				{/* <Route path="/update-profile" element={
+				<Route path="/update-profile" element={
 					<RequireAuth>
 						<UpdateProfile />
 					</RequireAuth>
-				}/> */}
-
+				} />
 			</Routes>
 
 			<ToastContainer

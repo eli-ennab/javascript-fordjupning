@@ -8,3 +8,8 @@ export type SignUpCredentials = {
 	password: string
 	passwordConfirm: string
 }
+
+export type UpdateProfileFormData = {
+	// set type
+}
+

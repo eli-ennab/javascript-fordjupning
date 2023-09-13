@@ -16,20 +16,22 @@ const Navigation = () => {
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="ms-auto">
-						{ currentUser ? (<>
+						{currentUser ? (<>
 							{/* User is logged in */}
 							<Nav.Link as={NavLink} end to="/todos">Todos</Nav.Link>
-							<NavDropdown title={userEmail}>
-								<NavDropdown.Item as={NavLink} to="/update-profile">Profile</NavDropdown.Item>
-									<NavDropdown.Divider />
+
+							<NavDropdown
+								title={userEmail}
+							>
+								<NavDropdown.Item as={NavLink} to="/update-profile">Update Profile</NavDropdown.Item>
+								<NavDropdown.Divider />
 								<NavDropdown.Item as={NavLink} to="/logout">Logout</NavDropdown.Item>
 							</NavDropdown>
 						</>) : (<>
 							{/* No user is logged in */}
 							<Nav.Link as={NavLink} to="/signup">Signup</Nav.Link>
 							<Nav.Link as={NavLink} to="/login">Login</Nav.Link>
-						</>)
-						}
+						</>)}
 					</Nav>
 				</Navbar.Collapse>
 			</Container>
@@ -38,3 +40,4 @@ const Navigation = () => {
 }
 
 export default Navigation
+
