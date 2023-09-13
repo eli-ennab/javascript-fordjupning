@@ -6,6 +6,7 @@ import EditTodoPage from './pages/EditTodoPage'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import LogoutPage from './pages/LogoutPage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import NotFound from './pages/NotFound'
 import SignupPage from './pages/SignupPage'
 import TodoPage from './pages/TodoPage'
@@ -59,6 +60,10 @@ const App = () => {
 					<RequireAuth>
 						<UpdateProfile />
 					</RequireAuth>
+				} />
+
+				<Route path="/forgot-password" element={
+						<ForgotPasswordPage />
 				} />
 			</Routes>
 

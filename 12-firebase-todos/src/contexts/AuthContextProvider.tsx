@@ -6,6 +6,7 @@ import {
 	onAuthStateChanged,
 	User,
 	signOut,
+	sendPasswordResetEmail,
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
 import SyncLoader from 'react-spinners/SyncLoader'
@@ -15,6 +16,7 @@ type AuthContextType = {
 	currentUser: User | null
 	login: (email: string, password: string) => Promise<UserCredential>
 	logout: () => Promise<void>
+	newPassword: (email: string) => Promise<void>
 	signup: (email: string, password: string) => Promise<UserCredential>
 	userEmail: string | null
 }
@@ -41,6 +43,10 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 
 	const signup = (email: string, password: string) => {
 		return createUserWithEmailAndPassword(auth, email, password)
+	}
+
+	const newPassword = (email: string) => {
+		return sendPasswordResetEmail(auth, email)
 	}
 
 	// add auth-state observer here (somehow... 😈)
@@ -76,6 +82,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			currentUser,
 			login,
 			logout,
+			newPassword,
 			signup,
 			userEmail,
 		}}>
