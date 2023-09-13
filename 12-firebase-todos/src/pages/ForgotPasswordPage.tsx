@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col'
 import Container from "react-bootstrap/Container"
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
+import { toast } from 'react-toastify'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
@@ -16,7 +17,7 @@ const ForgotPasswordPage = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
 	const { handleSubmit, register, formState: { errors } } = useForm<SignUpCredentials>()
-	const { newPassword } = useAuth()
+	const { resetPassword } = useAuth()
 	const navigate = useNavigate()
 
 	const onNewPassword: SubmitHandler<UpdateProfileFormData> = async (data) => {
@@ -28,8 +29,8 @@ const ForgotPasswordPage = () => {
 
 		try {
 			setLoading(true)
-			await newPassword(data.email)
-
+			await resetPassword(data.email)
+			toast.success("New password successfully sent to your email")
 			navigate('/login')
 
 		} catch (error) {
