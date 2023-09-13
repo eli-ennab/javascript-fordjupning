@@ -10,9 +10,10 @@ export type SignUpCredentials = {
 }
 
 export type UpdateProfileFormData = {
-	email?: string
-	password?: string
-	// displayName?: string
-	// photoUrl?: string
+	email: string
+	password: string
+	displayName: string
+	photoUrl: string
+	passwordConfirm: string
 }
 
