@@ -96,26 +96,29 @@ const UpdateProfile = () => {
 									<Form.Control
 										placeholder={userDisplayName ? userDisplayName : 'set display name'}
 										type="text"
-										{...register('displayName')}
+										{... register('displayName', {
+											value: userDisplayName ?? ''
+										})}
 									/>
 								</Form.Group>
 
 								<Form.Group controlId="photoURL" className="mb-3">
 									<Form.Label>Photo URL</Form.Label>
 									<Form.Control
-										placeholder={userPhotoUrl ? userPhotoUrl : 'set photo url'}
 										type="url"
-										// value={currentUser?.photoURL}
-										{...register('photoUrl')}
+										{... register('photoUrl', {
+											value: userPhotoUrl ?? ''
+										})}
 									/>
 								</Form.Group>
 
 								<Form.Group controlId="email" className="mb-3">
 									<Form.Label>Email</Form.Label>
 									<Form.Control
-										placeholder={userEmail ? userEmail : 'youremail@email.com'}
 										type="email"
-										{...register('email')}
+										{... register('email', {
+											value: userEmail ?? ''
+										})}
 									/>
 								</Form.Group>
 
