@@ -7,6 +7,8 @@ import {
 	User,
 	signOut,
 	sendPasswordResetEmail,
+	updateEmail,
+	updateProfile,
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
 import SyncLoader from 'react-spinners/SyncLoader'
@@ -16,9 +18,16 @@ type AuthContextType = {
 	currentUser: User | null
 	login: (email: string, password: string) => Promise<UserCredential>
 	logout: () => Promise<void>
-	newPassword: (email: string) => Promise<void>
 	signup: (email: string, password: string) => Promise<UserCredential>
+	// userReload: ?
+	resetPassword: (email: string) => Promise<void>
+	setEmail: (user: User, newEmail: string) => Promise<void>
+	setDisplayName: (user: User, displayName: string) => Promise<void>
+	// setPassword: ?
+	setPhotoUrl: (user: User, photoUrl: string) => Promise<void>
 	userEmail: string | null
+	userDisplayName: string | null
+	userPhotoUrl: string | null
 }
 
 // This creates the actual context and sets the context's initial/default value
@@ -31,6 +40,8 @@ type AuthContextProps = {
 const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState<User | null>(null)
 	const [userEmail, setUserEmail] = useState<string | null>(null)
+	const [userDisplayName, setUserDisplayName] = useState<string | null>(null)
+	const [userPhotoUrl, setUserPhotoUrl] = useState<string | null>(null)
 	const [loading, setLoading] = useState(true)
 
 	const login = (email: string, password: string) => {
@@ -45,8 +56,31 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return createUserWithEmailAndPassword(auth, email, password)
 	}
 
-	const newPassword = (email: string) => {
+	const userReload = async () => {
+	}
+
+	const resetPassword = (email: string) => {
 		return sendPasswordResetEmail(auth, email)
+	}
+
+	const setEmail = (user: User, newEmail: string) => {
+		return updateEmail(user, newEmail)
+	}
+
+	const setPassword = async (password: string) => {
+
+	}
+
+	const setDisplayName = async (user: User, displayName: string) => {
+		await updateProfile(user, {
+			displayName: displayName
+		})
+	}
+
+	const setPhotoUrl = async (user: User, photoUrl: string) => {
+		await updateProfile(user, {
+			photoURL: photoUrl
+		})
 	}
 
 	// add auth-state observer here (somehow... 😈)
@@ -62,13 +96,16 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 
 		// the result is returned as a cleanup (unsubscribe)
 		return onAuthStateChanged(auth, (user) => {
-			// console.log("Auth state changed:", user)
 			setCurrentUser(user)
 
 			if (user) {
 				setUserEmail(user.email)
+				setUserDisplayName(user.displayName)
+				setUserPhotoUrl(user.photoURL)
 			} else {
 				setUserEmail(null)
+				setUserDisplayName(null)
+				setUserPhotoUrl(null)
 			}
 
 			setLoading(false)
@@ -82,9 +119,14 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			currentUser,
 			login,
 			logout,
-			newPassword,
+			resetPassword,
 			signup,
 			userEmail,
+			userDisplayName,
+			userPhotoUrl,
+			setEmail,
+			setDisplayName,
+			setPhotoUrl,
 		}}>
 			{loading ? (
 				<div id="initial-loader">
