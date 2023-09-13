@@ -10,6 +10,7 @@ import Row from 'react-bootstrap/Row'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import useAuth from '../hooks/useAuth'
 import { UpdateProfileFormData } from '../types/User.types'
+import { toast } from 'react-toastify'
 
 const UpdateProfile = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -21,6 +22,7 @@ const UpdateProfile = () => {
 		setEmail,
 		setDisplayName,
 		setPhotoUrl,
+		setPassword,
 		userEmail,
 		userPhotoUrl,
 		userDisplayName,
@@ -59,6 +61,10 @@ const UpdateProfile = () => {
 			}
 
 			// Update password *ONLY* if the user has provided a new password to set
+			if (data.password === data.passwordConfirm) {
+				await setPassword(currentUser, data.password)
+				toast.success("You have successfully changed your password")
+			}
 
 			// Reload user data
 			// userReload()
@@ -122,8 +128,8 @@ const UpdateProfile = () => {
 									/>
 								</Form.Group>
 
-								{/* <Form.Group controlId="password" className="mb-3">
-									<Form.Label>Password</Form.Label>
+								<Form.Group controlId="password" className="mb-3">
+									<Form.Label>New Password</Form.Label>
 									<Form.Control
 										type="password"
 										autoComplete="new-password"
@@ -138,7 +144,7 @@ const UpdateProfile = () => {
 								</Form.Group>
 
 								<Form.Group controlId="confirmPassword" className="mb-3">
-									<Form.Label>Confirm Password</Form.Label>
+									<Form.Label>Confirm New Password</Form.Label>
 									<Form.Control
 										type="password"
 										autoComplete="off"
@@ -152,7 +158,7 @@ const UpdateProfile = () => {
 											}
 										})}
 									/>
-								</Form.Group> */}
+								</Form.Group>
 
 								<Button
 									disabled={loading}

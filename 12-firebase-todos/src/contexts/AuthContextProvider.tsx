@@ -9,6 +9,7 @@ import {
 	sendPasswordResetEmail,
 	updateEmail,
 	updateProfile,
+	updatePassword,
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
 import SyncLoader from 'react-spinners/SyncLoader'
@@ -23,7 +24,7 @@ type AuthContextType = {
 	resetPassword: (email: string) => Promise<void>
 	setEmail: (user: User, newEmail: string) => Promise<void>
 	setDisplayName: (user: User, displayName: string) => Promise<void>
-	// setPassword: ?
+	setPassword: (user: User, newPassword: string) => Promise<void>
 	setPhotoUrl: (user: User, photoUrl: string) => Promise<void>
 	userEmail: string | null
 	userDisplayName: string | null
@@ -67,8 +68,8 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		return updateEmail(user, newEmail)
 	}
 
-	const setPassword = async (password: string) => {
-
+	const setPassword = async (user: User, newPassword: string) => {
+		updatePassword(user, newPassword)
 	}
 
 	const setDisplayName = async (user: User, displayName: string) => {
@@ -127,6 +128,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			setEmail,
 			setDisplayName,
 			setPhotoUrl,
+			setPassword,
 		}}>
 			{loading ? (
 				<div id="initial-loader">
@@ -140,3 +142,4 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 }
 
 export default AuthContextProvider
+
