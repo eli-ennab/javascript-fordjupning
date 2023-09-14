@@ -49,7 +49,7 @@ const TodosPage = () => {
 
 			{currentUser && todos && todos.length > 0 && (
 				<ListGroup className="todolist">
-					{todos.map((todo) => ( todo.user === currentUser.uid ?
+					{todos.map((todo) => (todo.user === currentUser.uid ?
 						<ListGroup.Item
 							action
 							as={Link}
@@ -59,7 +59,10 @@ const TodosPage = () => {
 						>
 							<span className="todo-title">{todo.title}</span>
 							<span className="created">
-								{firebaseTimestampToString(todo.created_at)}
+								{todo.created_at
+									? firebaseTimestampToString(todo.created_at)
+									: "Saving..."
+								}
 							</span>
 						</ListGroup.Item> : null
 					))}
