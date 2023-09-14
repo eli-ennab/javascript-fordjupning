@@ -22,6 +22,9 @@ export const auth = getAuth(app)
 // Get Firestore instance
 export const db = getFirestore(app)
 
+// Get storage instance
+export const storage = getFirestore(app)
+
 // This is just a helper to add the type to the db responses
 const createCollection = <T = DocumentData>(collectionName: string) => {
 	return collection(db, collectionName) as CollectionReference<T>

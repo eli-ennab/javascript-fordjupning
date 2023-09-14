@@ -4,21 +4,18 @@ import ListGroup from "react-bootstrap/ListGroup"
 import { Link } from "react-router-dom"
 import { toast } from 'react-toastify'
 import TodoForm from '../components/TodoForm'
+import { firebaseTimestampToString } from '../helpers/time'
+import useAuth from '../hooks/useAuth'
 import useGetTodos from '../hooks/useGetTodos'
 import { newTodosCol } from '../services/firebase'
 import { TodoFormData } from "../types/Todo.types"
-import { firebaseTimestampToString } from '../helpers/time'
-import useAuth from '../hooks/useAuth'
 
 const TodosPage = () => {
+	const { currentUser } = useAuth()
 	const {
 		data: todos,
 		loading
-	} = useGetTodos()
-
-	const {
-		currentUser,
-	} = useAuth()
+	} = useGetTodos(currentUser?.uid)
 
 	// Create a new todo in the API
 	const addTodo = async (data: TodoFormData) => {
@@ -28,9 +25,9 @@ const TodosPage = () => {
 		// Set the contents of the document
 		await setDoc(docRef, {
 			...data,
+			uid: currentUser?.uid,
 			created_at: serverTimestamp(),
 			updated_at: serverTimestamp(),
-			user: currentUser?.uid,
 		})
 
 		// 🥂
@@ -47,9 +44,9 @@ const TodosPage = () => {
 
 			{loading && <p>Loading todos...</p>}
 
-			{currentUser && todos && todos.length > 0 && (
+			{todos && todos.length > 0 && (
 				<ListGroup className="todolist">
-					{todos.map((todo) => (todo.user === currentUser.uid ?
+					{todos.map((todo) => (
 						<ListGroup.Item
 							action
 							as={Link}
@@ -61,10 +58,9 @@ const TodosPage = () => {
 							<span className="created">
 								{todo.created_at
 									? firebaseTimestampToString(todo.created_at)
-									: "Saving..."
-								}
+									: "Saving..."}
 							</span>
-						</ListGroup.Item> : null
+						</ListGroup.Item>
 					))}
 				</ListGroup>
 			)}
