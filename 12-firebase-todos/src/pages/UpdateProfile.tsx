@@ -46,25 +46,21 @@ const UpdateProfile = () => {
 
 			// Update displayName *ONLY* if it has changed
 			if (data.name !== (currentUser?.displayName ?? "")) {
-				console.log("Updating display name...")
 				await setDisplayName(data.name)
 			}
 
 			// Update photoUrl *ONLY* if it has changed
 			if (data.photoUrl !== (currentUser?.photoURL ?? "")) {
-				console.log("Updating photo url...")
 				await setPhotoUrl(data.photoUrl)
 			}
 
 			// Update email *ONLY* if it has changed
 			if (data.email !== (currentUser?.email ?? "")) {
-				console.log("Updating email...")
 				await setEmail(data.email)
 			}
 
 			// Update password *ONLY* if the user has provided a new password to set
 			if (data.password) {
-				console.log("Updating password...")
 				await setPassword(data.password)
 			}
 
@@ -76,8 +72,6 @@ const UpdateProfile = () => {
 
 			// Enable update-button again
 			setLoading(false)
-			console.log("All ok 👍🏻👍🏻👍🏻!")
-
 		} catch (error) {
 			if (error instanceof FirebaseError) {
 				setErrorMessage(error.message)
