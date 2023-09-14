@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Container from "react-bootstrap/Container"
+import Image from 'react-bootstrap/Image'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -13,6 +14,7 @@ import { toast } from 'react-toastify'
 import useAuth from '../hooks/useAuth'
 import { storage } from '../services/firebase'
 import { UpdateProfileFormData } from '../types/User.types'
+import placeholder from '../assets/images/placeholder.png'
 
 const UpdateProfile = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -24,6 +26,7 @@ const UpdateProfile = () => {
 		setEmail,
 		setPassword,
 		setPhotoUrl,
+		setUserPhotoToNull
 	} = useAuth()
 	const { handleSubmit, register, watch, formState: { errors } } = useForm<UpdateProfileFormData>({
 		defaultValues: {
@@ -123,6 +126,10 @@ const UpdateProfile = () => {
 					<Card>
 						<Card.Body>
 							<Card.Title className="mb-3">Update Profile</Card.Title>
+
+							<Container className="my-4">
+								<Image src={currentUser.photoURL || `${placeholder}`} height={150} width={150} className="my-4" roundedCircle />
+							</Container>
 
 							{errorMessage && (<Alert variant="danger">{errorMessage}</Alert>)}
 

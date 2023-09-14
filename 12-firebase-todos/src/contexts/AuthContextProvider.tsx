@@ -26,6 +26,7 @@ type AuthContextType = {
 	setDisplayName: (displayName: string) => Promise<void>
 	setPassword: (password: string) => Promise<void>
 	setPhotoUrl: (photoURL: string) => Promise<void>
+	setUserPhotoToNull: () => void
 	userEmail: string | null
 	userName: string | null
 	userPhotoUrl: string | null
@@ -75,6 +76,10 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		setUserPhotoUrl(auth.currentUser.photoURL)
 
 		return true
+	}
+
+	const setUserPhotoToNull = () => {
+		setUserPhotoUrl(null)
 	}
 
 	const resetPassword = (email: string) => {
@@ -140,6 +145,7 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 			userEmail,
 			userName,
 			userPhotoUrl,
+			setUserPhotoToNull
 		}}>
 			{loading ? (
 				<div id="initial-loader">

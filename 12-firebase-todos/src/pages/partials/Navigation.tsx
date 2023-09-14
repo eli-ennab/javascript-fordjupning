@@ -35,7 +35,6 @@ const Navigation = () => {
 										width={30}
 										title={(userName || userEmail) ?? ""}
 										className="navbar-userphoto"
-										fluid
 										roundedCircle />
 									: userName || userEmail
 								}
