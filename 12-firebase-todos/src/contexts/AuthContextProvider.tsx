@@ -10,7 +10,6 @@ import {
 	updateProfile,
 	updateEmail,
 	updatePassword,
-	reload,
 } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
 import SyncLoader from 'react-spinners/SyncLoader'
@@ -75,7 +74,6 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 		setUserEmail(auth.currentUser.email)
 		setUserPhotoUrl(auth.currentUser.photoURL)
 
-		console.log("Reloaded user ☕️", auth.currentUser)
 		return true
 	}
 
@@ -108,7 +106,6 @@ const AuthContextProvider: React.FC<AuthContextProps> = ({ children }) => {
 	// add auth-state observer here (somehow... 😈)
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
-			console.log("Auth state changed!")
 			setCurrentUser(user)
 
 			if (user) {

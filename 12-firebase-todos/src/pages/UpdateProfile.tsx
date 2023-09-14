@@ -1,4 +1,5 @@
 import { FirebaseError } from 'firebase/app'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { useRef, useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
@@ -10,6 +11,7 @@ import Row from 'react-bootstrap/Row'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import useAuth from '../hooks/useAuth'
+import { storage } from '../services/firebase'
 import { UpdateProfileFormData } from '../types/User.types'
 
 const UpdateProfile = () => {
@@ -27,13 +29,19 @@ const UpdateProfile = () => {
 		defaultValues: {
 			email: currentUser?.email ?? "",
 			name: currentUser?.displayName ?? "",
-			photoUrl: currentUser?.photoURL ?? "",
 		}
 	})
 
 	// Watch the current value of `password` form field
 	const passwordRef = useRef("")
 	passwordRef.current = watch('password')
+
+	const photoFileRef = useRef<FileList | null>(null)
+	photoFileRef.current = watch("photoFile")
+
+	if (!currentUser) {
+		return <p>Error, error, error!</p>
+	}
 
 	const onUpdateProfile: SubmitHandler<UpdateProfileFormData> = async (data) => {
 		// Clear any previous error state
@@ -45,22 +53,46 @@ const UpdateProfile = () => {
 			setLoading(true)
 
 			// Update displayName *ONLY* if it has changed
-			if (data.name !== (currentUser?.displayName ?? "")) {
+			if (data.name !== (currentUser.displayName ?? "")) {
+				console.log("Updating display name...")
 				await setDisplayName(data.name)
 			}
 
-			// Update photoUrl *ONLY* if it has changed
-			if (data.photoUrl !== (currentUser?.photoURL ?? "")) {
-				await setPhotoUrl(data.photoUrl)
+			// Only upload a photo if one has been selected
+			if (data.photoFile.length) {
+				const photo = data.photoFile[0]
+
+				// create a reference to upload the file to
+				// example: "photos/3PjBWeCaZmfasyz4jTEURhnFtI83/space.jpg"
+				const fileRef = ref(storage, `photos/${currentUser.uid}/${photo.name}`)
+
+				try {
+					// upload photo to fileRef
+					const uploadResult = await uploadBytes(fileRef, photo)
+
+					// get download url to uploaded file
+					const photoUrl = await getDownloadURL(uploadResult.ref)
+
+					console.log("Photo successfully uploaded, download url is: " + photoUrl)
+
+					// set download url as the users photoURL
+					await setPhotoUrl(photoUrl)
+
+				} catch (e) {
+					console.log("Upload failed", e)
+					setErrorMessage("Upload failed!")
+				}
 			}
 
 			// Update email *ONLY* if it has changed
-			if (data.email !== (currentUser?.email ?? "")) {
+			if (data.email !== (currentUser.email ?? "")) {
+				console.log("Updating email...")
 				await setEmail(data.email)
 			}
 
 			// Update password *ONLY* if the user has provided a new password to set
 			if (data.password) {
+				console.log("Updating password...")
 				await setPassword(data.password)
 			}
 
@@ -72,6 +104,8 @@ const UpdateProfile = () => {
 
 			// Enable update-button again
 			setLoading(false)
+			console.log("All ok 👍🏻👍🏻👍🏻!")
+
 		} catch (error) {
 			if (error instanceof FirebaseError) {
 				setErrorMessage(error.message)
@@ -85,7 +119,7 @@ const UpdateProfile = () => {
 	return (
 		<Container className="py-3 center-y">
 			<Row>
-				<Col md={{ span: 6, offset: 3 }}>
+				<Col md={{ span: 8, offset: 2 }}>
 					<Card>
 						<Card.Body>
 							<Card.Title className="mb-3">Update Profile</Card.Title>
@@ -111,14 +145,21 @@ const UpdateProfile = () => {
 									{errors.name && <p className="invalid">{errors.name.message ?? "Invalid value"}</p>}
 								</Form.Group>
 
-								<Form.Group controlId="photoURL" className="mb-3">
-									<Form.Label>Photo URL</Form.Label>
+								<Form.Group controlId="photo" className="mb-3">
+									<Form.Label>Photo</Form.Label>
 									<Form.Control
-										placeholder="https://www.chiquita.com/Bananana.jpg"
-										type="url"
-										{...register('photoUrl')}
+										type="file"
+										accept="image/gif,image/jpeg,image/png,image/webp"
+										{...register('photoFile')}
 									/>
-									{errors.photoUrl && <p className="invalid">{errors.photoUrl.message ?? "Invalid value"}</p>}
+									{errors.photoFile && <p className="invalid">{errors.photoFile.message ?? "Invalid value"}</p>}
+									<Form.Text>{photoFileRef.current && photoFileRef.current.length > 0 && (
+										<span>
+											{photoFileRef.current[0].name}
+											{' '}
+											({Math.round(photoFileRef.current[0].size / 1024)} kB)
+										</span>
+									)}</Form.Text>
 								</Form.Group>
 
 								<Form.Group controlId="email" className="mb-3">

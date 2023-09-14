@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
+import { getStorage } from "firebase/storage"
 import { CollectionReference, collection, DocumentData, getFirestore } from "firebase/firestore"
 import { NewTodo, Todo } from "../types/Todo.types"
 
@@ -22,8 +23,8 @@ export const auth = getAuth(app)
 // Get Firestore instance
 export const db = getFirestore(app)
 
-// Get storage instance
-export const storage = getFirestore(app)
+// Get Storage instance
+export const storage = getStorage(app)
 
 // This is just a helper to add the type to the db responses
 const createCollection = <T = DocumentData>(collectionName: string) => {
@@ -35,3 +36,4 @@ export const todosCol = createCollection<Todo>("todos")
 export const newTodosCol = createCollection<NewTodo>("todos")
 
 export default app
+
