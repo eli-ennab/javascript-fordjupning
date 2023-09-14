@@ -9,11 +9,15 @@ export type SignUpCredentials = {
 	passwordConfirm: string
 }
 
+export type ForgotPasswordFormData = {
+	email: string
+}
+
 export type UpdateProfileFormData = {
+	name: string
+	photoUrl: string
 	email: string
 	password: string
-	displayName: string
-	photoUrl: string
 	passwordConfirm: string
 }
 

@@ -8,25 +8,28 @@ import Container from "react-bootstrap/Container"
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { toast } from 'react-toastify'
 import useAuth from '../hooks/useAuth'
 import { UpdateProfileFormData } from '../types/User.types'
-import { toast } from 'react-toastify'
 
 const UpdateProfile = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
-	// const [errorMessage, setErrorMessage] = useState([]) // make error an array later
 	const [loading, setLoading] = useState(false)
-	const { handleSubmit, register, watch, formState: { errors } } = useForm<UpdateProfileFormData>()
 	const {
 		currentUser,
-		setEmail,
+		reloadUser,
 		setDisplayName,
-		setPhotoUrl,
+		setEmail,
 		setPassword,
-		userEmail,
-		userPhotoUrl,
-		userDisplayName,
-} = useAuth()
+		setPhotoUrl,
+	} = useAuth()
+	const { handleSubmit, register, watch, formState: { errors } } = useForm<UpdateProfileFormData>({
+		defaultValues: {
+			email: currentUser?.email ?? "",
+			name: currentUser?.displayName ?? "",
+			photoUrl: currentUser?.photoURL ?? "",
+		}
+	})
 
 	// Watch the current value of `password` form field
 	const passwordRef = useRef("")
@@ -36,43 +39,45 @@ const UpdateProfile = () => {
 		// Clear any previous error state
 		setErrorMessage(null)
 
-		if (!currentUser) {
-			throw new Error("No user")
-		}
-
 		// Update user profile
 		try {
 			// Disable update-button while update is in progress
 			setLoading(true)
 
 			// Update displayName *ONLY* if it has changed
-			if (userDisplayName !== data.displayName) {
-				await setDisplayName(currentUser, data.displayName)
+			if (data.name !== (currentUser?.displayName ?? "")) {
+				console.log("Updating display name...")
+				await setDisplayName(data.name)
 			}
 
-			// Update photoURL *ONLY* if it has changed
-			if (userPhotoUrl !== data.photoUrl) {
-				await setPhotoUrl(currentUser, data.photoUrl)
+			// Update photoUrl *ONLY* if it has changed
+			if (data.photoUrl !== (currentUser?.photoURL ?? "")) {
+				console.log("Updating photo url...")
+				await setPhotoUrl(data.photoUrl)
 			}
 
 			// Update email *ONLY* if it has changed
-			if (userEmail !== data.email) {
-				await setEmail(currentUser, data.email)
+			if (data.email !== (currentUser?.email ?? "")) {
+				console.log("Updating email...")
+				await setEmail(data.email)
 			}
 
 			// Update password *ONLY* if the user has provided a new password to set
-			if (data.password === data.passwordConfirm) {
-				await setPassword(currentUser, data.password)
-				toast.success("You have successfully changed your password")
+			if (data.password) {
+				console.log("Updating password...")
+				await setPassword(data.password)
 			}
 
 			// Reload user data
-			// userReload()
+			await reloadUser()
 
 			// Show success toast 🥂
+			toast.success("Profile successfully updated")
 
 			// Enable update-button again
 			setLoading(false)
+			console.log("All ok 👍🏻👍🏻👍🏻!")
+
 		} catch (error) {
 			if (error instanceof FirebaseError) {
 				setErrorMessage(error.message)
@@ -98,38 +103,44 @@ const UpdateProfile = () => {
 									Fill the displayName, photoURL and email form fields with their current value!
 								*/}
 								<Form.Group controlId="displayName" className="mb-3">
-									<Form.Label>Display Name</Form.Label>
+									<Form.Label>Name</Form.Label>
 									<Form.Control
-										placeholder={userDisplayName ? userDisplayName : 'set display name'}
+										placeholder="Sean Banan"
 										type="text"
-										{... register('displayName', {
-											value: userDisplayName ?? ''
+										{...register('name', {
+											minLength: {
+												value: 3,
+												message: "If you have a name, it has to be at least 3 characters long"
+											}
 										})}
 									/>
+									{errors.name && <p className="invalid">{errors.name.message ?? "Invalid value"}</p>}
 								</Form.Group>
 
 								<Form.Group controlId="photoURL" className="mb-3">
 									<Form.Label>Photo URL</Form.Label>
 									<Form.Control
+										placeholder="https://www.chiquita.com/Bananana.jpg"
 										type="url"
-										{... register('photoUrl', {
-											value: userPhotoUrl ?? ''
-										})}
+										{...register('photoUrl')}
 									/>
+									{errors.photoUrl && <p className="invalid">{errors.photoUrl.message ?? "Invalid value"}</p>}
 								</Form.Group>
 
 								<Form.Group controlId="email" className="mb-3">
 									<Form.Label>Email</Form.Label>
 									<Form.Control
+										placeholder="snelhest2000@horsemail.com"
 										type="email"
-										{... register('email', {
-											value: userEmail ?? ''
+										{...register('email', {
+											required: "You have to enter an email",
 										})}
 									/>
+									{errors.email && <p className="invalid">{errors.email.message ?? "Invalid value"}</p>}
 								</Form.Group>
 
 								<Form.Group controlId="password" className="mb-3">
-									<Form.Label>New Password</Form.Label>
+									<Form.Label>Password</Form.Label>
 									<Form.Control
 										type="password"
 										autoComplete="new-password"
@@ -140,11 +151,12 @@ const UpdateProfile = () => {
 											},
 										})}
 									/>
+									{errors.password && <p className="invalid">{errors.password.message ?? "Invalid value"}</p>}
 									<Form.Text>At least 6 characters</Form.Text>
 								</Form.Group>
 
 								<Form.Group controlId="confirmPassword" className="mb-3">
-									<Form.Label>Confirm New Password</Form.Label>
+									<Form.Label>Confirm Password</Form.Label>
 									<Form.Control
 										type="password"
 										autoComplete="off"
@@ -154,10 +166,11 @@ const UpdateProfile = () => {
 												message: "Please enter at least 3 characters"
 											},
 											validate: (value) => {
-												return value === passwordRef.current || "The passwords does not match 🤦🏼‍♂️"
+												return !passwordRef.current || value === passwordRef.current || "The passwords does not match 🤦🏼‍♂️"
 											}
 										})}
 									/>
+									{errors.passwordConfirm && <p className="invalid">{errors.passwordConfirm.message ?? "Invalid value"}</p>}
 								</Form.Group>
 
 								<Button
@@ -170,8 +183,10 @@ const UpdateProfile = () => {
 										: "Save"}
 								</Button>
 							</Form>
+
 						</Card.Body>
 					</Card>
+
 				</Col>
 			</Row>
 		</Container>
@@ -179,3 +194,4 @@ const UpdateProfile = () => {
 }
 
 export default UpdateProfile
+
