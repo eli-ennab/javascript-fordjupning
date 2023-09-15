@@ -1,25 +1,24 @@
 import { FirebaseError } from 'firebase/app'
-import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage'
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { useRef, useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Container from "react-bootstrap/Container"
-import Image from 'react-bootstrap/Image'
 import Form from 'react-bootstrap/Form'
+import Image from 'react-bootstrap/Image'
+import ProgressBar from 'react-bootstrap/ProgressBar'
 import Row from 'react-bootstrap/Row'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import useAuth from '../hooks/useAuth'
 import { storage } from '../services/firebase'
 import { UpdateProfileFormData } from '../types/User.types'
-import placeholder from '../assets/images/placeholder.png'
-import ProgressBar from 'react-bootstrap/ProgressBar'
 
 const UpdateProfile = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
-	const [uploadProgress, setUploadProgress] = useState<number | undefined>(undefined)
+	const [uploadProgress, setUploadProgress] = useState<number | null>(null)
 	const [loading, setLoading] = useState(false)
 	const {
 		currentUser,
@@ -28,6 +27,7 @@ const UpdateProfile = () => {
 		setEmail,
 		setPassword,
 		setPhotoUrl,
+		userPhotoUrl,
 	} = useAuth()
 	const { handleSubmit, register, watch, formState: { errors } } = useForm<UpdateProfileFormData>({
 		defaultValues: {
@@ -35,8 +35,6 @@ const UpdateProfile = () => {
 			name: currentUser?.displayName ?? "",
 		}
 	})
-
-	const now = uploadProgress
 
 	// Watch the current value of `password` form field
 	const passwordRef = useRef("")
@@ -47,6 +45,17 @@ const UpdateProfile = () => {
 
 	if (!currentUser) {
 		return <p>Error, error, error!</p>
+	}
+
+	const handleDeletePhoto = async () => {
+		// set user's photoURL to null
+		await setPhotoUrl("")
+
+		// Reload user data
+		await reloadUser()
+
+		// Show success toast 🥂
+		toast.success("Photo deleted successfully")
 	}
 
 	const onUpdateProfile: SubmitHandler<UpdateProfileFormData> = async (data) => {
@@ -72,52 +81,31 @@ const UpdateProfile = () => {
 				// example: "photos/3PjBWeCaZmfasyz4jTEURhnFtI83/space.jpg"
 				const fileRef = ref(storage, `photos/${currentUser.uid}/${photo.name}`)
 
-				try {
-					// upload photo to fileRef
-					const uploadResult = await uploadBytes(fileRef, photo)
+				// upload photo to fileRef
+				const uploadTask = uploadBytesResumable(fileRef, photo)
+
+				// attach upload observer
+				uploadTask.on("state_changed", (snapshot) => {
+					// got an update about the upload
+					setUploadProgress(Math.round(snapshot.bytesTransferred / snapshot.totalBytes * 1000) / 10)
+
+				}, (err) => {
+					// something went wrong
+					console.log("Upload failed!", err)
+					setErrorMessage("Upload failed!")
+
+				}, async () => {
+					// we're done!
+					console.log("Upload completed!")
 
 					// get download url to uploaded file
-					const photoUrl = await getDownloadURL(uploadResult.ref)
+					const photoUrl = await getDownloadURL(fileRef)
 
 					console.log("Photo successfully uploaded, download url is: " + photoUrl)
 
 					// set download url as the users photoURL
 					await setPhotoUrl(photoUrl)
-
-					const getUploadProcess = () => {
-						const uploadTask = uploadBytesResumable(fileRef, photo)
-
-						uploadTask.on('state_changed',
-						(snapshot) => {
-								const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-									console.log('Upload is ' + progress + '% done')
-									setUploadProgress(progress)
-								switch (snapshot.state) {
-								case 'paused':
-									console.log('Upload is paused')
-									break
-								case 'running':
-									console.log('Upload is running')
-									break
-								}
-							},
-							(error) => {
-								console.log(error)
-							},
-							() => {
-								getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-								console.log('File available at', downloadURL)
-								})
-							}
-						)
-					}
-
-					getUploadProcess()
-
-				} catch (e) {
-					console.log("Upload failed", e)
-					setErrorMessage("Upload failed!")
-				}
+				})
 			}
 
 			// Update email *ONLY* if it has changed
@@ -160,16 +148,32 @@ const UpdateProfile = () => {
 						<Card.Body>
 							<Card.Title className="mb-3">Update Profile</Card.Title>
 
-							<Container className="my-4">
-								<Image src={currentUser.photoURL || `${placeholder}`} height={150} width={150} className="my-4" roundedCircle />
-							</Container>
-
 							{errorMessage && (<Alert variant="danger">{errorMessage}</Alert>)}
 
 							<Form onSubmit={handleSubmit(onUpdateProfile)}>
 								{/*
 									Fill the displayName, photoURL and email form fields with their current value!
 								*/}
+
+								<div className="profile-photo-wrapper text-center my-3">
+									<div className="d-flex justify-content-center mb-2">
+										<Image
+											src={userPhotoUrl || "https://via.placeholder.com/225"}
+											fluid
+											roundedCircle
+											className="img-square w-75"
+										/>
+									</div>
+
+									<Button
+										onClick={handleDeletePhoto}
+										size="sm"
+										variant="secondary"
+									>
+										Delete Photo
+									</Button>
+								</div>
+
 								<Form.Group controlId="displayName" className="mb-3">
 									<Form.Label>Name</Form.Label>
 									<Form.Control
@@ -193,17 +197,25 @@ const UpdateProfile = () => {
 										{...register('photoFile')}
 									/>
 									{errors.photoFile && <p className="invalid">{errors.photoFile.message ?? "Invalid value"}</p>}
-									{/* <Form.Text>{photoFileRef.current && photoFileRef.current.length > 0 && (
-										<span>
-											{photoFileRef.current[0].name}
-											{' '}
-											({Math.round(photoFileRef.current[0].size / 1024)} kB)
-										</span>
-									)}</Form.Text> */}
-									{uploadProgress !== undefined && (
-										// <p>{uploadProgress}%</p>
-										<ProgressBar className="my-2" striped variant="info" now={now} label={`${now}%`} />
-									)}
+									<Form.Text>
+										{uploadProgress !== null
+											? (
+												<ProgressBar
+													now={uploadProgress}
+													label={`${uploadProgress}%`}
+													animated
+													className="mt-1"
+													variant="success"
+												/>
+											)
+											: photoFileRef.current && photoFileRef.current.length > 0 && (
+												<span>
+													{photoFileRef.current[0].name}
+													{' '}
+													({Math.round(photoFileRef.current[0].size / 1024)} kB)
+												</span>
+											)}
+									</Form.Text>
 								</Form.Group>
 
 								<Form.Group controlId="email" className="mb-3">

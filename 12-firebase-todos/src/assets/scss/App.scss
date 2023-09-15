@@ -34,6 +34,11 @@ h1, h2, h3, h4, h5, h6 {
 	justify-content: center;
 }
 
+.img-square {
+	aspect-ratio: 1;
+	object-fit: cover;
+}
+
 .todolist {
 	.done {
 		color: $success;
@@ -54,8 +59,8 @@ h1, h2, h3, h4, h5, h6 {
 		justify-content: space-between;
 		align-items: center;
 
-		// .todo-title {
-		// }
+		.todo-title {
+		}
 
 		.created {
 			color: $text-muted;
