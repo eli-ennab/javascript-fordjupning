@@ -1,34 +1,48 @@
 import { Reducer, useReducer } from 'react'
 import Button from 'react-bootstrap/Button'
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
+
+enum PointsActionTypes {
+	INCREMENT = "increment",
+	DECREMENT = "decrement",
+}
 
 type PointsState = {
 	points: number
+	game: string
 }
 
 type PointsAction = {
-	type: "increment" | "decrement"
+	type: PointsActionTypes
 }
 
 const initialState: PointsState = {
-	points: 0
+	points: 0,
+	game: "Hackers vs Plebs"
 }
 
-const pointsReducer = (state: PointsState, action: PointsAction) => {		// takes current state and what (action) we want to do with the state
-	// state = current state, action = { type: "increment" }
-	// console.log("Current state:", state)
-	// console.log("Action:", action)
+/**
+ * Reduce a new state based on the action and current state
+ *
+ * @param state Current state
+ * @param action Action to take on the state
+ * @returns New state
+ */
+const pointsReducer = (state: PointsState, action: PointsAction) => {
+	// state = current state
+	// action = { type: "increment" }
 
 	switch (action.type) {
-		case "decrement":
-			console.log("Would decrement points", action)
+		case PointsActionTypes.DECREMENT:
 			return {
-				points: state.points - 1	// returning a new state
+				...state,
+				points: state.points - 1,
 			}
 
-		case "increment":
-			console.log("Would increment points", action)
+		case PointsActionTypes.INCREMENT:
 			return {
-				points: state.points + 1	// returning a new state
+				...state,
+				points: state.points + 1,
 			}
 
 		default:
@@ -36,24 +50,61 @@ const pointsReducer = (state: PointsState, action: PointsAction) => {		// takes 
 	}
 }
 
+const decreasePoints = () => {
+	return { type: PointsActionTypes.DECREMENT }
+}
+
+const increasePoints = () => {
+	return { type: PointsActionTypes.INCREMENT }
+}
+
+
 const ReducerCounter = () => {
-	const [state, dispatch] = useReducer<Reducer<PointsState, PointsAction>>(pointsReducer, initialState)	// dispatch modifies state
+	const [state, dispatch] = useReducer<Reducer<PointsState, PointsAction>>(pointsReducer, initialState)
 
 	return (
 		<div className="counter">
-			<Button
-				variant="warning"
-				onClick={() => dispatch({ type: "decrement" })}>
-					-
-			</Button>
+			{/* Decrease points */}
+			<ButtonGroup>
+				<Button
+					variant="warning"
+					onClick={() => null}
+				>-10</Button>
+				<Button
+					variant="warning"
+					onClick={() => null}
+				>-5</Button>
+				<Button
+					variant="warning"
+					onClick={() => dispatch( decreasePoints() )}
+				>-</Button>
+			</ButtonGroup>
 
+			{/* Current points */}
 			<span className="points">{state.points}</span>
 
+			{/* Increase points */}
+			<ButtonGroup>
+				<Button
+					variant="success"
+					onClick={() => dispatch( increasePoints() )}
+				>+</Button>
+				<Button
+					variant="success"
+					onClick={() => null}
+				>+5</Button>
+				<Button
+					variant="success"
+					onClick={() => null}
+				>+10</Button>
+			</ButtonGroup>
+
+			{/* Reset state */}
 			<Button
-				variant="success"
-				onClick={() => dispatch({ type: "increment" })}>
-					+
-			</Button>
+				className="ms-3"
+				variant="danger"
+				onClick={() => null}
+			>🧹</Button>
 		</div>
 	)
 }
