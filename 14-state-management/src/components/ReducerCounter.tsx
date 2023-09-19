@@ -5,6 +5,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup'
 enum PointsActionTypes {
 	INCREMENT = "increment",
 	DECREMENT = "decrement",
+	RESET = "reset",
 }
 
 type PointsState = {
@@ -45,6 +46,9 @@ const pointsReducer = (state: PointsState, action: PointsAction) => {
 				points: state.points + 1,
 			}
 
+		case PointsActionTypes.RESET:
+			return initialState
+
 		default:
 			return state
 	}
@@ -56,6 +60,10 @@ const decreasePoints = () => {
 
 const increasePoints = () => {
 	return { type: PointsActionTypes.INCREMENT }
+}
+
+const reset = () => {
+	return { type: PointsActionTypes.RESET }
 }
 
 
@@ -103,8 +111,8 @@ const ReducerCounter = () => {
 			<Button
 				className="ms-3"
 				variant="danger"
-				onClick={() => null}
-			>🧹</Button>
+				onClick={() => dispatch( reset() )}
+			>RESET</Button>
 		</div>
 	)
 }
