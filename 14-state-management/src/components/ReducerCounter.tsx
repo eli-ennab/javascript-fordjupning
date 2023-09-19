@@ -69,7 +69,6 @@ const reset = () => {
 	return { type: PointsActionTypes.RESET }
 }
 
-
 const ReducerCounter = () => {
 	const [state, dispatch] = useReducer<Reducer<PointsState, PointsAction>>(pointsReducer, initialState)
 
