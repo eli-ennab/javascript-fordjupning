@@ -15,12 +15,24 @@ export const todoSlice = createSlice({
 				completed: action.payload.completed
 			}
 			state.push(newTodo)
-		}
+		},
+		toggle: (state, action: PayloadAction<string>) => {
+			const todo = state.find(todo => todo.id === action.payload)
+			if (todo) {
+				todo.completed = ! todo.completed
+			}
+		},
+		// delete: (state, action: PayloadAction<Todo>) => {
+		// 	const todo = state.findIndex(todo => todo.id === action.payload.id)
+		// 	if (todo !== -1) {
+		// 		state.splice(todo, 1)
+		// 	}
+		// },
 	}
 })
 
 // Action creators are generated for each reducer function
-export const { add } = todoSlice.actions
+export const { add, toggle } = todoSlice.actions
 
 // Export the reducer
 export default todoSlice.reducer

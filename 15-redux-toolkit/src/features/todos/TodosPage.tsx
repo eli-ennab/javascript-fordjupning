@@ -6,7 +6,7 @@ import { TodoFormData } from "../../types/Todo.types"
 import { toast } from "react-toastify"
 import TodoForm from "./TodoForm"
 import { dummyTodos as todos } from "../../data/todos"
-import { add } from "./todoSlice"
+import { add, toggle } from "./todoSlice"
 import { useDispatch } from "react-redux"
 import { useAppSelector } from "../../app/hooks"
 
@@ -24,6 +24,7 @@ const TodosPage = () => {
 
 	const handleToggle = async (id: string) => {
 		console.log("handleToggle", id)
+		await dispatch(toggle(id))
 
 		// 🥂
 		toast.success("Yay, you did something... 😁")
@@ -31,6 +32,7 @@ const TodosPage = () => {
 
 	const handleDelete = async (id: string) => {
 		console.log("handleDelete", id)
+		// await dispatch(delete(id))
 
 		// 🥂
 		toast.success("Deleting stuff instead of doing them still counts... 🏆")
