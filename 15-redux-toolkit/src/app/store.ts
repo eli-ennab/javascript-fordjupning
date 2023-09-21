@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import accountReducer from '../features/account/accountSlice'
+import todoReducer from '../features/todos/todoSlice'
 
 export const store = configureStore({
 	reducer: {
 		account: accountReducer,
+		todos: todoReducer
 	},
 })
 

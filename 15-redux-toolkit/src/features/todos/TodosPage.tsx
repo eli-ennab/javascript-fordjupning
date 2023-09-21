@@ -6,10 +6,17 @@ import { TodoFormData } from "../../types/Todo.types"
 import { toast } from "react-toastify"
 import TodoForm from "./TodoForm"
 import { dummyTodos as todos } from "../../data/todos"
+import { add } from "./todoSlice"
+import { useDispatch } from "react-redux"
+import { useAppSelector } from "../../app/hooks"
 
 const TodosPage = () => {
+	const todoState = useAppSelector(state => state.todos)
+	const dispatch = useDispatch()
+
 	const handleAddTodo = async (data: TodoFormData) => {
 		console.log("handleAddTodo", data)
+		await dispatch(add(data))
 
 		// 🥂
 		toast.success("Yay, even MORE stuff to do... 😁")
@@ -37,9 +44,9 @@ const TodosPage = () => {
 
 			<TodoForm onSave={handleAddTodo} />
 
-			{todos && todos.length > 0 && (
+			{todoState && todoState.length > 0 && (
 				<ListGroup className="todolist">
-					{todos.map((todo) => (
+					{todoState.map((todo) => (
 						<ListGroup.Item
 							key={todo.id}
 							className={todo.completed ? "done" : ""}
