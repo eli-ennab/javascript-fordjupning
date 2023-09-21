@@ -4,35 +4,35 @@ import Container from "react-bootstrap/Container"
 import ListGroup from "react-bootstrap/ListGroup"
 import { TodoFormData } from "../../types/Todo.types"
 import { toast } from "react-toastify"
+import { v4 as uuid } from 'uuid'
 import TodoForm from "./TodoForm"
-import { dummyTodos as todos } from "../../data/todos"
-import { add, toggle } from "./todoSlice"
+import { add, toggle, remove } from "./todosSlice"
 import { useDispatch } from "react-redux"
 import { useAppSelector } from "../../app/hooks"
 
 const TodosPage = () => {
-	const todoState = useAppSelector(state => state.todos)
+	const todos = useAppSelector(state => state.todos)
 	const dispatch = useDispatch()
 
 	const handleAddTodo = async (data: TodoFormData) => {
-		console.log("handleAddTodo", data)
-		await dispatch(add(data))
+		dispatch(add({
+			id: uuid(),
+			...data,
+		}))
 
 		// 🥂
 		toast.success("Yay, even MORE stuff to do... 😁")
 	}
 
-	const handleToggle = async (id: string) => {
-		console.log("handleToggle", id)
-		await dispatch(toggle(id))
+	const handleToggle = (id: string) => {
+		dispatch(toggle(id))
 
 		// 🥂
 		toast.success("Yay, you did something... 😁")
 	}
 
-	const handleDelete = async (id: string) => {
-		console.log("handleDelete", id)
-		// await dispatch(delete(id))
+	const handleDelete = (id: string) => {
+		dispatch(remove(id))
 
 		// 🥂
 		toast.success("Deleting stuff instead of doing them still counts... 🏆")
@@ -46,9 +46,9 @@ const TodosPage = () => {
 
 			<TodoForm onSave={handleAddTodo} />
 
-			{todoState && todoState.length > 0 && (
+			{todos && todos.length > 0 && (
 				<ListGroup className="todolist">
-					{todoState.map((todo) => (
+					{todos.map((todo) => (
 						<ListGroup.Item
 							key={todo.id}
 							className={todo.completed ? "done" : ""}

@@ -8,13 +8,8 @@ export const todoSlice = createSlice({
 	name: "todos",
 	initialState,
 	reducers: {
-		add: (state, action: PayloadAction<TodoFormData>) => {
-			const newTodo = {
-				id: 'ikamsdoianfdouand',
-				title: action.payload.title,
-				completed: action.payload.completed
-			}
-			state.push(newTodo)
+		add: (state, action: PayloadAction<Todo>) => {
+			state.push(action.payload)
 		},
 		toggle: (state, action: PayloadAction<string>) => {
 			const todo = state.find(todo => todo.id === action.payload)
@@ -22,17 +17,14 @@ export const todoSlice = createSlice({
 				todo.completed = ! todo.completed
 			}
 		},
-		// delete: (state, action: PayloadAction<Todo>) => {
-		// 	const todo = state.findIndex(todo => todo.id === action.payload.id)
-		// 	if (todo !== -1) {
-		// 		state.splice(todo, 1)
-		// 	}
-		// },
+		remove: (state, action: PayloadAction<string>) => {
+			return state.filter(todo => todo.id !== action.payload)
+		},
 	}
 })
 
 // Action creators are generated for each reducer function
-export const { add, toggle } = todoSlice.actions
+export const { add, toggle, remove } = todoSlice.actions
 
 // Export the reducer
 export default todoSlice.reducer
