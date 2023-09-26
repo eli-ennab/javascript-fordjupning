@@ -10,6 +10,7 @@ export default {
 	data() {
 		return {
 			count: 0,
+			username: '',
 		}
 	},
 	methods: {
@@ -34,10 +35,15 @@ export default {
 			<hr />
 
 			<div class="mb-3">
-				<input type="text" class="form-control" placeholder="Enter your name" />
+				<input
+					type="text"
+					class="form-control"
+					placeholder="Enter your name"
+					v-model="username"
+				/>
 			</div>
 
-			<p>Hello, USERNAME!</p>
+			<p>Hello, {{ username }}!</p>
 		</section>
 
 		<hr />
