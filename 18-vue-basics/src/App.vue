@@ -17,7 +17,9 @@ export default {
 
 	},
 	computed: {
-
+		displayName() {
+			return this.username || 'anonymous haxx0r'
+		}
 	},
 }
 </script>
@@ -43,7 +45,7 @@ export default {
 				/>
 			</div>
 
-			<p>Hello, {{ username }}!</p>
+			<p>Hello, {{ displayName }}!</p>
 		</section>
 
 		<hr />
