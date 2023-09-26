@@ -6,7 +6,19 @@ const todos = [
 	{ id: 4, title: 'Drink ALL THE coffee', completed: false },
 ]
 
-export default {}
+export default {
+	data() {
+		return {
+			count: 0,
+		}
+	},
+	methods: {
+
+	},
+	computed: {
+
+	},
+}
 </script>
 
 <template>
@@ -16,8 +28,8 @@ export default {}
 		<section class="basics">
 			<h2>MSG</h2>
 
-			<p>You have clicked the button: COUNT times.</p>
-			<button class="btn btn-success btn-lg">Click meee! 😃</button>
+			<p>You have clicked the button: {{ count }} times.</p>
+			<button class="btn btn-success btn-lg" @click="count++">Click meee! 😃</button>
 
 			<hr />
 
