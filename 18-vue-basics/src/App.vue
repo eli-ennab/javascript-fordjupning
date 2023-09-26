@@ -54,6 +54,7 @@ export default {
 				<li
 					v-for="todo in todos"
 					:key="todo.id"
+					:class="todo.completed ? 'completed' : ''"
 				>
 					{{ todo.title }}
 				</li>
